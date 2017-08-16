@@ -1,0 +1,49 @@
+# Vocabulary for ELMO version 2.0: Extendable Lightweight Model Ontology. A vocabulary for the dotwebstack framework configuration
+#
+# The vocabulary consists of three separate parts:
+# - The system configuration of the framework
+# - The configuration for the backend and core layers of the framework
+# - The configuration for the frontend of the framework
+
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+# System configuration vocabulary
+elmo:Theatre a owl:Class;
+	rdfs:label "Theatre"@en;
+	rdfs:label "Theater"@nl;
+	rdfs:comment "A specific executable instance of the dotwebstack framework. A configuration should contain exactly one theatre instance. If no theatre instance is present, a default version is created, containing all configured sites."@en;
+.
+elmo:Site a owl:Class;
+	rdfs:label "Site"@en;
+	rdfs:label "Locatie"@nl;
+	rdfs:comment "A specific site that hosts a dotwebstack framework. A site is identified by a full qualified domain name. If no site is present, a default version is created, identified by 'localhost'";
+.
+elmo:Stage a owl:Class;
+	rdfs:label "Stage"@en;
+	rdfs:label "Podium"@nl;
+	rdfs:comment "A specific stage at a certain site. A stage is identified by the first part of the path after the domain name, typically up to the next slash. If no stage is present, a default version is created, the 'main stage', identified by an empty path.";
+.
+elmo:Layout a owl:Class;
+	rdfs:label "Layout"@en;
+	rdfs:label "Opmaak"@nl;
+	rdfs:comment "The layout that is used for a particular stage, site or theatre. The theatre layout is inherited by all sites (unless stated otherwise), and a site layout is inherited by all stages for that site (unless sated otherwise). A default layout is used if no layout is specified"@en;
+.
+
+# Backstage and core layers vocabulary
+elmo:InformationProduct a owl:Class;
+	rdfs:label "Information product"@en;
+	rdfs:label "Informatieproduct"@nl;
+.
+elmo:Transaction a owl:Class;
+	rdfs:label "Transaction"@en;
+	rdfs:label "Transactie"@nl;
+.
+elmo:Backend a owl:Class;
+	rdfs:label "Backend"@en;
+	rdfs:label "Backend"@nl;
+.
