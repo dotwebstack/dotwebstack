@@ -1,0 +1,39 @@
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+
+@prefix config: <http://dotwebstack.org/examples/vocab#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+# System and configuration graph
+GRAPH config: {
+	config:DummyTheatre a elmo:Theatre;
+		rdfs:label "The dummy theatre, using all vocabulary statements";
+		dc:title "Dummy theatre";
+	.
+	config:DummySite a elmo:Site;
+		elmo:domain "demo.dotwebstack.org";
+	.
+	config:MainStage a elmo:Stage;
+		elmo:site config:DummySite;
+		elmo:basePath "main";
+	.
+	
+	config:CountAllInfo a elmo:InformationProduct;
+		elmo:backend config:MyLocalSparqlBackend;
+		elmo:query '''
+			select (count(*) as ?count)
+			where {?s?p?o}
+		'''
+	.
+	
+	config:MyLocalSparqlBackend a elmo:SparqlBackend;
+		elmo:endpoint "http://localhost:8890/sparql"^^xsd:anyURI;
+	.
+}
+GRAPH <http://demo.dotwebstack.org/main/stage> {
+	config:Representation a elmo:Representation;
+		elmo:urlPattern "/count-all";
+		elmo:informationProduct config:CountAllInfo;
+	.
+}
