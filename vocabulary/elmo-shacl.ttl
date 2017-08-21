@@ -47,7 +47,6 @@ elmo-shape:Site a sh:NodeShape;
 	sh:property [
 		sh:name "elmo:domain";
 		sh:path elmo:domain;
-		sh:minCount 1;
 		sh:maxCount 1;
 		sh:datatype xsd:string
 	];
@@ -74,7 +73,7 @@ elmo-shape:Stage a sh:NodeShape;
 		sh:name "elmo:site";
 		sh:path elmo:site;
 		sh:class elmo:Site;
-		sh:minCount 0;
+		sh:minCount 1;
 		sh:maxCount 1;
 	];
 	sh:property [
