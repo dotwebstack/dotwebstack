@@ -1,12 +1,5 @@
 # Quality Assurance
 
-## IDE setup
-
-Instructions how to configure your IDE can be found here:
-
-* [Eclipse](eclipse/)
-* [IntelliJ](intellij/)
-
 ## Definition of Ready
 
 Definition of Ready (DoR) is a list of criteria that a user story must meet prior to being accepted into the upcoming iteration.
