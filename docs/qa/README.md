@@ -1,4 +1,4 @@
-# Quality Assurance
+# Quality assurance
 
 ## Definition of Ready
 
