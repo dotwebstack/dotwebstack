@@ -36,47 +36,39 @@ elmo: a owl:Ontology;
 #
 elmo:Theatre a owl:Class;
 	rdfs:label "Theatre"@en;
-	rdfs:label "Theater"@nl;
 	rdfs:comment "The class of executable instances for the dotwebstack framework. The system configuration graph should contain exactly one theatre instance. If no theatre instance is present, a default version is created. All sites in the same system configuration graph are considered part of the particular theatre instance."@en;
 .
 elmo:Site a owl:Class;
 	rdfs:label "Site"@en;
-	rdfs:label "Locatie"@nl;
 	rdfs:comment "The class of sites that host the dotwebstack framework. A site is identified by a domain name. If no site is present in the system configuration graph, a default version is created, identified by 'localhost'";
 .
 elmo:Stage a owl:Class;
 	rdfs:label "Stage"@en;
-	rdfs:label "Podium"@nl;
 	rdfs:comment "The class of stages at a site. A stage is identified by its site and a base path, the first part of the path after the domain name, typically up to the next slash. If no stage is present, a default version is created, the 'main stage', identified by an empty path.";
 .
 elmo:Layout a owl:Class;
 	rdfs:label "Layout"@en;
-	rdfs:label "Opmaak"@nl;
 	rdfs:comment "The layout that is used for a particular stage, site or theatre. The theatre layout is inherited by all sites (unless stated otherwise), and a site layout is inherited by all stages for that site (unless stated otherwise). A default layout is used if no layout is specified"@en;
 .
 
 elmo:domain a owl:DatatypeProperty;
 	rdfs:label "domain"@en;
-	rdfs:label "domein"@nl;
 	rdfs:comment "States the domain for a particular site"@en;
 	rdfs:domain elmo:Site;
 	rdfs:range xsd:string;
 .
 elmo:site a owl:ObjectProperty;
 	rdfs:label "site"@en;
-	rdfs:label "locatie"@nl;
 	rdfs:comment "States the site to which a particular stage belongs"@en;
 	rdfs:domain elmo:Stage;
 	rdfs:range elmo:Site;
 .
 elmo:basePath a owl:DatatypeProperty;
 	rdfs:label "base path"@en;
-	rdfs:label "startpad"@nl;
 	rdfs:comment "States the base path of a stage, the first part of the path after the domain name, typically up to the next slash. A base path may include slashes";
 .
 elmo:layout a owl:DatatypeProperty;
 	rdfs:label "layout"@en;
-	rdfs:label "opmaak"@nl;
 	rdfs:comment "States the layout for a particular theatre, site or stage"@en;
 	rdfs:range elmo:Layout
 	# No rdfs:domain -> domain could be theatre, site or stage
@@ -87,55 +79,46 @@ elmo:layout a owl:DatatypeProperty;
 #
 elmo:InformationProduct a owl:Class;
 	rdfs:label "Information product"@en;
-	rdfs:label "Informatieproduct"@nl;
 	rdfs:comment "The class of information product specifications. An information product retrieves some data according to a specific information request, and returns a set of one or more graphs OR a binding set. It should not be possible to use an information product to manipulate data."@en;
 .
 elmo:Transaction a owl:Class;
 	rdfs:label "Transaction"@en;
-	rdfs:label "Transactie"@nl;
 	rdfs:comment "The class of transaction specifications. A transaction creates or deletes data according to a specific transaction request"@en;
 .
 elmo:Backend a owl:Class;
 	rdfs:label "Backend"@en;
-	rdfs:label "Backend"@nl;
 	rdfs:comment "The class of backend specifications. A backend specification specifies the data store that can be accessed to retrieve data or to manipulate the data in the store"@en;
 .
 elmo:SparqlBackend a owl:Class;
 	rdfs:subClassOf elmo:Backend;
 	rdfs:label "Sparql backend"@en;
-	rdfs:label "Sparql backend"@nl;
 	rdfs:comment "The class of sparql backends. A sparql backend implements the sparql 1.1 protocol: http://www.w3.org/TR/sparql11-protocol"@en;
 .
 elmo:ElasticSearchBackend a owl:Class;
 	rdfs:subClassOf elmo:Backend;
 	rdfs:label "Elastic search backend"@en;
-	rdfs:label "Elastic search backend"@nl;
 	rdfs:comment "The class of elastic search backends. An Elastic search backend retrieves Linked Data documents from an elastic search server."@en;
 .
 elmo:FileBackend a owl:Class;
 	rdfs:subClassOf elmo:Backend;
 	rdfs:label "File backend"@en;
-	rdfs:label "Bestand backend"@nl;
 	rdfs:comment "The class of file backends. A file backend retrieves Linked Data documents from a file system."@en;
 .
 
 elmo:backend a owl:ObjectProperty;
 	rdfs:label "backend"@en;
-	rdfs:label "backend"@nl;
 	rdfs:comment "States the backend for a particular information product"@en;
 	rdfs:range elmo:Backend;
 	# No rdfs:domain -> domain could be information product or transaction, and we may introduce 'source' as a class between information product and backend
 .
 elmo:endpoint a owl:DatatypeProperty;
 	rdfs:label "endpoint"@en;
-	rdfs:label "endpoint"@nl;
 	rdfs:comment "States the (http) endpoint that should be accessed for this particular backend. Note: this property is only relevant for backends that respond to http requests"@en;
 	rdfs:domain elmo:Backend;
 	rdfs:range xsd:anyURI;
 .
 elmo:query a owl:DatatypeProperty;
 	rdfs:label "query"@en;
-	rdfs:label "query"@nl;
 	rdfs:comment "States the query that specifies the information request. Note: the syntax for a query may differ between backends (for example: a SPARQL query for a Sparql backend, a JSON query for an Elastic search backend)."@en;
 	rdfs:domain elmo:InformationProduct;
 	rdfs:range xsd:string;
@@ -146,33 +129,28 @@ elmo:query a owl:DatatypeProperty;
 #
 elmo:Representation a owl:Class;
 	rdfs:label "Representation"@en;
-	rdfs:label "Representatie"@nl;
 	rdfs:comment "The class of representations. A representation links a http request to the corresponding information product."@en;
 .
 elmo:urlPattern a owl:DatatypeProperty;
 	rdfs:label "URL pattern"@en;
-	rdfs:label "URL pattern"@nl;
 	rdfs:comment "Specifies the URL pattern for which this representation should be used. The URL pattern is matched to the part of the http request after removing the domain name of the site and the base path of the stage."@en;
 	rdfs:domain elmo:Representation;
 	rdfs:range xsd:string;
 .
 elmo:uriPattern a owl:DatatypeProperty;
 	rdfs:label "URI pattern"@en;
-	rdfs:label "URI pattern"@nl;
 	rdfs:comment "Specifies the URI pattern of the subject resource for which this representation should be used. The subject is equal to a dereferenceable URI or the value of the 'subject' or URL parameter if present. In all other cases, no match will be made."@en;
 	rdfs:domain elmo:Representation;
 	rdfs:range xsd:string;
 .
 elmo:appliesTo a owl:ObjectProperty;
 	rdfs:label "applies to"@en;
-	rdfs:label "toegepast voor"@nl;
 	rdfs:comment "Specifies the resource profile for which this representation should be used. A resource profile is a set of triples ([]?p?o). A particular resource ?s matches a resource profile if and only if all triples ?s?p?o exist. For example: the resource profile [rdf:type skos:Concept] whould match any resource that is of type skos:Concept."@en;
 	rdfs:domain elmo:Representation;
 	rdfs:range rdfs:Resource;
 .
 elmo:informationProduct a owl:ObjectProperty;
 	rdfs:label "information product"@en;
-	rdfs:label "informatieproduct"@nl;
 	rdfs:comment "States the information product of a particular representation"@en;
 	rdfs:domain elmo:Representation;
 	rdfs:range elmo:InformationProduct;

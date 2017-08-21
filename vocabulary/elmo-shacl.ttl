@@ -1,8 +1,5 @@
 # baseURI: http://dotwebstack.org/def/elmo-shacl#
 
-# A SHACL shapes graph to validate SHACL shapes graphs
-# Draft last edited 2017-04-04
-
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
@@ -126,6 +123,13 @@ elmo-shape:InformationProduct a sh:NodeShape;
 		sh:name "elmo:query";
 		sh:path elmo:query;
 		sh:datatype xsd:string;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "elmo:path";
+		sh:path elmo:path;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
 	];
 	sh:property [
 		sh:name "elmo:backend";
@@ -156,6 +160,10 @@ elmo-shape:Backend a sh:NodeShape;
 		sh:path rdfs:label
 	];
 .
+
+# =========
+# Backstage extentions, with IP constraints
+#
 elmo-shape:SparqlBackend a sh:NodeShape;
 	sh:targetClass elmo:SparqlBackend;
 	rdfs:label "Sparql backend shape"@en;
@@ -167,7 +175,23 @@ elmo-shape:SparqlBackend a sh:NodeShape;
 		sh:maxCount 1;
 		sh:datatype xsd:anyURI;
 	];
+	sh:property [
+		sh:path [sh:inversePath elmo:backend ];
+		sh:node sh:SparqlInformationProduct;
+		sh:class elmo:InformationProduct;
+	]
 .
+elmo-shape:SparqlInformationProduct a sh:NodeShape;
+	rdfs:label "IP constraints for sparql backend";
+	sh:name "elmo:InformationProduct (Sparql)";
+	sh:property [
+		sh:path elmo:query;
+		sh:name "elmo:query";
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+
 elmo-shape:ElasticSearchBackend a sh:NodeShape;
 	sh:targetClass elmo:ElasticSearchBackend;
 	rdfs:label "Elastic search backend shape"@en;
@@ -179,7 +203,29 @@ elmo-shape:ElasticSearchBackend a sh:NodeShape;
 		sh:maxCount 1;
 		sh:datatype xsd:anyURI;
 	];
+	sh:property [
+		sh:path [sh:inversePath elmo:backend ];
+		sh:node sh:ElasticSearchInformationProduct;
+		sh:class elmo:InformationProduct;
+	]
 .
+elmo-shape:ElasticSearchInformationProduct a sh:NodeShape;
+	rdfs:label "IP constraints for sparql backend";
+	sh:name "elmo:InformationProduct (Elastic search)";
+	sh:property [
+		sh:path elmo:query;
+		sh:name "elmo:query";
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path elmo:path;
+		sh:name "elmo:path";
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+
 elmo:FileBackend a sh:NodeShape;
 	sh:targetClass elmo:FileBackend;
 	rdfs:label "File backend shape"@en;
