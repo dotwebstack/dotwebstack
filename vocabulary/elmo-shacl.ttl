@@ -1,0 +1,268 @@
+# baseURI: http://dotwebstack.org/def/elmo-shacl#
+
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1>.
+
+@prefix elmo-shape: <http://dotwebstack.org/def/elmo-shacl#> .
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+
+elmo-shape:
+	rdfs:label "SHACL for ELMO"@en ;
+	rdfs:comment "This shapes graph can be used to validate dotwebstack configurations. It can also be used to create a visual representation of the structure"@en ;
+	sh:declare [
+		sh:prefix "elmo-shape" ;
+		sh:namespace "http://dotwebstack.org/def/elmo-shacl#" ;
+	] .
+
+# =========
+# System configuration shapes
+#
+elmo-shape:Theatre a sh:NodeShape;
+	sh:targetClass elmo:Theatre;
+	rdfs:label "Theatre shape"@en;
+	sh:name "elmo:Theatre";
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label;
+	];
+	sh:property [
+		sh:name "dc:title";
+		sh:path dc:title;
+	];
+	sh:property [
+		sh:name "elmo:layout";
+		sh:path elmo:layout;
+		sh:maxCount 1;
+		sh:class elmo:Layout;
+	];
+.
+elmo-shape:Site a sh:NodeShape;
+	sh:targetClass elmo:Site;
+	rdfs:label "Site shape"@en;
+	sh:name "elmo:Site";
+	sh:property [
+		sh:name "elmo:domain";
+		sh:path elmo:domain;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:string
+	];
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label;
+	];
+	sh:property [
+		sh:name "dc:title";
+		sh:path dc:title;
+	];
+	sh:property [
+		sh:name "elmo:layout";
+		sh:path elmo:layout;
+		sh:class elmo:Layout;
+		sh:maxCount 1
+	];
+.
+elmo-shape:Stage a sh:NodeShape;
+	sh:targetClass elmo:Stage;
+	rdfs:label "Stage shape"@en;
+	sh:name "elmo:Stage";
+	sh:property [
+		sh:name "elmo:site";
+		sh:path elmo:site;
+		sh:class elmo:Site;
+		sh:minCount 0;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "sh:basePath";
+		sh:path sh:basePath;
+		sh:minCount 0;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label;
+	];
+	sh:property [
+		sh:name "dc:title";
+		sh:path dc:title;
+	];
+	sh:property [
+		sh:name "elmo:layout";
+		sh:path elmo:layout;
+		sh:class elmo:Layout;
+		sh:maxCount 1
+	];
+.
+elmo-shape:Layout a sh:NodeShape;
+	sh:targetClass elmo:Layout;
+	rdfs:label "Layout shape"@en;
+	sh:name "elmo:Layout";
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label;
+	];
+.
+
+# =========
+# Backstage and core layers vocabulary
+#
+elmo-shape:InformationProduct a sh:NodeShape;
+	sh:targetClass elmo:InformationProduct;
+	rdfs:label "Information product shape"@en;
+	sh:name "elmo:InformationProduct";
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label
+	];
+	sh:property [
+		sh:name "elmo:query";
+		sh:path elmo:query;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "elmo:path";
+		sh:path elmo:path;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "elmo:backend";
+		sh:path elmo:backend;
+		sh:class elmo:Backend;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+elmo-shape:Transaction a sh:NodeShape;
+	sh:targetClass elmo:Transaction;
+	rdfs:label "Transaction shape"@en;
+	sh:name "elmo:Transaction";
+	sh:property [
+		sh:name "elmo:backend";
+		sh:path elmo:backend;
+		sh:class elmo:Backend;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+elmo-shape:Backend a sh:NodeShape;
+	sh:targetClass elmo:Backend;
+	rdfs:label "Backend shape"@en;
+	sh:name "elmo:Backend";
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label
+	];
+.
+
+# =========
+# Backstage extentions, with IP constraints
+#
+elmo-shape:SparqlBackend a sh:NodeShape;
+	sh:targetClass elmo:SparqlBackend;
+	rdfs:label "Sparql backend shape"@en;
+	sh:name "elmo:SparqlBackend";
+	sh:property [
+		sh:name "elmo:endpoint";
+		sh:path elmo:endpoint;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:anyURI;
+	];
+	sh:property [
+		sh:path [sh:inversePath elmo:backend ];
+		sh:node sh:SparqlInformationProduct;
+		sh:class elmo:InformationProduct;
+	]
+.
+elmo-shape:SparqlInformationProduct a sh:NodeShape;
+	rdfs:label "IP constraints for sparql backend";
+	sh:name "elmo:InformationProduct (Sparql)";
+	sh:property [
+		sh:path elmo:query;
+		sh:name "elmo:query";
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+
+elmo-shape:ElasticSearchBackend a sh:NodeShape;
+	sh:targetClass elmo:ElasticSearchBackend;
+	rdfs:label "Elastic search backend shape"@en;
+	sh:name "elmo:ElasticSearchBackend";
+	sh:property [
+		sh:name "elmo:endpoint";
+		sh:path elmo:endpoint;
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:anyURI;
+	];
+	sh:property [
+		sh:path [sh:inversePath elmo:backend ];
+		sh:node sh:ElasticSearchInformationProduct;
+		sh:class elmo:InformationProduct;
+	]
+.
+elmo-shape:ElasticSearchInformationProduct a sh:NodeShape;
+	rdfs:label "IP constraints for sparql backend";
+	sh:name "elmo:InformationProduct (Elastic search)";
+	sh:property [
+		sh:path elmo:query;
+		sh:name "elmo:query";
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path elmo:path;
+		sh:name "elmo:path";
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+
+elmo:FileBackend a sh:NodeShape;
+	sh:targetClass elmo:FileBackend;
+	rdfs:label "File backend shape"@en;
+	sh:name "elmo:FileBackend";
+.
+
+# =========
+# Frontend vocabulary
+#
+elmo-shape:Representation a sh:NodeShape;
+	sh:targetClass elmo:Representation;
+	rdfs:label "Representation shape"@en;
+	sh:name "elmo:Representation";
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label;
+	];
+	sh:property [
+		sh:name "elmo:urlPattern";
+		sh:path elmo:urlPattern;
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		sh:name "elmo:uriPattern";
+		sh:path elmo:uriPattern;
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		sh:name "elmo:appliesTo";
+		sh:path elmo:appliesTo;
+		sh:class rdfs:Resource;
+	];
+	sh:property [
+		sh:name "elmo:informationProduct";
+		sh:path elmo:informationProduct;
+		sh:class elmo:InformationProduct;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
