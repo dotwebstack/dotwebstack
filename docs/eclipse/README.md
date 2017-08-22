@@ -57,3 +57,9 @@ This document describes how the Eclipse IDE can be setup.
 1. Ignore unhandled token in @SuppressWarnings (i.e. "checkstyle:*"):
    1. Go to Window > Preferences > Java > Compiler > Errors/Warnings > Annotations;
    1. Set 'Unhandled token in '@SuppressWarnings'' to Ignore.
+
+## SonarLint
+
+1. Install Sonarlint from http://www.sonarlint.org/eclipse/;
+
+1. After installing any issues will be reported as Eclipse markers.

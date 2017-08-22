@@ -4,8 +4,9 @@ This document describes how the IntelliJ IDE can be setup.
 
 ## Checkstyle
 
-* Import the [Checkstyle template](intellij-java-google-style.xml) for Java;
-* Add JSON, XML and YAML to that profile.
+1. Import the [Checkstyle template](intellij-java-google-style.xml) for Java;
+
+1. Add JSON, XML and YAML to that profile.
 
   Open IDEA and go to __file > settings__ (Ctrl + Alt + S) and then __Editor | Code Style | \<language\>__
 
@@ -45,3 +46,9 @@ This document describes how the IntelliJ IDE can be setup.
     Indent: 2
     Right margin: 100
   ```
+
+## SonarLint
+
+1. Install Sonarlint from http://www.sonarlint.org/intellij/;
+
+1. After installing the plugin you'll get on the fly analysis of your code and a new action called 'Analyze with SonarLint'.
