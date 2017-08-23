@@ -103,17 +103,18 @@ If you cannot use the method name, it is probably a bad name;
 * As in the preceding example, if logging parameters, then place them between single quotes (`'`);
 * As in the example above, precede the parameter value by the parameter name separated by the equals sign `=`;
 * If logging an object parameter, be aware of the length of the toString() of the object (!). You do not want to flood the logging with major print outs of your objects;
+* If you log some sort of process or transaction, then also log some key which uniquely identifies the process.
 * If you log the start of a process, do not forget the log the end of the process:
 
 ```java
-LOG.info("Job started");
+LOG.info("Job 123 started");
 
 // [ ... ]
 
-LOG.info("Job ended");
+LOG.info("Job 123 ended");
 ```
 
-This way people reading your logs know all statements between "Job started" and "Job ended" belong to the job process;
+This way people reading your logs know all statements between "Job X started" and "Job X ended" belong to the job process;
 * Last but bot least, use common sense. Log statements which add value only (especially on the info level!).
 
 ## Placeholders
