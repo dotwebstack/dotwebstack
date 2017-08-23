@@ -6,9 +6,9 @@ This document describes how the IntelliJ IDE can be setup.
 
 1. Import the [Checkstyle template](intellij-java-google-style.xml) for Java;
 
-1. Add JSON, XML and YAML to that profile.
+1. Overwrite JSON, XML and YAML configurations in the profile.
 
-  Open IDEA and go to __file > settings__ (Ctrl + Alt + S) and then __Editor | Code Style | \<language\>__
+  Open IDEA preferences and then __Editor | Code Style | \<language\>__
 
   ```yaml
   JSON:
