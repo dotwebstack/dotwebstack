@@ -39,11 +39,11 @@ Please note that:
 SLF4J supports the following log levels:
 
 | Level | Description
-|:--|:--|:--
+|:--|:--
 | fatal | Not used.
 | error | An error has occurred which must be looked into by the dev team. The application cannot recover from the error.
 | warn  | Something went wrong, but the application can recover from the situation. Even so, the dev team will look into the warnings on a regular basis.
-| info  | |
+| info  |
 | debug | Use for debugging purposes only.
 | trace | Not used.
 
