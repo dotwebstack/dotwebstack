@@ -119,7 +119,7 @@ This way people reading your logs know all statements between "Job X started" an
 
 ## Placeholders
 
-The use of string concatenation (or `String.format(...)`) in log statements should be avoided. If the log level is not high enough, the string concatenation or formatting will be needlessly performed. For example, in the following example, if the log level is INFO, the string concatenation will be performed even though the message will not be written to the log.
+The use of string concatenation (or `String.format(...)`) in log statements should be avoided. If the log level is not high enough, the string concatenation or formatting will be needlessly performed.
 
 ```java
 void sayHello(String message) {
@@ -127,7 +127,7 @@ void sayHello(String message) {
 }
 ```
 
-Placeholders should be used whenever possible:
+In the previous example, if the log level is INFO, the string concatenation will be performed even though the message will not be written to the log. This is not what we want, so placeholders should be used whenever possible:
 
 ```java
 void foo(float bar) {
