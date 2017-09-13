@@ -78,7 +78,7 @@ For asserts we use hamcrest matchers for more human readable code. For example, 
 	assertThat(actual, is(equalTo(expected)));
 	```
 	
-You can read more in depth about at (Hamcrest.org) [https://code.google.com/archive/p/hamcrest/wikis/Tutorial.wiki]
+You can read more in depth about at (Hamcrest.org)[https://code.google.com/archive/p/hamcrest/wikis/Tutorial.wiki]
 
 ### Mockito for mocking
 
