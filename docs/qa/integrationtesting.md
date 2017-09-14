@@ -1,6 +1,6 @@
 # Integration testing
 
-In DotWebStack we try to do as much happy flow testing inside an integration test sandbox. See the (integration-test module)[https://github.com/dotwebstack/dotwebstack-framework/tree/master/integration-test] inside the core project.
+In DotWebStack we try to do as much happy flow testing inside an integration test sandbox. See the [integration-test module](https://github.com/dotwebstack/dotwebstack-framework/tree/master/integration-test) inside the core project.
 
 Through connecting all the different pieces we can simulate how the actual project will behave and we can ensure that we can deliver the features of the DotWebStack framework as a whole.
 
@@ -33,6 +33,7 @@ First we need to decorate our test with the start and stop method. After this, t
     ```
 	
 Then you need to tell the SparqlHttpStub which data you wish to return, should a query be executed:
+
 	```
 	@Test
 	public void getBreweryCollection() {
