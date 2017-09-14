@@ -1,6 +1,6 @@
 # Unittesting
 
-In DotWebStack we follow a naming convention to indicate what we are testing inside the test name itself. We also follow the ["Arrange-Act-Assert" pattern](http://wiki.c2.com/?ArrangeActAssert).
+In DotWebStack we follow a naming convention to indicate what we are testing inside the name of the test itself. We also follow the ["Arrange-Act-Assert" pattern](http://wiki.c2.com/?ArrangeActAssert).
 
 ## Naming convention
 
@@ -60,7 +60,7 @@ We strife to uphold a high code coverage of all the lines of code inside our sol
 
 ## Libraries
 
-For unittesting we use a set of libraries.
+For unittesting we use the following set of libraries.
 
 ### JUnit
 
