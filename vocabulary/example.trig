@@ -5,12 +5,12 @@
 
 # Configuration prefix could be anything: properties.yml must contain the name of the system configuration graph (in this case: <http://dotwebstack.org/configuration/DummyTheatre>)
 # (no system configuration graph means - failure to start-up the dotwebstack)
-# If you only want to have one named graph with the whole configuration, the URI for this named graph MUST be the same as the main stage URI (elmo:Stage)
+# All stages should be defined in the system configuration graph
 # If no elmo:Stage declaration is made, a default one is created, with the URI of the system named graph.
 
 @prefix config: <http://dotwebstack.org/configuration/>.
 
-# System and configuration graph
+# System configuration graph
 GRAPH config:DummyTheatre> {
 	# Theatre declaration, URI MUST be the same as the system configuration name graph
 	config:DummyTheatre a elmo:Theatre;
@@ -26,9 +26,12 @@ GRAPH config:DummyTheatre> {
 	# All stage declarations MUST be part of the system configuration graph
 	config:MainStage a elmo:Stage;
 		elmo:site config:DummySite;
-		elmo:basePath "main";
+		elmo:basePath "";
 	.
-	
+	config:SecondStage a elmo:Stage;
+		elmo:site config:DummySite;
+		elmo:basePath "second-stage"
+	.
 	config:CountAllInfo a elmo:InformationProduct;
 		elmo:backend config:MyLocalSparqlBackend;
 		elmo:query '''
@@ -42,11 +45,18 @@ GRAPH config:DummyTheatre> {
 	.
 }
 
+# Stage configuration graphs
 # URI of configuration named graph MUST be the same as the corresponding elmo:Stage
 # Elements within the stage graph are local to that particular stage
 GRAPH config:MainStage {
 	config:Representation a elmo:Representation;
 		elmo:urlPattern "/count-all";
+		elmo:informationProduct config:CountAllInfo;
+	.
+}
+GRAPH config:SecondStage {
+	config:Representation a elmo:Representation;
+		elmo:urlPattern "/all-count";
 		elmo:informationProduct config:CountAllInfo;
 	.
 }
