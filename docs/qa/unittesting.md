@@ -58,6 +58,8 @@ When testing for expected exceptions, we reverse the Act and Assert, and use JUn
 
 We strife to uphold a high code coverage of all the lines of code inside our solutions. To so do, we let the build fail if the coverage ever drops below a threshold that the team agreed upon. Futhermore we exclude files from code coverage / testing only if the whole team agrees that writing the test would be useless.
 
+We use code coverage also as a tool to find untested code. Coverage itself is not the main accomplishment. We try to test all possible scenarios how our unit can behave, so that we can fully cover all of its functionality instead of actual lines of code.
+
 ## Libraries
 
 For unittesting we use the following set of libraries.
@@ -90,7 +92,7 @@ The benefits of a mocking framework are in comparison to writing stub class of o
 - Less code to create a mock
 - Follows DRY (you won't end up repeating mock implementations)
 
-Mock objects are useful when you want to test interactions between a class under test and a particular interface. Therefor mocking of simple POJO's is not necessary.
+Mock objects are useful when you want to test interactions between a class under test and a particular interface. Therefore mocking of simple POJO's is not necessary.
 
 ### Powermock for corner cases
 

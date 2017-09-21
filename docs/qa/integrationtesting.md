@@ -1,10 +1,8 @@
 # Integration testing
 
-In DotWebStack we try to do as much happy flow testing inside an integration test sandbox. See the [integration-test module](https://github.com/dotwebstack/dotwebstack-framework/tree/master/integration-test) inside the core project.
+In DotWebStack we try to do as much happy flow testing as possible inside an integration test sandbox. See the [integration-test module](https://github.com/dotwebstack/dotwebstack-framework/tree/master/integration-test) inside the core project.
 
 Through connecting all the different pieces we can simulate how the actual project will behave and we can ensure that we can deliver the features of the DotWebStack framework as a whole.
-
-As of now, we test both the OpenAPI and LinkedDataAPI through simple requests only. 
 
 ## DBEERPEDIA
 
@@ -13,7 +11,7 @@ To have a solid test set, we provide the DBEERPEDIA dataset. This set describes 
 
 ## Stub triple store
 
-In order to have our tests not be dependant on an external triple store, we have implemented a stub triple store which listens for requests on a pre-defined port. This stub implementation is a simple java `HttpServer` which translate a RDF `Model` to the turtle format, and simulates what a SPARQL endpoint would return, given simular requests. In order to influence the resulting result set, you can provide your own result model when starting your integration test.
+In order to have our tests not be dependant on an external triple store, we have implemented a stub triple store which listens for requests on a pre-defined port. This stub implementation is a simple java `HttpServer` which translate a RDF `Model` to the turtle format, and simulates what a SPARQL endpoint would return, given similar requests. In order to influence the resulting result set, you can provide your own result model when starting your integration test.
 
 For example:
 
@@ -36,7 +34,7 @@ Then you need to tell the SparqlHttpStub which data you wish to return, should a
 
 	```
 	@Test
-	public void getBreweryCollection() {
+	public void get_GetBreweryCollection_ThroughApi() {
 	  // Arrange
 	  Model model = new ModelBuilder().subject(DBEERPEDIA.BREWERIES).add(RDFS.LABEL,
 		DBEERPEDIA.BREWERIES_LABEL).build();
