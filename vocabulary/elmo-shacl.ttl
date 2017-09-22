@@ -6,8 +6,10 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix dc: <http://purl.org/dc/elements/1.1>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 
 @prefix elmo-shape: <http://dotwebstack.org/def/elmo-shacl#> .
+@prefix elmo-schemes: <http://dotwebstack.org/def/elmo/>.
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
 
 elmo-shape:
@@ -183,6 +185,8 @@ elmo-shape:Transaction a sh:NodeShape;
 		sh:name "elmo:updateProtocol";
 		sh:path elmo:updateProtocol;
 		sh:class elmo:UpdateProtocol;
+		sh:node elmo-shape:UpdateProtocol;
+		sh:maxCount 1;
 	];
 	sh:property [
 		sh:name "elmo:preQueries";
@@ -213,6 +217,16 @@ elmo-shape:Transaction a sh:NodeShape;
 		sh:class elmo:Representation;
 	];
 .
+elmo-shape:UpdateProtocol a sh:NodeShape;
+	rdfs:label "UpdateProtocol shape"@en;
+	sh:name "elmo:UpdateProtocol";
+	sh:property [
+		sh:path skos:inScheme;
+		sh:hasValue elmo-schemes:update-protocol;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
 
 elmo-shape:Backend a sh:NodeShape;
 	sh:targetClass elmo:Backend;
@@ -222,12 +236,6 @@ elmo-shape:Backend a sh:NodeShape;
 		sh:name "rdfs:label";
 		sh:path rdfs:label
 	];
-.
-
-elmo-shape:UpdateProtocol a sh:NodeShape;
-	sh:targetClass elmo:UpdateProtocol;
-	rdfs:label "UpdateProtocol shape"@en;
-	sh:name "elmo:UpdateProtocol";
 .
 
 elmo-shape:Transformer a sh:NodeShape;
@@ -349,6 +357,13 @@ elmo-shape:Representation a sh:NodeShape;
 	sh:property [
 		sh:name "rdfs:label";
 		sh:path rdfs:label;
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		sh:name "elmo:name";
+		sh:path elmo:name;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
 	];
 	sh:property [
 		sh:name "elmo:urlPattern";
@@ -365,14 +380,37 @@ elmo-shape:Representation a sh:NodeShape;
 		sh:path elmo:appliesTo;
 		sh:class rdfs:Resource;
 	];
-		sh:property [
+	sh:property [
+		sh:name "elmo:fragment";
+		sh:path elmo:fragment;
+		sh:class elmo:Fragment;
+	];
+	sh:property [
 		sh:name "elmo:template";
-		sh:path elmo:template
+		sh:path elmo:template;
+		sh:datatype xsd:string;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "elmo:appearance";
+		sh:path elmo:appearance;
+		sh:class elmo:Appearance;
+		sh:node elmo-shape:Appearance;
 	];
 	sh:property [
 		sh:path [sh:inversePath elmo:contains ];
 		sh:node elmo-shape:TopLevelRepresentation;
 		sh:class elmo:Representation;
+	];
+.
+elmo-shape:Appearance a sh:NodeShape;
+	rdfs:label "Appearance shape"@en;
+	sh:name "elmo:Appearance";
+	sh:property [
+		sh:path skos:inScheme;
+		sh:hasValue elmo-schemes:appearance;
+		sh:minCount 1;
+		sh:maxCount 1;
 	];
 .
 
@@ -388,6 +426,7 @@ elmo-shape:TopLevelRepresentation a sh:NodeShape;
 		sh:name "elmo:contains";
 		sh:class elmo:Representation;
 		sh:minCount 1;
+		# elmo:contains might also refer to a rdf:List of elmo:Representations to facilitate the order in which child representations are presented
 	];
 .
 elmo-shape:TransactionRepresentation a sh:NodeShape;
@@ -441,7 +480,24 @@ elmo-shape:DataRepresentation a sh:NodeShape;
 	sh:property [
 		sh:path elmo:data;
 		sh:name "elmo:data";
+		sh:class rdfs:Resource;
 		sh:minCount 1;
 	];
 	# Data representations should not have properties like informationProduct or transaction
+.
+
+elmo-shape:Fragment a sh:NodeShape;
+	rdfs:label "Fragment shape";
+	sh:name "elmo:Fragment";
+	sh:targetClass elmo:Fragment;
+	sh:property [
+		sh:name "elmo:appliesTo";
+		sh:path elmo:apliesTo;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label;
+	];
 .

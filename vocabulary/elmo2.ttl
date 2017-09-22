@@ -223,6 +223,12 @@ elmo:Representation a owl:Class;
 	rdfs:label "Representation"@en;
 	rdfs:comment "The class of representations. A representation links a http request to the corresponding information product."@en;
 .
+elmo:name a owl:DatatypeProperty;
+	rdfs:label "name"@en;
+	rdfs:comment "The unique name of a resource, within a certain context";
+	# No rdfs:domain, name can be used in a lot of situations;
+	rdfs:range xsd:string;
+.
 elmo:urlPattern a owl:DatatypeProperty;
 	rdfs:label "URL pattern"@en;
 	rdfs:comment "Specifies the URL pattern for which this representation should be used. The URL pattern is matched to the part of the http request after removing the domain name of the site and the base path of the stage."@en;
@@ -238,8 +244,14 @@ elmo:uriPattern a owl:DatatypeProperty;
 elmo:appliesTo a owl:ObjectProperty;
 	rdfs:label "applies to"@en;
 	rdfs:comment "Specifies the resource profile for which this representation should be used. A resource profile is a set of triples ([]?p?o). A particular resource ?s matches a resource profile if and only if all triples ?s?p?o exist. For example: the resource profile [rdf:type skos:Concept] whould match any resource that is of type skos:Concept."@en;
-	rdfs:domain elmo:Representation;
+	# no rdfs:domain: it could be elmo:Representation, but also elmo:Fragment;
 	rdfs:range rdfs:Resource;
+.
+elmo:fragment a owl:ObjectProperty;
+	rdfs:label "fragment"@en;
+	rdfs:comment "Links a particular fragment definition to a representation";
+	rdfs:domain elmo:Representation;
+	rdfs:range elmo:Fragment;
 .
 elmo:informationProduct a owl:ObjectProperty;
 	rdfs:label "information product"@en;
@@ -282,4 +294,14 @@ elmo:template a owl:DatatypeProperty;
 	rdfs:comment "Specifies an optional JSX template for the representation. This template replaces a default generated template from the configuration";
 	rdfs:domain elmo:Representation;
 	rdfs:range xsd:string;
+.
+
+elmo:Fragment a owl:Class;
+	rdfs:label "Fragment"@en;
+	rdfs:comment "The class of fragments";
+.
+
+elmo:Appearance a owl:Class;
+	rdfs:label "Appearance"@en;
+	rdfs:comment "The class of appearances";
 .

@@ -1,0 +1,67 @@
+# =========
+# Update protocols
+#
+# Used terminology in the description of the update protocols:
+# - subject parameter: the parameter that identifies the subject of the transaction. In REST API's this will be similar to the URL
+# - target graph: the URI of an explicitly specified target graph (as part of the transaction configuration), or the value of the subject parameter in case no target graph is specified
+# - transaction dataset: the in memory dataset that is loaded from the http request body (and may be changed by an pre-query)
+#
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+@prefix elmo-schemes: <http://dotwebstack.org/def/elmo/>.
+@prefix elmo-up: <http://dotwebstack.org/def/elmo/update-protocol/>.
+
+elmo-up:DeleteGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Clear graph";
+	rdfs:comment "Clears the content of the target graph";
+.
+elmo-up:ReplaceGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Replace graph";
+	rdfs:comment "Replaces the content of the target graph with the content of the transaction dataset";
+.
+elmo-up:InsertIntoGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Insert into graph";
+	rdfs:comment "Inserts the content of the transaction dataset in the target graph, without deleting any triples in the target graph";
+.
+elmo-up:InsertOrReplaceResourceInGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Insert or replace resource in graph";
+	rdfs:comment "Insert the content of the transaction dataset in the target graph, and deletes any triples <s,p,o> for any s that is present in the transaction dataset";
+.
+elmo-up:DeleteResourceFromGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Delete resource from graph";
+	rdfs:comment "Deletes any triples <s,p,o> from the target graph where s is equal to the value of the subject parameter";
+.
+elmo-up:CreateResourceInGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Create resource in graph";
+	rdfs:comment "mints URIs for any resource in the transaction dataset, and inserts the transaction dataset into the target graph.";
+.
+elmo-up:InsertIntoVersionGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Insert into version graph";
+	rdfs:comment "inserts the content of the transaction dataset into a newly created versioned target graph.";
+.
+elmo-up:InvalidateVersionGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Invalidate version graph";
+	rdfs:comment "invalidates the current version (this created a new version that states that the previous version is invalid)";
+.
+elmo-up:DeleteVersionGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Delete version graph";
+	rdfs:comment "deletes a particular version graph.";
+.
+elmo-up:CreateResourceInVersionGraph a elmo:UpdateProtocol;
+	skos:inScheme elmo-schemes:update-protocol;
+	rdfs:label "Create resource in version graph";
+	rdfs:comment "mints URIs for any resource in the transaction dataset, and inserts the content of the transaction dataset into a newly created versioned target graph.";
+.
