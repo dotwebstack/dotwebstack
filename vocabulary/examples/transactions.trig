@@ -1,0 +1,101 @@
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+@prefix config: <http://dotwebstack.org/configuration/>.
+
+#Backend (only transactions and information products, theatre system config has been left out)
+GRAPH config:Theatre> {
+	# Information product, retrieve any data for this subject
+	config:SubjectData a elmo:InformationProduct;
+		elmo:query '''
+			construct {
+				${subject} ?p ?o
+			}
+			where {
+				${subject} ?p ?o
+			}
+		'''
+	.
+
+	# Transaction: replace resource from graph
+	config:InsertOrReplaceConcept a elmo:Transaction;
+		elmo:conformsTo config:ConceptShapeGraph;
+		elmo:preQueries (
+			[
+				a elmo:Query;
+				rdfs:label "Add missing labels";
+				elmo:query '''
+					insert {
+						?concept rdfs:label ?label
+					}
+					where {
+						?concept skos:prefLabel ?label.
+						FILTER NOT EXISTS {
+							?concept rdfs:label ?existinglabel
+						}
+					}
+				''';
+			]
+		);
+		elmo:storageProtocol InsertOrReplaceResourceInGraph;
+		elmo:targetGraph <http://dotwebstack.org/all-concepts>;
+		elmo:postQueries (
+			[
+				a elmo:Query;
+				rdfs:label "Add hash";
+				elmo:query '''
+					insert {
+						graph <http://dotwebstack.org/all-concepts> {
+							?concept wdrs:hash ?hash
+						}
+					}
+					where {
+						graph <http://dotwebstack.org/all-concepts> {
+							select (md5(?definition) as ?hash) {
+								?concept skos:definition ?definition
+							}
+						}
+					}
+				'''
+			]
+		)
+	.
+	config:DeleteConcept a elmo:Transaction;
+		elmo:storageProtocol elmo:DeleteResourceFromGraph;
+		elmo:targetGraph <http://dotwebstack.org/all-concepts>;
+	.
+	config:Transform a elmo:Transaction;
+		elmo:transformer [
+			a elmo:RMLMapper;
+			elmo:sourceGraph config:RMLMap;
+		];
+		elmo:storageProtocol elmo:ReplaceGraph;
+		elmo:targetGraph <http://dotwebstack.org/uploaded-data>
+	.
+}
+
+#Frontend
+GRAPH config:MainStage {
+	# Representation and storage of concepts
+	config:ConceptResource a elmo:Representation;
+		elmo:uri-pattern "/id/concept/";
+		elmo:informationProduct config:SubjectData;
+		elmo:postTransaction config:InsertOrReplaceConcept;
+		elmo:putTransaction config:InsertOrReplaceConcept;
+		elmo:deleteTransaction config:DeleteConcept;
+	.
+}
+
+#Concept Shape graph
+GRAPH config:ConceptShapeGraph {
+	# Constraint: a concept should have a prefLabel
+	concept-shape a sh:NodeShape;
+		sh:targetClass skos:Concept;
+		sh:property [
+			sh:path skos:prefLabel;
+			sh:minCount 1;
+		];
+	.
+}
