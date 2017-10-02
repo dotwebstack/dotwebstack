@@ -68,7 +68,7 @@ GRAPH config:MainStage {
 	
 	# This version is a manually made jsx template
 	# The default jsx template is overriden, making it possible to add extra code. 
-	# The property 'name' is used to link the TableAppearance with the specifiek representation
+	# The property 'name' is used to link the TableAppearance with the specific representation
 	# A third appearance is added, to show how to include linked data from different sources
 	# At the location specified by the property 'src', RDF data is expected
 	config:PersonRepresentation3 a elmo:Representation;
