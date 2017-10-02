@@ -22,6 +22,7 @@ Definition of Done (DoD) is a list of criteria which must be met before a produc
 * Code does not introduce any new [SonarCloud issues][1];
 * Code does not contain any TODOs (they must be administered as new Jira issues);
 * Code is merged with master and feature branch has been removed.
-* Code is tested and can be demoed in the sandbox project.
+* Code is tested following the [unittest guidelines](unittesting.md) and can be demoed in the sandbox project.
+* Code is touched by at least one integration test. See our [integrationtest guidelines](integrationtesting.md). 
 
 [1]: https://sonarcloud.io/organizations/dotwebstack/projects
