@@ -14,7 +14,7 @@ The elmo ontology consists of three seperate parts:
 2. The core and backend configuration (information product and transaction)
 3. The frontend configuration (representation).
 
-Al parts will be discussed in separate chapters.
+All parts will be discussed in separate chapters.
 
 ## System configuration
 
@@ -36,29 +36,29 @@ The picture below gives a visual representation of the elmo vocabulary with resp
 
 ![](transaction-flow.png)
 
-Shape validation is performed against the data summited as part of the request. Prequeries are performed against the in-memory dataset. Prequeries are specified as a rdf:List of elmo:Queries. This means that more than one query can be executed in the specified order. The language of the prequeries should be SPARQL Update. PostQueries are performed against the backend persistancy, and are also specified as a rdf:List of elmo:Queries. The language for the postqueries depend on the particular backend that is used.
+Shape validation (as stated with `elmo:conformsTo`) is performed against the data submitted as part of the request. Prequeries are performed against the in-memory dataset. Prequeries are specified as a rdf:List of elmo:Queries. This means that more than one query can be executed in the specified order. The language of the prequeries should be SPARQL Update. PostQueries are performed against the backend persistancy, and are also specified as a rdf:List of elmo:Queries. The language for the postqueries depends on the particular backend that is used.
 
-Via `elmo:updateProtocol` you specify which kind of update protocol is used to manipulate the persistancy store. The following update protocols are available:
+Via `elmo:storageProtocol` you specify which kind of update protocol is used to manipulate the persistancy store. The following update protocols are available:
 
 - `elmo-up:DeleteGraph`: clears the content of the target graph;
 - `elmo-up:ReplaceGraph`: replaces the content of the target graph with the content of the transaction dataset;
 - `elmo-up:InsertIntoGraph`: inserts the content of the transaction dataset into the target graph, without deleting any triples;
 - `elmo-up:InsertOrReplaceResourceInGraph`: inserts the content of the transaction dataset in the target graph, and deletes any triples <s,p,o> for any s that is present in the transaction dataset;
 - `elmo-up:DeleteResourceFromGraph`: deletes any triples <s,p,o> from the target graph where s is equal to the value of the subject parameter;
-- `elmo-up:CreateResourceInGraph`: mints URIs for any resource in the transaction dataset, and inserts the transaction dataset into the target graph;
+- `elmo-up:CreateResourceInGraph`: mints URIs for any resource in the transaction dataset (as defined by `elmo:uriTemplate`), and inserts the transaction dataset into the target graph;
 - `elmo-up:InsertIntoVersionGraph`: inserts the content of the transaction dataset into a newly created versioned target graph.
 - `elmo-up:InvalidateVersionGraph`: invalidates the current version (this created a new version that states that the previous version is invalid)
 - `elmo-up:DeleteVersionGraph`:  deletes a particular version graph.
-- `elmo-up:CreateResourceInVersionGraph`: mints URIs for any resource in the transaction dataset, and inserts the content of the transaction dataset into a newly created versioned target graph. 
+- `elmo-up:CreateResourceInVersionGraph`: mints URIs for any resource in the transaction dataset (as defined by `elmo:uriTemplate`), and inserts the content of the transaction dataset into a newly created versioned target graph. 
 
 We have created a [configuration file](examples/transactions.trig) that contains some examples how to configure transactions.
 
 ## Front-end configuration
-The picture below gives a visual representation of the elmo vocabulary with respect to the front-end configuration. You use the front-end configuration to serve regular linked data serializations and HTML. The front-end configuration is not ment for API specifications, for this you will need to create an OpenAPI specification document.
+The picture below gives a visual representation of the elmo vocabulary with respect to the front-end configuration. You use the front-end configuration to serve regular linked data serializations and HTML. The front-end configuration is not meant for API specifications, for this you will need to create an OpenAPI specification document.
 
 ![](elmo-frontend-diagram.png)
 
-A blank version of `elmo:InformationProduct` and `elmo:Transaction` are depicted in the picture above, to describe the way that an `elmo:Representation` is linked to these components.
+Blank versions of `elmo:InformationProduct` and `elmo:Transaction` are depicted in the picture above, to describe the way that an `elmo:Representation` is linked to these components.
 
 To specify which representation is used in a particular situation, you can use the properties `elmo:urlPattern`, `elmo:uriPattern` and `elmo:appliesTo`.
 

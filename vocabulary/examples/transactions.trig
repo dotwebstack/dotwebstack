@@ -1,12 +1,13 @@
-@prefix elmo: <http://dotwebstack.org/def/elmo#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix dc: <http://purl.org/dc/elements/1.1>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+@prefix elmo-sp: <http://dotwebstack.org/def/elmo/storage-protocol/>.
 
 @prefix config: <http://dotwebstack.org/configuration/>.
 
 #Backend (only transactions and information products, theatre system config has been left out)
-GRAPH config:Theatre> {
+GRAPH config:Theatre {
 	# Information product, retrieve any data for this subject
 	config:SubjectData a elmo:InformationProduct;
 		elmo:query '''
@@ -39,7 +40,7 @@ GRAPH config:Theatre> {
 				''';
 			]
 		);
-		elmo:storageProtocol InsertOrReplaceResourceInGraph;
+		elmo:storageProtocol elmo-sp:InsertOrReplaceResourceInGraph;
 		elmo:targetGraph <http://dotwebstack.org/all-concepts>;
 		elmo:postQueries (
 			[
@@ -63,7 +64,7 @@ GRAPH config:Theatre> {
 		)
 	.
 	config:DeleteConcept a elmo:Transaction;
-		elmo:storageProtocol elmo:DeleteResourceFromGraph;
+		elmo:storageProtocol elmo-sp:DeleteResourceFromGraph;
 		elmo:targetGraph <http://dotwebstack.org/all-concepts>;
 	.
 	config:Transform a elmo:Transaction;
@@ -71,7 +72,7 @@ GRAPH config:Theatre> {
 			a elmo:RMLMapper;
 			elmo:sourceGraph config:RMLMap;
 		];
-		elmo:storageProtocol elmo:ReplaceGraph;
+		elmo:storageProtocol elmo-sp:ReplaceGraph;
 		elmo:targetGraph <http://dotwebstack.org/uploaded-data>
 	.
 }

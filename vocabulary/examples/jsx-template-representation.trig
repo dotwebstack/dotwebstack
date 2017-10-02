@@ -6,7 +6,7 @@
 @prefix config: <http://dotwebstack.org/configuration/>.
 
 #Backend (only information products, theatre system config has been left out)
-GRAPH config:Theatre> {
+GRAPH config:Theatre {
 	config:SubjectData a elmo:InformationProduct;
 		elmo:query '''
 			construct {

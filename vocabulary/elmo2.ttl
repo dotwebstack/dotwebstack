@@ -11,7 +11,7 @@
 #
 
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
-@prefix elmo-up: <http://dotwebstack.org/def/elmo/update-protocol/>.
+@prefix elmo-sp: <http://dotwebstack.org/def/elmo/storage-protocol/>.
 
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -90,9 +90,9 @@ elmo:Query a owl:Class;
 	rdfs:label "Query"@en;
 	rdfs:comment "Reification of the query. This makes it possible to reuse a query, or to add metadata to the query";
 .
-elmo:UpdateProtocol a owl:Class;
-	rdfs:label "UpdateProtocol"@en;
-	rdfs:comment "The class of update protocols. Instances of this class define how a transaction updates the persistancy layer";
+elmo:StorageProtocol a owl:Class;
+	rdfs:label "StorageProtocol"@en;
+	rdfs:comment "The class of storage protocols. Instances of this class define how a transactionresult is stored within the persistancy layer";
 .
 elmo:Transformer a owl:Class;
 	rdfs:label "Transformer"@en;
@@ -150,15 +150,15 @@ elmo:query a owl:DatatypeProperty;
 
 elmo:targetGraph a owl:ObjectProperty;
 	rdfs:label "targetGraph"@en;
-	rdfs:comment "States the named graph that is affected by the transaction. If no target graph is mentioned, and the updateProtocol needs one, the value of the subject parameter is used";
+	rdfs:comment "States the named graph that is affected by the transaction. If no target graph is mentioned, and the storageProtocol needs one, the value of the subject parameter is used";
 	rdfs:domain elmo:Transaction;
 	rdfs:range rdfs:Resource;
 .
-elmo:updateProtocol a owl:ObjectProperty;
-	rdfs:label "updateProtocol"@en;
-	rdfs:comment "Defines the way that the persistancy layer is updated";
+elmo:storageProtocol a owl:ObjectProperty;
+	rdfs:label "storageProtocol"@en;
+	rdfs:comment "Defines the way that the result of a transaction is stored within the persistancy layer";
 	rdfs:domain elmo:Transaction;
-	rdfs:range elmo:UpdateProtocol;
+	rdfs:range elmo:StorageProtocol;
 .
 elmo:transformer a owl:ObjectProperty;
 	rdfs:label "transformer"@en;
@@ -166,54 +166,58 @@ elmo:transformer a owl:ObjectProperty;
 	rdfs:domain elmo:Transaction;
 	rdfs:range elmo:Transformer;
 .
-	
+elmo:uriTemplate a owl:DatatypeProperty;
+	rdfs:label "uriTemplate"@en;
+	rdfs:comment "Specifies the template that is used for minting a URI during a transaction.";
+.
+
 # =========
-# Update protocols
+# Storage protocols
 #
-# Used terminology in the description of the update protocols:
+# Used terminology in the description of the storage protocols:
 # - subject parameter: the parameter that identifies the subject of the transaction. In REST API's this will be similar to the URL
 # - target graph: the URI of an explicitly specified target graph (as part of the transaction configuration), or the value of the subject parameter in case no target graph is specified
 # - transaction dataset: the in memory dataset that is loaded from the http request body (and may be changed by an pre-query)
 #
-elmo-up:DeleteGraph a elmo:UpdateProtocol;
+elmo-sp:DeleteGraph a elmo:StorageProtocol;
 	rdfs:label "Clear graph";
 	rdfs:comment "Clears the content of the target graph";
 .
-elmo-up:ReplaceGraph a elmo:UpdateProtocol;
+elmo-sp:ReplaceGraph a elmo:StorageProtocol;
 	rdfs:label "Replace graph";
 	rdfs:comment "Replaces the content of the target graph with the content of the transaction dataset";
 .
-elmo-up:InsertIntoGraph a elmo:UpdateProtocol;
+elmo-sp:InsertIntoGraph a elmo:StorageProtocol;
 	rdfs:label "Insert into graph";
 	rdfs:comment "Inserts the content of the transaction dataset in the target graph, without deleting any triples in the target graph";
 .
-elmo-up:InsertOrReplaceResourceInGraph a elmo:UpdateProtocol;
+elmo-sp:InsertOrReplaceResourceInGraph a elmo:StorageProtocol;
 	rdfs:label "Insert or replace resource in graph";
 	rdfs:comment "Insert the content of the transaction dataset in the target graph, and deletes any triples <s,p,o> for any s that is present in the transaction dataset";
 .
-elmo-up:DeleteResourceFromGraph a elmo:UpdateProtocol;
+elmo-sp:DeleteResourceFromGraph a elmo:StorageProtocol;
 	rdfs:label "Delete resource from graph";
 	rdfs:comment "Deletes any triples <s,p,o> from the target graph where s is equal to the value of the subject parameter";
 .
-elmo-up:CreateResourceInGraph a elmo:UpdateProtocol;
+elmo-sp:CreateResourceInGraph a elmo:StorageProtocol;
 	rdfs:label "Create resource in graph";
-	rdfs:comment "mints URIs for any resource in the transaction dataset, and inserts the transaction dataset into the target graph.";
+	rdfs:comment "mints URIs for any resource in the transaction dataset (as defined by elmo:uriTemplate), and inserts the transaction dataset into the target graph.";
 .
-elmo-up:InsertIntoVersionGraph a elmo:UpdateProtocol;
+elmo-sp:InsertIntoVersionGraph a elmo:StorageProtocol;
 	rdfs:label "Insert into version graph";
 	rdfs:comment "inserts the content of the transaction dataset into a newly created versioned target graph.";
 .
-elmo-up:InvalidateVersionGraph a elmo:UpdateProtocol;
+elmo-sp:InvalidateVersionGraph a elmo:StorageProtocol;
 	rdfs:label "Invalidate version graph";
 	rdfs:comment "invalidates the current version (this created a new version that states that the previous version is invalid)";
 .
-elmo-up:DeleteVersionGraph a elmo:UpdateProtocol;
+elmo-sp:DeleteVersionGraph a elmo:StorageProtocol;
 	rdfs:label "Delete version graph";
 	rdfs:comment "deletes a particular version graph.";
 .
-elmo-up:CreateResourceInVersionGraph a elmo:UpdateProtocol;
+elmo-sp:CreateResourceInVersionGraph a elmo:StorageProtocol;
 	rdfs:label "Create resource in version graph";
-	rdfs:comment "mints URIs for any resource in the transaction dataset, and inserts the content of the transaction dataset into a newly created versioned target graph.";
+	rdfs:comment "mints URIs for any resource in the transaction dataset (as defined by elmo:uriTemplate), and inserts the content of the transaction dataset into a newly created versioned target graph.";
 .
 
 # =========

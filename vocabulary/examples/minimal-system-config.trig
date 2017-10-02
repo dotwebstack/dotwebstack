@@ -11,7 +11,7 @@
 @prefix config: <http://dotwebstack.org/configuration/>.
 
 # System configuration graph
-GRAPH config:DemoTheatre> {
+GRAPH config:DemoTheatre {
 	# Theatre declaration, URI MUST be the same as the system configuration name graph
 	config:DemoTheatre a elmo:Theatre;
 		rdfs:label "The demo theatre, using all vocabulary statements";
