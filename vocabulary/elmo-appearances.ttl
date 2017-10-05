@@ -1,0 +1,32 @@
+# =========
+# Appearances
+#
+# The elmo:name property of an appearance is important, because this name is used to link an appearance with the React component
+#
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+@prefix elmo-schemes: <http://dotwebstack.org/def/elmo/>.
+@prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
+
+elmo-app:ContentAppearance a elmo:Appearance;
+	skos:inScheme elmo-schemes:appearance;
+	elmo:name "ContentAppearance";
+	rdfs:label "Content appearance"@en;
+	rdfs:comment "Appearance that presents triples in a property-object layout (two columns, row per property)"@en;
+.
+elmo-app:TableAppearance a elmo:Appearance;
+	skos:inScheme elmo-schemes:appearance;
+	elmo:name "TableAppearance";
+	rdfs:label "Table appearance"@en;
+	rdfs:comment "Appearance that presents triples or a list of bindingsets as a table"@en;
+.
+elmo-app:GeoAppearance a elmo:Appearance;
+	skos:inScheme elmo-schemes:appearance;
+	elmo:name "GeoAppearance";
+	rdfs:label "Geospatial appearance";
+	rdfs:comment "Appearance that presents triples with geospatial properties on a map";
+.

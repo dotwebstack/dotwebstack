@@ -1,43 +1,42 @@
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix dc: <http://purl.org/dc/elements/1.1>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix config: <http://dotwebstack.org/configuration/>.
 
 # Configuration prefix could be anything: properties.yml must contain the name of the system configuration graph (in this case: <http://dotwebstack.org/configuration/DummyTheatre>)
 # (no system configuration graph means - failure to start-up the dotwebstack)
 # All stages should be defined in the system configuration graph
 # If no elmo:Stage declaration is made, a default one is created, with the URI of the system named graph.
 
-@prefix config: <http://dotwebstack.org/configuration/>.
-
 # System configuration graph
-GRAPH config:DummyTheatre> {
+GRAPH config:DemoTheatre {
 	# Theatre declaration, URI MUST be the same as the system configuration name graph
-	config:DummyTheatre a elmo:Theatre;
-		rdfs:label "The dummy theatre, using all vocabulary statements";
-		dc:title "Dummy theatre";
+	config:DemoTheatre a elmo:Theatre;
+		rdfs:label "The demo theatre, using all vocabulary statements";
+		dc:title "Demo theatre";
 	.
 	
 	# All site declarations MUST be part of the system configuration graph
-	config:DummySite a elmo:Site;
+	config:DemoSite a elmo:Site;
 		elmo:domain "demo.dotwebstack.org";
 	.
 	
 	# All stage declarations MUST be part of the system configuration graph
 	config:MainStage a elmo:Stage;
-		elmo:site config:DummySite;
+		elmo:site config:DemoSite;
 		elmo:basePath "";
 	.
 	config:SecondStage a elmo:Stage;
-		elmo:site config:DummySite;
+		elmo:site config:DemoSite;
 		elmo:basePath "second-stage"
 	.
 	config:CountAllInfo a elmo:InformationProduct;
 		elmo:backend config:MyLocalSparqlBackend;
-		elmo:query '''
+		elmo:query """
 			select (count(*) as ?count)
 			where {?s?p?o}
-		'''
+		"""
 	.
 	
 	config:MyLocalSparqlBackend a elmo:SparqlBackend;
