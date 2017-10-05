@@ -38,7 +38,7 @@ The picture below gives a visual representation of the elmo vocabulary with resp
 
 Shape validation (as stated with `elmo:conformsTo`) is performed against the data submitted as part of the request. Prequeries are performed against the in-memory dataset. Prequeries are specified as a rdf:List of elmo:Queries. This means that more than one query can be executed in the specified order. The language of the prequeries should be SPARQL Update. PostQueries are performed against the backend persistancy, and are also specified as a rdf:List of elmo:Queries. The language for the postqueries depends on the particular backend that is used.
 
-Via `elmo:storageProtocol` you specify which kind of update protocol is used to manipulate the persistancy store. The following update protocols are available:
+Via `elmo:storageProtocol` you specify which kind of storage protocol is used to manipulate the persistancy store. The following storage protocols are available:
 
 - `elmo-up:DeleteGraph`: clears the content of the target graph;
 - `elmo-up:ReplaceGraph`: replaces the content of the target graph with the content of the transaction dataset;

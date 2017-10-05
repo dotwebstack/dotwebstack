@@ -2,29 +2,31 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix dc: <http://purl.org/dc/elements/1.1>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
 
 @prefix config: <http://dotwebstack.org/configuration/>.
 
 #Backend (only information products, theatre system config has been left out)
 GRAPH config:Theatre {
 	config:SubjectData a elmo:InformationProduct;
-		elmo:query '''
+		elmo:query """
 			construct {
 				${subject} ?p ?o
 			}
 			where {
 				${subject} ?p ?o
 			}
-		'''
+		"""
 	.
 	config:FriendsOfSubject a elmo:InformationProduct;
-		elmo:query '''
+		elmo:query """
 			select ?friend ?friend_label
 			where {
 				${subject} foaf:knows ?friend
 				OPTIONAL {?friend rdfs:label ?friend_label}
 			}
-		'''
+		"""
 	.
 }
 
@@ -32,14 +34,14 @@ GRAPH config:Theatre {
 GRAPH config:MainStage {
 	# This version creates a default jsx temnplate
 	config:PersonRepresentation1 a elmo:Representation;
-		elmo:appliesTo [rdf:type foaf:Person];
+		elmo:appliesTo [a foaf:Person];
 		elmo:informationProduct config:SubjectData;
 		elmo:contains config:FriendsRepresentation;
 	.
 	config:FriendsRepresentation a elmo:Representation;
 		elmo:name "Friends"; #Not realy necessary in the first two examples, but handy in the third example
 		elmo:informationProduct config:FriendsOfSubject;
-		elmo:appearance elmo:TableAppearance
+		elmo:appearance elmo-app:TableAppearance;
 		elmo:fragment [
 			elmo:appliesTo "friend";
 			rdfs:label "Friend"@en;
@@ -50,10 +52,10 @@ GRAPH config:MainStage {
 	# This version is identical the the previous, but with the jsx template as it would have been created
 	# By stating a elmo:template, the default jsx template is overriden (in this case replaced by an identical version...)
 	config:PersonRepresentation2 a elmo:Representation;
-		elmo:appliesTo [rdf:type foaf:Person];
+		elmo:appliesTo [a foaf:Person];
 		elmo:informationProduct config:SubjectData;
 		elmo:contains config:FriendsRepresentation;
-		elmo:template '''
+		elmo:template """
 			<div>
 				<ContentAppearance />
 				<TableAppearance about="http://dotwebstack.org/configuration/FriendsRepresentation">
@@ -63,7 +65,7 @@ GRAPH config:MainStage {
 					</fragment>
 				</TableAppearance>
 			</div>
-		''';
+		""";
 	.
 	
 	# This version is a manually made jsx template
@@ -72,10 +74,10 @@ GRAPH config:MainStage {
 	# A third appearance is added, to show how to include linked data from different sources
 	# At the location specified by the property 'src', RDF data is expected
 	config:PersonRepresentation3 a elmo:Representation;
-		elmo:appliesTo [rdf:type foaf:Person];
+		elmo:appliesTo [a foaf:Person];
 		elmo:informationProduct config:SubjectData;
 		elmo:contains config:FriendsRepresentation;
-		elmo:template '''
+		elmo:template """
 			<div class="row">
 				<div class="col">
 					<ContentAppearance />
@@ -92,6 +94,6 @@ GRAPH config:MainStage {
 			<div class="row">
 				<GeoAppearance src="http://bag.basisregistraties.overheid.nl/bag/id/pand/0307100000333887" />
 			</div>
-		''';
+		""";
 	.
 }

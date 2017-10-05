@@ -98,10 +98,10 @@ elmo:Transformer a owl:Class;
 	rdfs:label "Transformer"@en;
 	rdfs:comment "The class of transformers.";
 .
-elmo:RMLMapper a owl:Class;
-	rdfs:label "RMLMapper"@en;
+elmo:RMLTransformer a owl:Class;
+	rdfs:label "RMLTransformer"@en;
 	rdfs:subClassOf elmo:Transformer;
-	rdfs:comment "The class of RML mappers.";
+	rdfs:comment "The class of RML transformers.";
 .
 elmo:XSLTransformer a owl:Class;
 	rdfs:label "XSLTransformer"@en;

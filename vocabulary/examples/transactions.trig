@@ -1,8 +1,10 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix dc: <http://purl.org/dc/elements/1.1>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
 @prefix elmo-sp: <http://dotwebstack.org/def/elmo/storage-protocol/>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 
 @prefix config: <http://dotwebstack.org/configuration/>.
 
@@ -10,14 +12,14 @@
 GRAPH config:Theatre {
 	# Information product, retrieve any data for this subject
 	config:SubjectData a elmo:InformationProduct;
-		elmo:query '''
+		elmo:query """
 			construct {
 				${subject} ?p ?o
 			}
 			where {
 				${subject} ?p ?o
 			}
-		'''
+		"""
 	.
 
 	# Transaction: replace resource from graph
@@ -27,7 +29,7 @@ GRAPH config:Theatre {
 			[
 				a elmo:Query;
 				rdfs:label "Add missing labels";
-				elmo:query '''
+				elmo:query """
 					insert {
 						?concept rdfs:label ?label
 					}
@@ -37,7 +39,7 @@ GRAPH config:Theatre {
 							?concept rdfs:label ?existinglabel
 						}
 					}
-				''';
+				""";
 			]
 		);
 		elmo:storageProtocol elmo-sp:InsertOrReplaceResourceInGraph;
@@ -46,7 +48,7 @@ GRAPH config:Theatre {
 			[
 				a elmo:Query;
 				rdfs:label "Add hash";
-				elmo:query '''
+				elmo:query """
 					insert {
 						graph <http://dotwebstack.org/all-concepts> {
 							?concept wdrs:hash ?hash
@@ -59,7 +61,7 @@ GRAPH config:Theatre {
 							}
 						}
 					}
-				'''
+				"""
 			]
 		)
 	.
@@ -69,7 +71,7 @@ GRAPH config:Theatre {
 	.
 	config:Transform a elmo:Transaction;
 		elmo:transformer [
-			a elmo:RMLMapper;
+			a elmo:RMLTransformer;
 			elmo:sourceGraph config:RMLMap;
 		];
 		elmo:storageProtocol elmo-sp:ReplaceGraph;
@@ -92,7 +94,7 @@ GRAPH config:MainStage {
 #Concept Shape graph
 GRAPH config:ConceptShapeGraph {
 	# Constraint: a concept should have a prefLabel
-	concept-shape a sh:NodeShape;
+	config:ConceptShape a sh:NodeShape;
 		sh:targetClass skos:Concept;
 		sh:property [
 			sh:path skos:prefLabel;
