@@ -131,7 +131,7 @@ In the previous example, if the log level is INFO, the string concatenation will
 
 ```java
 void foo(float bar) {
-  LOG.debug("foo() bar = '{}'", message);
+  LOG.debug("foo() bar = '{}'", bar);
 }
 ```
 
