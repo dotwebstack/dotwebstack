@@ -90,6 +90,12 @@ elmo:Query a owl:Class;
 	rdfs:label "Query"@en;
 	rdfs:comment "Reification of the query. This makes it possible to reuse a query, or to add metadata to the query";
 .
+
+elmo:Parameter a owl:Class;
+	rdfs:label "Parameter"@en;
+	rdfs:comment "The class of parameters. A parameter is used as input for an information product. Its value(s) are merged with the query according to a template specification.";
+.
+
 elmo:StorageProtocol a owl:Class;
 	rdfs:label "StorageProtocol"@en;
 	rdfs:comment "The class of storage protocols. Instances of this class define how a transactionresult is stored within the persistancy layer";
@@ -169,6 +175,11 @@ elmo:transformer a owl:ObjectProperty;
 elmo:uriTemplate a owl:DatatypeProperty;
 	rdfs:label "uriTemplate"@en;
 	rdfs:comment "Specifies the template that is used for minting a URI during a transaction.";
+.
+elmo:parameter a owl:ObjectProperty;
+	rdfs:label "parameter";
+	rdfs:comment "States the parameter(s) for an information product, transaction or query";
+	rdfs:range elmo:Parameter;
 .
 
 # =========

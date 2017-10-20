@@ -180,6 +180,11 @@ elmo-shape:InformationProduct a sh:NodeShape;
 		sh:class elmo:Backend; #Deze conditie zal falen als de rdfs:subClassOf triple niet wordt meegenomen van subclasses van elmo:Backend;
 		sh:maxCount 1;
 	];
+	sh:property [
+		sh:name "elmo:parameter";
+		sh:path elmo:parameter;
+		sh:class elmo:Parameter;
+	];
 	# Link to elmo:Representation
 	sh:property [
 		sh:path [sh:inversePath elmo:informationProduct ];
@@ -262,6 +267,119 @@ elmo-shape:Transaction a sh:NodeShape;
 		sh:class elmo:Representation;
 	];
 .
+
+elmo-shape:Parameter a sh:NodeShape;
+	sh:targetClass elmo:Parameter;
+	sh:closed true;
+	rdfs:label "Parameter shape"@en;
+	sh:name "elmo:Parameter";
+	sh:property [
+		sh:path elmo:name;
+		sh:name "elmo:name";
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		sh:path elmo:shape;
+		sh:name "elmo:shape";
+		# direct property or node with properties
+		sh:node [ sh:xone (elmo-shape:ParameterPropertyShape elmo-shape:ParameterNodeShape) ];
+		# sh:node elmo-shape:ParameterPropertyShape;
+		# sh:node elmo-shape:ParameterNodeShape;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+elmo-shape:ParameterPropertyShape a sh:NodeShape;
+	sh:closed true;
+	rdfs:label "ParameterPropertyShape shape"@en;
+	sh:name "sh:PropertyShape (Parameter)";
+	sh:property [
+		sh:path sh:nodeKind;
+		sh:name "sh:nodeKind";
+		sh:defaultValue sh:Literal;
+		sh:class sh:NodeKind;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:datatype;
+		sh:name "sh:datatype";
+		sh:defaultValue xsd:string;
+		sh:class rdfs:Datatype;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:minCount;
+		sh:name "sh:minCount";
+		sh:datatype sh:integer;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:maxCount;
+		sh:name "sh:maxCount";
+		sh:datatype sh:integer;
+		sh:maxCount 1;
+	]
+.
+elmo-shape:ParameterNodeShape a sh:NodeShape;
+	sh:closed true;
+	rdfs:label "ParameterNodeShape shape"@en;
+	sh:name "sh:NodeShape (Parameter)";
+	sh:property [
+		sh:path sh:property;
+		sh:node elmo-shape:ParameterNodeShapeProperty;
+		sh:minCount 1;
+	];
+.
+elmo-shape:ParameterNodeShapeProperty a sh:NodeShape;
+	sh:closed true;
+	rdfs:label "ParameterNodeShapeProperty shape"@en;
+	sh:name "sh:PropertyShape (Parameternode)";
+	sh:property [
+		sh:path sh:name;
+		sh:name "sh:name";
+		sh:minCount 1;
+		sh:maxCount 1;
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		sh:path sh:nodeKind;
+		sh:name "sh:nodeKind";
+		sh:defaultValue sh:Literal;
+		sh:class sh:NodeKind;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:datatype;
+		sh:name "sh:datatype";
+		sh:defaultValue xsd:string;
+		sh:class rdfs:Datatype;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:minCount;
+		sh:name "sh:minCount";
+		sh:datatype sh:integer;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:maxCount;
+		sh:name "sh:maxCount";
+		sh:datatype sh:integer;
+		sh:maxCount 1;
+	]
+.
+#Placeholder, for viewing preferences
+elmo-shape:Datatype a sh:NodeShape;
+	sh:targetClass rdfs:Datatype;
+	sh:name "rdfs:Datatype";
+.
+elmo-shape:NodeKind a sh:NodeKind;
+	sh:targetClass sh:NodeKind;
+	sh:name "sh:NodeKind";
+.
+
 elmo-shape:StorageProtocol a sh:NodeShape;
 	rdfs:label "StorageProtocol shape"@en;
 	sh:name "elmo:StorageProtocol";

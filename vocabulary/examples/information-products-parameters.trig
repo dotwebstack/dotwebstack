@@ -1,0 +1,113 @@
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
+@prefix elmo-param: <http://dotwebstack.org/def/elmo/parameter/>.
+
+@prefix config: <http://dotwebstack.org/configuration/>.
+
+#Backend (only information products, theatre system config has been left out)
+GRAPH config:Theatre {
+	#
+	# Example of a predefined parameter (${subject})
+	#
+	config:SubjectData a elmo:InformationProduct;
+		# ${subject} is a default parameter, so we don't need to define this one, but we need to reference it
+		elmo:parameter elmo-param:subject;
+		elmo:query """
+			construct {
+				${subject} ?p ?o
+			}
+			where {
+				${subject} ?p ?o
+			}
+		"""
+	.
+	
+	#
+	# Example of a composite parameter (not predefined, although we might introduce a predefined paginator in the future!)
+	#
+	config:paginatorParameter a elmo:Parameter;
+		elmo:name "paginator";
+		elmo:shape [
+			sh:property [
+				sh:name "pageSize";
+				sh:maxCount 1;
+				sh:defaultValue 20;
+				sh:datatype xsd:integer;
+			];
+			sh:property [
+				sh:name "page";
+				sh:maxCount 1;
+				sh:defaultValue 1;
+				sh:datatype xsd:integer;
+			]
+		]
+	.
+	config:PagedFriendsOfSubject a elmo:InformationProduct;
+		elmo:parameter elmo-param:subject;
+		elmo:parameter config:paginatorParameter;
+		elmo:query """
+			select ?friend ?friend_label
+			where {
+				${subject} foaf:knows ?friend
+				OPTIONAL {?friend rdfs:label ?friend_label}
+			}
+			offset ${paginator.pageSize*(paginator.page-1)}
+			limit ${paginator.pageSize}
+		"""
+	.
+	
+	#
+	# Example of a simple string parameter
+	#
+	config:termParameter a elmo:Parameter;
+		elmo:name "term";
+		elmo:shape [
+			sh:datatype xsd:string;
+			sh:minCount 1;
+			sh:maxCount 1;
+		]
+	.
+	config:SimpleSearchResult a elmo:InformationProduct;
+		elmo:parameter config:termParameter;
+		elmo:query """
+			select ?resource ?resource_label
+			where {
+				?resource rdfs:label ?resource_label.
+				FILTER (regex(?resource_label,"${term}","i"))
+			}
+			limit 100
+		"""
+	.
+	
+	#
+	# Example of a list-of-strings parameter
+	#
+	config:termsParameter a elmo:Parameter;
+		elmo:name "term";
+		elmo:shape [
+			sh:datatype xsd:string;
+			sh:minCount 1;
+			sh:maxCount 10; #Maximum of 10 terms kan be used
+		];
+	.
+	config:SearchResult a elmo:InformationProduct;
+		elmo:parameter config:termsParameter;
+		elmo:query """
+			select ?resource ?resource_label
+			where {
+				?resource rdfs:label ?resource_label.
+				FILTER (1=0
+				<#list terms as term>
+					|| regex(?resource_label,"${term}","i")
+				</#list>
+				)
+			}
+			limit 100
+		"""
+	.
+	
+}
