@@ -63,16 +63,15 @@ GRAPH config:Theatre {
 	#
 	# Example of a simple string parameter
 	#
-	config:termParameter a elmo:Parameter;
+	config:termParameter a elmo:TermFilter;
 		elmo:name "term";
 		elmo:shape [
 			sh:datatype xsd:string;
-			sh:minCount 1;
-			sh:maxCount 1;
+			sh:minLength 2;
 		]
 	.
 	config:SimpleSearchResult a elmo:InformationProduct;
-		elmo:parameter config:termParameter;
+		elmo:requiredParameter config:termParameter;
 		elmo:query """
 			select ?resource ?resource_label
 			where {
