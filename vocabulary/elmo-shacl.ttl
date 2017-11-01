@@ -181,8 +181,13 @@ elmo-shape:InformationProduct a sh:NodeShape;
 		sh:maxCount 1;
 	];
 	sh:property [
-		sh:name "elmo:parameter";
-		sh:path elmo:parameter;
+		sh:name "elmo:optionalParameter";
+		sh:path elmo:optionalParameter;
+		sh:class elmo:Parameter;
+	];
+	sh:property [
+		sh:name "elmo:requiredParameter";
+		sh:path elmo:requiredParameter;
 		sh:class elmo:Parameter;
 	];
 	# Link to elmo:Representation
@@ -280,96 +285,117 @@ elmo-shape:Parameter a sh:NodeShape;
 		sh:maxCount 1;
 		sh:datatype xsd:string;
 	];
+.
+elmo-shape:TermFilter a sh:NodeShape;
+	sh:targetClass elmo:TermFilter;
+	sh:name "elmo:TermFilter";
 	sh:property [
 		sh:path elmo:shape;
 		sh:name "elmo:shape";
 		# direct property or node with properties
-		sh:node [ sh:xone (elmo-shape:ParameterPropertyShape elmo-shape:ParameterNodeShape) ];
-		# sh:node elmo-shape:ParameterPropertyShape;
-		# sh:node elmo-shape:ParameterNodeShape;
+		sh:node [ sh:xone (elmo-shape:URIParameterPropertyShape elmo-shape:StringParameterPropertyShape elmo-shape:IntegerParameterPropertyShape) ];
 		sh:minCount 1;
 		sh:maxCount 1;
 	];
 .
-elmo-shape:ParameterPropertyShape a sh:NodeShape;
+elmo-shape:Paginator a sh:NodeShape;
+	sh:targetClass elmo:Paginator;
+	sh:name "elmo:Paginator";
+.
+elmo-shape:SpatialReprojector a sh:NodeShape;
+	sh:targetClass elmo:SpatialReprojector;
+	sh:name "elmo:SpatialReprojector"
+.
+
+elmo-shape:URIParameterPropertyShape a sh:NodeShape;
 	sh:closed true;
-	rdfs:label "ParameterPropertyShape shape"@en;
-	sh:name "sh:PropertyShape (Parameter)";
+	rdfs:label "URIParameterPropertyShape shape"@en;
+	sh:name "sh:PropertyShape (URI)";
 	sh:property [
 		sh:path sh:nodeKind;
 		sh:name "sh:nodeKind";
-		sh:defaultValue sh:Literal;
-		sh:class sh:NodeKind;
-		sh:maxCount 1;
-	];
-	sh:property [
-		sh:path sh:datatype;
-		sh:name "sh:datatype";
-		sh:defaultValue xsd:string;
-		sh:class rdfs:Datatype;
-		sh:maxCount 1;
-	];
-	sh:property [
-		sh:path sh:minCount;
-		sh:name "sh:minCount";
-		sh:datatype sh:integer;
-		sh:maxCount 1;
-	];
-	sh:property [
-		sh:path sh:maxCount;
-		sh:name "sh:maxCount";
-		sh:datatype sh:integer;
-		sh:maxCount 1;
-	]
-.
-elmo-shape:ParameterNodeShape a sh:NodeShape;
-	sh:closed true;
-	rdfs:label "ParameterNodeShape shape"@en;
-	sh:name "sh:NodeShape (Parameter)";
-	sh:property [
-		sh:path sh:property;
-		sh:node elmo-shape:ParameterNodeShapeProperty;
-		sh:minCount 1;
-	];
-.
-elmo-shape:ParameterNodeShapeProperty a sh:NodeShape;
-	sh:closed true;
-	rdfs:label "ParameterNodeShapeProperty shape"@en;
-	sh:name "sh:PropertyShape (Parameternode)";
-	sh:property [
-		sh:path sh:name;
-		sh:name "sh:name";
+		sh:hasValue sh:IRI;
 		sh:minCount 1;
 		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:regex;
+		sh:name "sh:regex";
 		sh:datatype xsd:string;
-	];
-	sh:property [
-		sh:path sh:nodeKind;
-		sh:name "sh:nodeKind";
-		sh:defaultValue sh:Literal;
-		sh:class sh:NodeKind;
 		sh:maxCount 1;
 	];
+.
+
+elmo-shape:StringParameterPropertyShape a sh:NodeShape;
+	sh:closed true;
+	rdfs:label "StringParameterPropertyShape shape"@en;
+	sh:name "sh:PropertyShape (String)";
 	sh:property [
 		sh:path sh:datatype;
 		sh:name "sh:datatype";
-		sh:defaultValue xsd:string;
+		sh:hasValue xsd:string;
 		sh:class rdfs:Datatype;
+		sh:minCount 1;
 		sh:maxCount 1;
 	];
 	sh:property [
-		sh:path sh:minCount;
-		sh:name "sh:minCount";
-		sh:datatype sh:integer;
+		sh:path sh:defaultValue;
+		sh:name "sh:defaultValue";
+		sh:datatype xsd:string;
 		sh:maxCount 1;
 	];
 	sh:property [
-		sh:path sh:maxCount;
-		sh:name "sh:maxCount";
-		sh:datatype sh:integer;
+		sh:path sh:regex;
+		sh:name "sh:regex";
+		sh:datatype xsd:string;
 		sh:maxCount 1;
-	]
+	];
+	sh:property [
+		sh:path sh:minLength;
+		sh:name "sh:minLength";
+		sh:datatype xsd:integer;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:maxLength;
+		sh:name "sh:maxLength";
+		sh:datatype xsd:integer;
+		sh:maxCount 1;
+	];
 .
+
+elmo-shape:IntegerParameterPropertyShape a sh:NodeShape;
+	sh:closed true;
+	rdfs:label "IntegerParameterPropertyShape shape"@en;
+	sh:name "sh:PropertyShape (Integer)";
+	sh:property [
+		sh:path sh:datatype;
+		sh:name "sh:datatype";
+		sh:hasValue xsd:integer;
+		sh:class rdfs:Datatype;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:defaultValue;
+		sh:name "sh:defaultValue";
+		sh:datatype xsd:integer;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:minInclusive;
+		sh:name "sh:minInclusive";
+		sh:datatype xsd:integer;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:path sh:maxInclusive;
+		sh:name "sh:maxInclusive";
+		sh:datatype xsd:integer;
+		sh:maxCount 1;
+	];
+.
+
 #Placeholder, for viewing preferences
 elmo-shape:Datatype a sh:NodeShape;
 	sh:targetClass rdfs:Datatype;
@@ -378,6 +404,15 @@ elmo-shape:Datatype a sh:NodeShape;
 elmo-shape:NodeKind a sh:NodeKind;
 	sh:targetClass sh:NodeKind;
 	sh:name "sh:NodeKind";
+.
+elmo-shape:string sh:targetNode xsd:string;
+	sh:name "xsd:string";
+.
+elmo-shape:integer sh:targetNode xsd:integer;
+	sh:name "xsd:integer";
+.
+elmo-shape:IRI sh:targetNode sh:IRI;
+	sh:name "sh:IRI";
 .
 
 elmo-shape:StorageProtocol a sh:NodeShape;
@@ -512,6 +547,32 @@ elmo:FileBackend a sh:NodeShape;
 # =========
 # Frontend vocabulary
 #
+elmo-shape:Redirection a sh:NodeShape;
+	sh:closed true;
+	sh:targetClass elmo:Redirection;
+	rdfs:label "Redirection shape"@en;
+	sh:name "elmo:Redirection";
+	sh:property [
+		sh:name "rdfs:label";
+		sh:path rdfs:label;
+		sh:datatype xsd:string;
+	];
+	sh:property [
+		sh:name "elmo:urlPattern";
+		sh:path elmo:urlPattern;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "elmo:targetUrl";
+		sh:path elmo:targetUrl;
+		sh:datatype xsd:string;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+
 elmo-shape:Representation a sh:NodeShape;
 	sh:targetClass elmo:Representation;
 	rdfs:label "Representation shape"@en;

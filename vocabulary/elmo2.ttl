@@ -95,6 +95,11 @@ elmo:Parameter a owl:Class;
 	rdfs:label "Parameter"@en;
 	rdfs:comment "The class of parameters. A parameter is used as input for an information product. Its value(s) are merged with the query according to a template specification.";
 .
+elmo:TermFilter a owl:Class;
+	rdfs:subClassOf elmo:Parameter;
+	rdfs:label "Term filter"@en;
+	rdfs:comment "The class of term filters. A term filter is a parameter that can hold one value and can be used to filter the results of an information product. The value might be a URI or a literal with any datatype."
+.
 
 elmo:StorageProtocol a owl:Class;
 	rdfs:label "StorageProtocol"@en;
@@ -176,9 +181,14 @@ elmo:uriTemplate a owl:DatatypeProperty;
 	rdfs:label "uriTemplate"@en;
 	rdfs:comment "Specifies the template that is used for minting a URI during a transaction.";
 .
-elmo:parameter a owl:ObjectProperty;
-	rdfs:label "parameter";
-	rdfs:comment "States the parameter(s) for an information product, transaction or query";
+elmo:optionalParameter a owl:ObjectProperty;
+	rdfs:label "optional parameter";
+	rdfs:comment "States the optional parameter(s) for an information product, transaction or query";
+	rdfs:range elmo:Parameter;
+.
+elmo:requiredParameter a owl:ObjectProperty;
+	rdfs:label "required parameter";
+	rdfs:comment "States the optional parameter(s) for an information product, transaction or query";
 	rdfs:range elmo:Parameter;
 .
 
@@ -234,6 +244,11 @@ elmo-sp:CreateResourceInVersionGraph a elmo:StorageProtocol;
 # =========
 # Frontend vocabulary
 #
+elmo:Redirection a owl:Class;
+	rdfs:label "Redirection"@en;
+	rdfs:comment "The class of redirections. A redirection redirects a http request to another URL via the http 303 response"@en;
+.
+
 elmo:Representation a owl:Class;
 	rdfs:label "Representation"@en;
 	rdfs:comment "The class of representations. A representation links a http request to the corresponding information product."@en;
@@ -247,7 +262,7 @@ elmo:name a owl:DatatypeProperty;
 elmo:urlPattern a owl:DatatypeProperty;
 	rdfs:label "URL pattern"@en;
 	rdfs:comment "Specifies the URL pattern for which this representation should be used. The URL pattern is matched to the part of the http request after removing the domain name of the site and the base path of the stage."@en;
-	rdfs:domain elmo:Representation;
+	# No rdfs:domain, a urlPattern can be used with elmo:Representation and elmo:Redirection
 	rdfs:range xsd:string;
 .
 elmo:uriPattern a owl:DatatypeProperty;
@@ -261,6 +276,10 @@ elmo:appliesTo a owl:ObjectProperty;
 	rdfs:comment "Specifies the resource profile for which this representation should be used. A resource profile is a set of triples ([]?p?o). A particular resource ?s matches a resource profile if and only if all triples ?s?p?o exist. For example: the resource profile [rdf:type skos:Concept] whould match any resource that is of type skos:Concept."@en;
 	# no rdfs:domain: it could be elmo:Representation, but also elmo:Fragment;
 	rdfs:range rdfs:Resource;
+.
+elmo:targetUrl a owl:DatatypeProperty;
+	rdfs:label "target URL"@en;
+	rdfs:comment "Specifies the template for the URL to redirect to. The template conforms to the 'replacement' parameter of the string.replaceAll(regex,replacement) method, the elmo:urlPattern will be used as the 'regex' parameter."
 .
 elmo:fragment a owl:ObjectProperty;
 	rdfs:label "fragment"@en;
