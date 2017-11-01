@@ -287,8 +287,8 @@ elmo:appliesTo a owl:ObjectProperty;
 	# no rdfs:domain: it could be elmo:Representation, but also elmo:Fragment;
 	rdfs:range rdfs:Resource;
 .
-elmo:redirectTemplate a owl:DatatypeProperty;
-	rdfs:label "redirect template"@en;
+elmo:targetUrl a owl:DatatypeProperty;
+	rdfs:label "target URL"@en;
 	rdfs:comment "Specifies the template for the URL to redirect to. The template conforms to the 'replacement' parameter of the string.replaceAll(regex,replacement) method, the elmo:urlPattern will be used as the 'regex' parameter."
 .
 elmo:fragment a owl:ObjectProperty;

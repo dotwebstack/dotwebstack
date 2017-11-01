@@ -68,7 +68,7 @@ Information resources are dereferenced using an `elmo:Representation`. To redire
 
 	elmo:id2doc a elmo:Redirection;
 		elmo:urlPattern "^(.+)\\/id\\/(.+)$";
-		elmo:redirectTemplate "$1\\/doc\\/$2"
+		elmo:targetUrl "$1\\/doc\\/$2"
 	.  
 
 ### Representation

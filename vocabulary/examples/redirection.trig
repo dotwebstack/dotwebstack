@@ -12,7 +12,7 @@ GRAPH config:MainStage {
 
 	# Redirect URL's that contain /id/ to URL's that have this replaced by /doc/
 	# Double escaping of \\ is needed, because turtle uses a backslash as escape character as well.
-	elmo:id2doc a elmo:Redirection;
+	config:id2doc a elmo:Redirection;
 		elmo:urlPattern "^(.+)\\/id\\/(.+)$";
 		elmo:redirectTemplate "$1\\/doc\\/$2"
 	.  
