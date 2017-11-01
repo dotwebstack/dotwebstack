@@ -100,16 +100,6 @@ elmo:TermFilter a owl:Class;
 	rdfs:label "Term filter"@en;
 	rdfs:comment "The class of term filters. A term filter is a parameter that can hold one value and can be used to filter the results of an information product. The value might be a URI or a literal with any datatype."
 .
-elmo:Paginator a owl:Class;
-	rdfs:subClassOf elmo:Parameter;
-	rdfs:label "Paginator"@en;
-	rdfs:comment "The class of paginators. A paginator is a parameter that can be used to paginate the results of a information product."
-.
-elmo:SpatialReprojector a owl:Class;
-	rdfs:subClassOf elmo:Parameter;
-	rdfs:label "Spatial reprojector";
-	rdfs:comment "The class of spatial reprojectors. A spatial reprojector is a parameter that can be used to reproject spatial data to a specific crs."
-.
 
 elmo:StorageProtocol a owl:Class;
 	rdfs:label "StorageProtocol"@en;
