@@ -211,7 +211,7 @@ elmo-shape:ResultType a sh:NodeShape;
 	sh:name "elmo:ResultType";
 	sh:property [
 		sh:path skos:inScheme;
-		sh:hasValue elmo-schemes:result-type;
+		sh:hasValue elmo-schemes:result-types;
 		sh:minCount 1;
 		sh:maxCount 1;
 	];
