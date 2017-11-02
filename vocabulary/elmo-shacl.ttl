@@ -9,6 +9,7 @@
 
 @prefix elmo-shape: <http://dotwebstack.org/def/elmo-shacl#> .
 @prefix elmo-schemes: <http://dotwebstack.org/def/elmo/>.
+@prefix elmo-rt: <http://dotwebstack.org/def/elmo/result-types/>.
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
 
 elmo-shape:
@@ -169,6 +170,14 @@ elmo-shape:InformationProduct a sh:NodeShape;
 		sh:maxCount 1;
 	];
 	sh:property [
+		sh:name "elmo:resultType";
+		sh:path elmo:resultType;
+		sh:class elmo:ResultType;
+		sh:defaulValue elmo-rt:Graph;
+		sh:node elmo-shape:ResultType;
+		sh:maxCount 1;
+	];
+	sh:property [
 		sh:name "elmo:path";
 		sh:path elmo:path;
 		sh:datatype xsd:string;
@@ -197,6 +206,17 @@ elmo-shape:InformationProduct a sh:NodeShape;
 		sh:class elmo:Representation;
 	]
 .
+elmo-shape:ResultType a sh:NodeShape;
+	rdfs:label "ResultType shape"@en;
+	sh:name "elmo:ResultType";
+	sh:property [
+		sh:path skos:inScheme;
+		sh:hasValue elmo-schemes:result-type;
+		sh:minCount 1;
+		sh:maxCount 1;
+	];
+.
+
 elmo-shape:Transaction a sh:NodeShape;
 	sh:closed true;
 	sh:targetClass elmo:Transaction;
@@ -275,7 +295,6 @@ elmo-shape:Transaction a sh:NodeShape;
 
 elmo-shape:Parameter a sh:NodeShape;
 	sh:targetClass elmo:Parameter;
-	sh:closed true;
 	rdfs:label "Parameter shape"@en;
 	sh:name "elmo:Parameter";
 	sh:property [
