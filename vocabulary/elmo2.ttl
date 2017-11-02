@@ -22,8 +22,8 @@
 # =========
 # Imports
 #
-xsd:string rdfs:Datatype.
-xsd:integer rdfs:Datatype.
+xsd:string a rdfs:Datatype.
+xsd:integer a rdfs:Datatype.
 
 # =========
 # Ontology spec
