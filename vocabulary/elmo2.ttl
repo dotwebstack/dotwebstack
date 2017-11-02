@@ -20,6 +20,12 @@
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 
 # =========
+# Imports
+#
+xsd:string rdfs:Datatype;
+xsd:integer rdfs:Datatype;
+
+# =========
 # Ontology spec
 #
 elmo: a owl:Ontology;
