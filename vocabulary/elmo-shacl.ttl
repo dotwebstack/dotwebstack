@@ -51,6 +51,12 @@ elmo-shape:Theatre a sh:NodeShape;
 		sh:maxCount 1;
 		sh:class elmo:Layout;
 	];
+	sh:property [
+		sh:name "elmo:defaultBackend";
+		sh:path elmo:defaultBackend;
+		sh:maxCount 1;
+		sh:class elmo:Backend;
+	];
 .
 elmo-shape:Site a sh:NodeShape;
 	sh:closed true;
@@ -84,6 +90,12 @@ elmo-shape:Site a sh:NodeShape;
 		sh:path elmo:layout;
 		sh:class elmo:Layout;
 		sh:maxCount 1
+	];
+	sh:property [
+		sh:name "elmo:defaultBackend";
+		sh:path elmo:defaultBackend;
+		sh:maxCount 1;
+		sh:class elmo:Backend;
 	];
 .
 elmo-shape:Stage a sh:NodeShape;
@@ -126,6 +138,12 @@ elmo-shape:Stage a sh:NodeShape;
 		sh:path elmo:layout;
 		sh:class elmo:Layout;
 		sh:maxCount 1
+	];
+	sh:property [
+		sh:name "elmo:defaultBackend";
+		sh:path elmo:defaultBackend;
+		sh:maxCount 1;
+		sh:class elmo:Backend;
 	];
 .
 elmo-shape:Layout a sh:NodeShape;
@@ -623,12 +641,6 @@ elmo-shape:Representation a sh:NodeShape;
 		sh:nodeKind sh:BlankNode;
 	];
 	sh:property [
-		sh:name "elmo:fragment";
-		sh:path elmo:fragment;
-		sh:nodeKind sh:BlankNodeOrIRI;
-		sh:node elmo-shape:Fragment;
-	];
-	sh:property [
 		sh:name "elmo:template";
 		sh:path elmo:template;
 		sh:datatype xsd:string;
@@ -637,8 +649,9 @@ elmo-shape:Representation a sh:NodeShape;
 	sh:property [
 		sh:name "elmo:appearance";
 		sh:path elmo:appearance;
-		sh:class elmo:Appearance;
+		sh:nodeKind sh:BlankNodeOrIRI;
 		sh:node elmo-shape:Appearance;
+		sh:maxCount 1;
 	];
 	sh:property [
 		sh:path [sh:inversePath elmo:contains ];
@@ -646,14 +659,23 @@ elmo-shape:Representation a sh:NodeShape;
 		sh:class elmo:Representation;
 	];
 .
+
 elmo-shape:Appearance a sh:NodeShape;
+	sh:targetClass elmo:Appearance;
 	rdfs:label "Appearance shape"@en;
 	sh:name "elmo:Appearance";
+	sh:closed true;
 	sh:property [
-		sh:path skos:inScheme;
-		sh:hasValue elmo-schemes:appearance;
-		sh:minCount 1;
+		sh:name "rdf:type";
+		sh:path rdf:type;
+		sh:class elmo:Appearance;
 		sh:maxCount 1;
+	];
+	sh:property [
+		sh:name "elmo:fragment";
+		sh:path elmo:fragment;
+		sh:nodeKind sh:BlankNodeOrIRI;
+		sh:node elmo-shape:Fragment;
 	];
 .
 

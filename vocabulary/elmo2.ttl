@@ -12,6 +12,7 @@
 
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
 @prefix elmo-sp: <http://dotwebstack.org/def/elmo/storage-protocol/>.
+@prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
 
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -41,6 +42,7 @@ elmo: a owl:Ontology;
 # =========
 # System configuration vocabulary
 #
+# == CLASSES ==
 elmo:Theatre a owl:Class;
 	rdfs:label "Theatre"@en;
 	rdfs:comment "The class of executable instances for the dotwebstack framework. The system configuration graph should contain exactly one theatre instance. If no theatre instance is present, a default version is created. All sites in the same system configuration graph are considered part of the particular theatre instance."@en;
@@ -58,6 +60,7 @@ elmo:Layout a owl:Class;
 	rdfs:comment "The layout that is used for a particular stage, site or theatre. The theatre layout is inherited by all sites (unless stated otherwise), and a site layout is inherited by all stages for that site (unless stated otherwise). A default layout is used if no layout is specified"@en;
 .
 
+# == PROPERTIES ==
 elmo:domain a owl:DatatypeProperty;
 	rdfs:label "domain"@en;
 	rdfs:comment "States the domain for a particular site"@en;
@@ -84,6 +87,7 @@ elmo:layout a owl:DatatypeProperty;
 # =========
 # Backstage and core layers vocabulary
 #
+# == CLASSES ==
 elmo:InformationProduct a owl:Class;
 	rdfs:label "Information product"@en;
 	rdfs:comment "The class of information product specifications. An information product retrieves some data according to a specific information request, and returns a set of one or more graphs OR a binding set. It should not be possible to use an information product to manipulate data."@en;
@@ -96,7 +100,6 @@ elmo:Query a owl:Class;
 	rdfs:label "Query"@en;
 	rdfs:comment "Reification of the query. This makes it possible to reuse a query, or to add metadata to the query";
 .
-
 elmo:Parameter a owl:Class;
 	rdfs:label "Parameter"@en;
 	rdfs:comment "The class of parameters. A parameter is used as input for an information product. Its value(s) are merged with the query according to a template specification.";
@@ -106,7 +109,6 @@ elmo:TermFilter a owl:Class;
 	rdfs:label "Term filter"@en;
 	rdfs:comment "The class of term filters. A term filter is a parameter that can hold one value and can be used to filter the results of an information product. The value might be a URI or a literal with any datatype."
 .
-
 elmo:StorageProtocol a owl:Class;
 	rdfs:label "StorageProtocol"@en;
 	rdfs:comment "The class of storage protocols. Instances of this class define how a transactionresult is stored within the persistancy layer";
@@ -125,7 +127,6 @@ elmo:XSLTransformer a owl:Class;
 	rdfs:subClassOf elmo:Transformer;
 	rdfs:comment "The class of XSL transformers.";
 .
-
 elmo:Backend a owl:Class;
 	rdfs:label "Backend"@en;
 	rdfs:comment "The class of backend specifications. A backend specification specifies the data store that can be accessed to retrieve data or to manipulate the data in the store"@en;
@@ -146,11 +147,18 @@ elmo:FileBackend a owl:Class;
 	rdfs:comment "The class of file backends. A file backend retrieves Linked Data documents from a file system."@en;
 .
 
+# == PROPERTIES ==
 elmo:backend a owl:ObjectProperty;
 	rdfs:label "backend"@en;
 	rdfs:comment "States the backend for a particular information product"@en;
 	rdfs:range elmo:Backend;
 	# No rdfs:domain -> domain could be information product or transaction, and we may introduce 'source' as a class between information product and backend
+.
+elmo:defaultBackend a owl:ObjectProperty;
+	rdfs:label "default backend"@en;
+	rdfs:comment "States the default backend for a stage, site or theatre"@en;
+	rdfs:range elmo:Backend;
+	# No rdfs:domain -> domain could be stage, site or theatre
 .
 elmo:endpoint a owl:DatatypeProperty;
 	rdfs:label "endpoint"@en;
@@ -164,7 +172,6 @@ elmo:query a owl:DatatypeProperty;
 	rdfs:domain elmo:InformationProduct;
 	rdfs:range xsd:string;
 .
-
 elmo:targetGraph a owl:ObjectProperty;
 	rdfs:label "targetGraph"@en;
 	rdfs:comment "States the named graph that is affected by the transaction. If no target graph is mentioned, and the storageProtocol needs one, the value of the subject parameter is used";
@@ -250,15 +257,25 @@ elmo-sp:CreateResourceInVersionGraph a elmo:StorageProtocol;
 # =========
 # Frontend vocabulary
 #
+# == CLASSES ==
 elmo:Redirection a owl:Class;
 	rdfs:label "Redirection"@en;
 	rdfs:comment "The class of redirections. A redirection redirects a http request to another URL via the http 303 response"@en;
 .
-
 elmo:Representation a owl:Class;
 	rdfs:label "Representation"@en;
 	rdfs:comment "The class of representations. A representation links a http request to the corresponding information product."@en;
 .
+elmo:Appearance a owl:Class;
+	rdfs:label "Appearance"@en;
+	rdfs:comment "The class of appearances";
+.
+elmo:Fragment a owl:Class;
+	rdfs:label "Fragment"@en;
+	rdfs:comment "The class of fragments";
+.
+
+# == PROPERTIES ==
 elmo:name a owl:DatatypeProperty;
 	rdfs:label "name"@en;
 	rdfs:comment "The unique name of a resource, within a certain context";
@@ -335,13 +352,39 @@ elmo:template a owl:DatatypeProperty;
 	rdfs:domain elmo:Representation;
 	rdfs:range xsd:string;
 .
-
-elmo:Fragment a owl:Class;
-	rdfs:label "Fragment"@en;
-	rdfs:comment "The class of fragments";
+elmo:appearance a owl:ObjectProperty;
+	rdfs:label "appearance"@en;
+	rdfs:comment "Specifies the appearance to be used with a particular Representation";
+	rdfs:domain elmo:Representation;
+	rdfs:range elmo:Appearance;
 .
 
-elmo:Appearance a owl:Class;
-	rdfs:label "Appearance"@en;
-	rdfs:comment "The class of appearances";
+# =========
+# Appearances
+#
+# The elmo:name property of an appearance is important, because this name is used to link an appearance with the React component
+#
+elmo:ResourceAppearance a owl:Class;
+	rdfs:subClassOf elmo:Appearance;
+	elmo:name "ContentAppearance";
+	rdfs:label "Content appearance"@en;
+	rdfs:comment "Appearance that presents triples in a property-object layout (two columns, row per property)"@en;
+.
+elmo:TableAppearance a owl:Class;
+	rdfs:subClassOf elmo:Appearance;
+	elmo:name "TableAppearance";
+	rdfs:label "Table appearance"@en;
+	rdfs:comment "Appearance that presents triples or a list of bindingsets as a table"@en;
+.
+elmo:GeoAppearance a owl:Class;
+	rdfs:subClassOf elmo:Appearance;
+	elmo:name "GeoAppearance";
+	rdfs:label "Geospatial appearance";
+	rdfs:comment "Appearance that presents triples with geospatial properties on a map";
+.
+elmo:VocabularyAppearance a owl:Class;
+	rdfs:subClassOf elmo:Appearance;
+	elmo:name "VocabularyAppearance";
+	rdfs:label "Vocabulary appearance"@en;
+	rdfs:comment "Appearance that presents a vocabulary page, describing classes and properties"@en;
 .

@@ -20,6 +20,9 @@ All parts will be discussed in separate chapters.
 
 The picture below gives a visual representation of the elmo vocabulary with respect to the system configuration.
 ![](elmo-system-diagram.png)
+
+`elmo:Theatre`, `elmo:Site` and `elmo:Stage` are mandatory elements. You may want to specify a UI layout. The value you specify at the stage level will override the value at the site level, which will override the value at the theatre level. You can specify a defaultBackstage in the same way. This defaultBackstage will be used as a default value for the `elmo:backstage` property for an information product or transaction.
+
 We have included a [minimal system configuration](examples/minimal-system-config.trig) as an example how to use these vocabulary elements.
 
 ## Core and backend configuration
@@ -74,10 +77,23 @@ Information resources are dereferenced using an `elmo:Representation`. To redire
 ### Representation
 To specify which representation is used in a particular situation, you can use the properties `elmo:urlPattern`, `elmo:uriPattern` and `elmo:appliesTo`.
 
-Only top-level representations should have links to transactions. Only the information product from the top-level representation is serialized with the http response (in a RDF format, or as inline data within the HTML). Data from containing representations are only used for html representations and will be fetched asynchronous.
+Only top-level representations should have links to transactions. Only the information product from the top-level representation is serialized with the http response (in a RDF format, or as inline data within the HTML). Data from containing representations are only used for html representations.
 
-A representation is linked to a particular appearance that specifies how the data is presented in the browser. If a representation contains child representations, these child representations will depicted below each other (except in the case of a header,navbar or footer appearance).
+A representation is linked to a particular appearance that specifies how the data is presented in the browser.
 
-It is however possible to fully control the way a page is rendered. For this, you might use the property `elmo:template`, that contains a JSX template describing the way appearances are presented on a page.
+An appearance itself can contain extra properties to configure the appearance. Which properties are applicable depend on the particular type of appearance, for example a `TableAppearance` might contain `elmo:fragment`s that specify the column names:
+
+	config:myRepresentation a elmo:Representation;
+		elmo:appearance [
+			a elmo:TableAppearance;
+			elmo:fragment [
+				elmo:appliesTo "g";
+				rdfs:label "Graph"@en;
+				rdfs:label "Graaf"@nl;
+			];
+		];
+	.
+
+If a representation contains child representations, these child representations will depicted below each other (except in the case of a header,navbar or footer appearance). It is however possible to fully control the way a page is rendered. For this, you might use the property `elmo:template`, that contains a JSX template describing the way appearances are presented on a page.
 
 We have created a [configuration file](examples/jsx-template-representation.trig) that contains some examples how to configure representations with or without JSX templates.
