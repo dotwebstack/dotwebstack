@@ -54,7 +54,7 @@ Via `elmo:storageProtocol` you specify which kind of storage protocol is used to
 - `elmo-up:InsertIntoVersionGraph`: inserts the content of the transaction dataset into a newly created versioned target graph.
 - `elmo-up:InvalidateVersionGraph`: invalidates the current version (this created a new version that states that the previous version is invalid)
 - `elmo-up:DeleteVersionGraph`:  deletes a particular version graph.
-- `elmo-up:CreateResourceInVersionGraph`: mints URIs for any resource in the transaction dataset (as defined by `elmo:uriTemplate`), and inserts the content of the transaction dataset into a newly created versioned target graph. 
+- `elmo-up:CreateResourceInVersionGraph`: mints URIs for any resource in the transaction dataset (as defined by `elmo:uriTemplate`), and inserts the content of the transaction dataset into a newly created versioned target graph.
 
 We have created a [configuration file](examples/transactions.trig) that contains some examples how to configure transactions.
 
@@ -66,9 +66,9 @@ Blank versions of `elmo:InformationProduct` and `elmo:Transaction` are depicted 
 ### Redirection
 Information resources are dereferenced using an `elmo:Representation`. To redirect the URL of a non-information using the http 303 response, you will use `elmo:Redirection`. The example below redirect all URL's that contain the substring `/id/` to URL's that have this substring replaced by `/doc/`:
 
-	elmo:id2doc a elmo:Redirection;
-		elmo:urlPattern "^(.+)\\/id\\/(.+)$";
-		elmo:targetUrl "$1\\/doc\\/$2"
+	config:id2doc a elmo:Redirection;
+		elmo:urlPattern "^\\/id\\/(.+)$";
+		elmo:targetUrl "\\/doc\\/$1"
 	.  
 
 ### Representation
