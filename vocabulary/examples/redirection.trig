@@ -3,17 +3,82 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
+@prefix elmo-param: <http://dotwebstack.org/def/elmo/parameter/>.
 
 @prefix config: <http://dotwebstack.org/configuration/>.
+
+# A combination of redirection, parameter mapping, representation and information product for mapped items
+# - the example elmo:Redirection does a redirection from non-information resources to information resources
+# - the example elmo:ParameterMapper maps the input parameter {$url} (a default parameter containing the original URL)
+#   to the target parameter ${subject}. In a way, the elmo:ParameterMapper reverses the elmo:Redirection
+# - ResourceRepresentation and ConceptRepresentation are two representations that uses the mapper
+# - ConceptRepresentation uses a elmo:appliesTo that actually needs the ${subject} value, because it checks for triples,
+#   using the following query:
+#     ASK {${subject} a skos:Concept}
 
 #Frontend
 GRAPH config:MainStage {
 
-	# Redirect URL's that contain /id/ to URL's that have this replaced by /doc/
-	# Double escaping of \\ is needed, because turtle uses a backslash as escape character as well.
-	config:id2doc a elmo:Redirection;
-		elmo:urlPattern "^\\/id\\/(.+)$";
-		elmo:targetUrl "\\/doc\\/$1"
-	.
+  # Redirect URL's that contain /id/ to URL's that have this replaced by /doc/
+  # Double escaping of \\ is needed, because turtle uses a backslash as escape character as well.
+  config:id2doc a elmo:Redirection;
+    elmo:urlPattern "^(.+)\\/id\\/(.+)$";
+    elmo:redirectTemplate "$1\\/doc\\/$2";
+  .
+
+  # elmo-param:url is a predefined parameter, containing the value of the URL from the http request
+  # elmo:ParameterMapper uses a freemarker template to map its input parameters to a target output parameter
+  config:url2subject a elmo:ParameterMapper;
+    elmo:requiredParameter elmo-param:url;
+    elmo:targetParameter config:subject;
+    elmo:template '''${url?replace("/doc/","/id/")}'''
+  .
+
+  config:ResourceRepresentation a elmo:Representation;
+    elmo:urlPattern "$1\\/doc\\/$2";
+    elmmo:optionalParameter config:url2subject;
+    elmo:informationProduct config:ResourceInformationProduct
+  .
+  
+  config:ConceptRepresentation a elmo:Representation;
+    elmo:appliesTo [a skos:Concept];
+    elmmo:optionalParameter config:url2subject;
+    elmo:informationProduct config:ConceptInformationProduct
+  .
+}
+
+#Backend
+GRAPH config:MainStage {
+
+  config:subject a elmo:TermFilter;
+    elmo:name "subject";
+    elmo:shape [
+      sh:nodeKind sh:IRI;
+    ]
+  .
+  
+  config:ResourceInformationProduct a elmo:InformationProduct;
+    elmo:requiredParameter config:subject;
+    elmo:query '''
+      CONSTRUCT {
+        {$subject} ?p ?o
+      }
+      WHERE {
+        {$subject} ?p ?o
+      }
+    ''';
+  .
+  
+  config:ConceptInformationProduct a elmo:InformationProduct;
+    elmo:requiredParameter config:subject;
+    elmo:query '''
+      CONSTRUCT {
+        {$subject} skos:prefLabel ?term.
+        {$subject} skos:definition ?definition.
+      }
+      WHERE {
+        {$subject} skos:prefLabel ?term.
+        {$subject} skos:definition ?definition.
+      }
+    ''';
 }
