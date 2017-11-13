@@ -9,8 +9,21 @@ The following prefixes are used:
 
 A value of "legacy" in the column realised means that the particular element is only available in the legacy implementation of the theatre.
 
+## Classes
+
 elmo 1.0 term|elmo 2.0 term|Comment|Realised
 -------------|-------------|---------|------------
 `elmo1:Representation`|`elmo2:Representation`|Only some parts, see also `elmo2:InformationProduct` and `elmo2:Appearance`|Yes
 `elmo1:Representation`|`elmo2:Appearance`|with regard to `elmo1:fragment` elements|Legacy
 `elmo1:Representation`|`elmo2:InformationProduct`|with regard to `elmo:query`|Yes
+
+## Properties
+
+elmo 1.0 class|elmo 1.0 term|elmo 2.0 term|Comment|Realised
+--------------|-------------|-------------|-------|--------
+`elmo1:Representation`|`elmo1:contains`|`elmo2:contains`||No
+|`elmo1:appearance`|`elmo2:appearance`|`elmo2:appearance maps to instances of `elmo2:Appearance`, not to classes as does `elmo1:apearance`
+||`elmo2:informationProduct`|Links an elmo2:Representation to its elmo2:InformationProduct|Yes
+|`elmo1:query`|`elmo2:query`|Moved to `elmo2:InformationProduct`. Only literals are supported at this moment|Yes (literals)
+|`elmo1:endpoint`|`elmo2:backend`|A separate class `elmo:Backend` is used.|Yes
+|`elmo1:adapter`|||No
