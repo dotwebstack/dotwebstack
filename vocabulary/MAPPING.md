@@ -21,9 +21,9 @@ elmo 1.0 term|elmo 2.0 term|Comment|Realised
 
 elmo 1.0 class|elmo 1.0 term|elmo 2.0 term|Comment|Realised
 --------------|-------------|-------------|-------|--------
+ |`elmo1:appearance`|`elmo2:appearance`|`elmo2:appearance maps to instances of `elmo2:Appearance`, not to classes as does `elmo1:apearance`
 `elmo1:Representation`|`elmo1:contains`|`elmo2:contains`||No
-|`elmo1:appearance`|`elmo2:appearance`|`elmo2:appearance maps to instances of `elmo2:Appearance`, not to classes as does `elmo1:apearance`
-||`elmo2:informationProduct`|Links an elmo2:Representation to its elmo2:InformationProduct|Yes
-|`elmo1:query`|`elmo2:query`|Moved to `elmo2:InformationProduct`. Only literals are supported at this moment|Yes (literals)
-|`elmo1:endpoint`|`elmo2:backend`|A separate class `elmo:Backend` is used.|Yes
-|`elmo1:adapter`|||No
+ ||`elmo2:informationProduct`|Links an elmo2:Representation to its elmo2:InformationProduct|Yes
+ |`elmo1:query`|`elmo2:query`|Moved to `elmo2:InformationProduct`. Only literals are supported at this moment|Yes (literals)
+ |`elmo1:endpoint`|`elmo2:backend`|A separate class `elmo:Backend` is used.|Yes
+ |`elmo1:adapter`|||No
