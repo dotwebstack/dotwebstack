@@ -21,7 +21,7 @@ All parts will be discussed in separate chapters.
 The picture below gives a visual representation of the elmo vocabulary with respect to the system configuration.
 ![](elmo-system-diagram.png)
 
-`elmo:Theatre`, `elmo:Site` and `elmo:Stage` are mandatory elements. You may want to specify a UI layout. The value you specify at the stage level will override the value at the site level, which will override the value at the theatre level. You can specify a defaultBackstage in the same way. This defaultBackstage will be used as a default value for the `elmo:backstage` property for an information product or transaction.
+`elmo:Theatre`, `elmo:Site` and `elmo:Stage` are mandatory elements. You may want to specify a UI layout. The value you specify at the stage level will override the value at the site level, which will override the value at the theatre level. You can specify a defaultBackend in the same way. This defaultBackend will be used as a default value for the `elmo:backend` property for an information product or transaction.
 
 We have included a [minimal system configuration](examples/minimal-system-config.trig) as an example how to use these vocabulary elements.
 
@@ -94,6 +94,6 @@ An appearance itself can contain extra properties to configure the appearance. W
 		];
 	.
 
-If a representation contains child representations, these child representations will depicted below each other (except in the case of a header,navbar or footer appearance). It is however possible to fully control the way a page is rendered. For this, you might use the property `elmo:template`, that contains a JSX template describing the way appearances are presented on a page.
+If a representation contains child representations, these child representations will be depicted below each other (except when the appearance explicitly defines otherwise). It is however possible to fully control the way a page is rendered. For this, you might use the property `elmo:template`, that contains a JSX template describing the way appearances are presented on a page.
 
 We have created a [configuration file](examples/jsx-template-representation.trig) that contains some examples how to configure representations with or without JSX templates.
