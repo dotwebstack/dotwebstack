@@ -3,7 +3,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
-@prefix elmo-param: <http://dotwebstack.org/def/elmo/parameter/>.
+@prefix http: <http://www.w3.org/2011/http#>.
 
 @prefix config: <http://dotwebstack.org/configuration/>.
 
@@ -26,23 +26,61 @@ GRAPH config:MainStage {
     elmo:redirectTemplate "$1\\/doc\\/$2";
   .
 
-  # elmo-param:url is a predefined parameter, containing the value of the URL from the http request
-  # elmo:ParameterMapper uses a freemarker template to map its input parameters to a target output parameter
-  config:url2subject a elmo:ParameterMapper;
-    elmo:requiredParameter elmo-param:url;
-    elmo:targetParameter config:subject;
-    elmo:template '''${url?replace("/doc/","/id/")}'''
+  # ======
+  # ISSUE (1): How can we determine from the http request which parameters should be input for the information product
+  #
+  # Current situation:
+  # - API component: the OpenAPI spec determines the parameters, with x-dotwebstack-parameter-input the correct parameter is determined
+  # - LD component: query parameters are mapped directory to the information product parameters, based on their name
+  #
+  # The main issue can be separated into two sub issues:
+  # - How can we specify that we need the URL (=requestUri from the http request), and not a parameter from the query-part of the URL
+  # - How can we transform the URL to a URI (for example: changing /doc/ to /id/)
+  #
+  # RELATED ISSUE (2): Another issue rises when we combine URL situations with ?subject=... situations
+  # The requirement is that people can directory use the URL, but also can use a parameter "subject" (or whatever name)
+  #
+  # Two options are investigated:
+  # Optie-1, uses configuration that is quite similar to the OpenAPI spec. This seems a good solution for simple cases, but doesn't solve the related ISSUE (2)
+  # Optie-2, uses a specific SubjectParameter, which is a specialisation of the RequestParameter
+  
+  # A RequestParameter is similar to the parameter element in a OpenAPI. 
+  # A "simple" request parameter as stated below is not necessary, because this is the default behaviour of the LD part
+  Config:SubjectFromQuery a elmo:RequestParameter;
+    elmo:name "subject"; # similar to the "name" element from OpenAPI
+    elmo:source http:params; # similar to the "in" element from OpenAPI. Using the http vocabulary from the W3c
+    elmo:targetParameter config:Subject; # Dit is nu nog niet nodig. Feitelijk wordt in het LD deel de mapping gedaan obv de naam
+  .
+  
+  Config:SubjectFromUrl a elmo:RequestParameter;
+    elmo:name "subject";
+    elmo:source http:requestURI;
+    elmo:mapping [
+      a elmo:RegexMapping;
+      elmo:pattern "^(.+)\\/doc\\/(.+)$";
+      elmo:template "$1\\/id\\/$2";
+    ]
+    elmo:targetParameter config:Subject; # Dit is nu nog niet nodig. Feitelijk wordt in het LD deel de mapping gedaan obv de naam
   .
 
+  Config:SubjectFromRequest a elmo:SubjectParameter;
+    elmo:urlPattern "^(.+)\\/doc\\/(.+)$";
+    elmo:uriTemplate "$1\\/id\\/$2";
+    elmo:name "subject";
+    elmo:targetParameter config:Subject; # Dit is nu nog niet nodig. Feitelijk wordt in het LD deel de mapping gedaan obv de naam
+  .
+  
   config:ResourceRepresentation a elmo:Representation;
     elmo:urlPattern "$1\\/doc\\/$2";
-    elmmo:optionalParameter config:url2subject;
+    elmo:requiredParameter elmo:SubjectFromQuery, elmo:SubjectFromUrl; # Optie 1: reguliere request-parameters, probleem met volgorde
+    elmo:requiredParameter elmo:SubjectFromRequest; # Optie 2: expliciete subject-parameter klasse die de logica bevat voor correcte interpretatie
     elmo:informationProduct config:ResourceInformationProduct
   .
   
   config:ConceptRepresentation a elmo:Representation;
     elmo:appliesTo [a skos:Concept];
-    elmmo:optionalParameter config:url2subject;
+    elmo:requiredParameter elmo:SubjectFromQuery, elmo:SubjectFromUrl; # Optie 1
+    elmo:requiredParameter elmo:SubjectFromRequest; # Optie 2
     elmo:informationProduct config:ConceptInformationProduct
   .
 }
@@ -50,7 +88,7 @@ GRAPH config:MainStage {
 #Backend
 GRAPH config:MainStage {
 
-  config:subject a elmo:TermFilter;
+  config:Subject a elmo:TermFilter;
     elmo:name "subject";
     elmo:shape [
       sh:nodeKind sh:IRI;
@@ -58,7 +96,7 @@ GRAPH config:MainStage {
   .
   
   config:ResourceInformationProduct a elmo:InformationProduct;
-    elmo:requiredParameter config:subject;
+    elmo:requiredParameter config:Subject;
     elmo:query '''
       CONSTRUCT {
         {$subject} ?p ?o
@@ -70,7 +108,7 @@ GRAPH config:MainStage {
   .
   
   config:ConceptInformationProduct a elmo:InformationProduct;
-    elmo:requiredParameter config:subject;
+    elmo:requiredParameter config:Subject;
     elmo:query '''
       CONSTRUCT {
         {$subject} skos:prefLabel ?term.
