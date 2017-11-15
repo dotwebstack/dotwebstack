@@ -7,21 +7,13 @@
 
 @prefix config: <http://dotwebstack.org/configuration/>.
 
-# A combination of redirection, parameter mapping, representation and information product for mapped items
-# - the example elmo:Redirection does a redirection from non-information resources to information resources
-# - the example elmo:ParameterMapper maps the input parameter {$url} (a default parameter containing the original URL)
-#   to the target parameter ${subject}. In a way, the elmo:ParameterMapper reverses the elmo:Redirection
-# - ResourceRepresentation and ConceptRepresentation are two representations that uses the mapper
-# - ConceptRepresentation uses a elmo:appliesTo that actually needs the ${subject} value, because it checks for triples,
-#   using the following query:
-#     ASK {${subject} a skos:Concept}
-
 #Frontend
 GRAPH config:MainStage {
 
+  # We state that any URI containg /id/ should be considered as a non-information resource. 303 redirection is required.
   # Redirect URL's that contain /id/ to URL's that have this replaced by /doc/
   # Double escaping of \\ is needed, because turtle uses a backslash as escape character as well.
-  config:id2doc a elmo:Redirection;
+  config:NonInformationResourceRedirection a elmo:Redirection;
     elmo:urlPattern "^(.+)\\/id\\/(.+)$";
     elmo:redirectTemplate "$1\\/doc\\/$2";
   .
@@ -46,41 +38,50 @@ GRAPH config:MainStage {
   
   # A RequestParameter is similar to the parameter element in a OpenAPI. 
   # A "simple" request parameter as stated below is not necessary, because this is the default behaviour of the LD part
-  Config:SubjectFromQuery a elmo:RequestParameter;
-    elmo:name "subject"; # similar to the "name" element from OpenAPI
-    elmo:source http:params; # similar to the "in" element from OpenAPI. Using the http vocabulary from the W3c
-    elmo:targetParameter config:Subject; # Dit is nu nog niet nodig. Feitelijk wordt in het LD deel de mapping gedaan obv de naam
-  .
   
-  Config:SubjectFromUrl a elmo:RequestParameter;
-    elmo:name "subject";
-    elmo:source http:requestURI;
-    elmo:mapping [
-      a elmo:RegexMapping;
-      elmo:pattern "^(.+)\\/doc\\/(.+)$";
-      elmo:template "$1\\/id\\/$2";
-    ]
-    elmo:targetParameter config:Subject; # Dit is nu nog niet nodig. Feitelijk wordt in het LD deel de mapping gedaan obv de naam
+  # A RequestMapper that maps the original URL to the config:Subject parameter
+  config:SubjectFromUrl a elmo:RequestMapper;
+    elmo:headerElement http:requestURI;
+    elmo:pattern "^(.+)\\/doc\\/(.+)$";
+    elmo:template "$1\\/id\\/$2";
+    elmo:targetParameter config:Subject;
   .
 
-  Config:SubjectFromRequest a elmo:SubjectParameter;
-    elmo:urlPattern "^(.+)\\/doc\\/(.+)$";
-    elmo:uriTemplate "$1\\/id\\/$2";
+  # A RequestMapper that maps the query-parameter "subject" to the config:Subject parameter
+  Config:SubjectFromQuery a elmo:RequestMapper;
     elmo:name "subject";
-    elmo:targetParameter config:Subject; # Dit is nu nog niet nodig. Feitelijk wordt in het LD deel de mapping gedaan obv de naam
+    elmo:headerElement http:params;
+    elmo:targetParameter config:Subject;
   .
-  
+
+  # A default representation to be used for any dereferenceable URI's. Two separate representations are needed
+  # (A) The representation that matches a /doc/ path, and uses the original URL to map to the config:Subject parameter
   config:ResourceRepresentation a elmo:Representation;
-    elmo:urlPattern "$1\\/doc\\/$2";
-    elmo:requiredParameter elmo:SubjectFromQuery, elmo:SubjectFromUrl; # Optie 1: reguliere request-parameters, probleem met volgorde
-    elmo:requiredParameter elmo:SubjectFromRequest; # Optie 2: expliciete subject-parameter klasse die de logica bevat voor correcte interpretatie
+    elmo:urlPattern "\\/resource$";
+    elmo:requestMapper config:SubjectFromQuery;
     elmo:informationProduct config:ResourceInformationProduct
   .
-  
+  # (B) The representation that matches a /resource path, and uses the ?subject=... query to map to the config:Subject parameter
+  config:ResourceRepresentation a elmo:Representation;
+    elmo:urlPattern "\\/resource$";
+    elmo:requestMapper config:SubjectFromUrl;
+    elmo:informationProduct config:ResourceInformationProduct
+  .
+
+  # A specific representation to be used for dereferenceable URI's that conform to a specific type
+  # OPEN ISSUE: How do we state that this representation "overrides" the representation above? They use the same url patterns!
+  #             Possible solution: representations with elmo:appliesTo override representations without elmo:appliesTo. But is this enough?
+  # DESIGN CONSIDERATION: urlPattern is still needed, because the dotwebstack framework uses this mechanism to distinguish between API en LD components
   config:ConceptRepresentation a elmo:Representation;
+    elmo:urlPattern "\\/resource$";
     elmo:appliesTo [a skos:Concept];
-    elmo:requiredParameter elmo:SubjectFromQuery, elmo:SubjectFromUrl; # Optie 1
-    elmo:requiredParameter elmo:SubjectFromRequest; # Optie 2
+    elmo:requestMapper config:SubjectFromQuery;
+    elmo:informationProduct config:ConceptInformationProduct
+  .
+  config:ConceptRepresentation a elmo:Representation;
+    elmo:urlPattern "$1\\/doc\\/$2";
+    elmo:appliesTo [a skos:Concept];
+    elmo:requestMapper config:SubjectFromUrl;
     elmo:informationProduct config:ConceptInformationProduct
   .
 }
