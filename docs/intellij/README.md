@@ -8,6 +8,10 @@ This document describes how the IntelliJ IDE can be setup.
 
 1. Check "Ensure line feed at file end on Save".
 
+1. Install Lombok plugin from Preferences > Plugins.
+
+1. Install Markdown Support plugin from Preferences > Plugins.
+
 ## Code Style
 
 1. Navigate to Preferences > Editor -> Code Style.
