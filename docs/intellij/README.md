@@ -2,13 +2,13 @@
 
 This document describes how the IntelliJ IDE can be setup.
 
-## Checkstyle
+## Code Style
 
-1. Import the [Checkstyle template](intellij-java-google-style.xml) for Java;
+1. Navigate to Preferences > Editor -> Code Style.
+
+1. Import the [Google style template](intellij-java-google-style.xml) for IntelliJ.
 
 1. Overwrite JSON, XML and YAML configurations in the profile.
-
-  Open IDEA preferences and then __Editor | Code Style | \<language\>__
 
   ```yaml
   JSON:
@@ -35,8 +35,8 @@ This document describes how the IntelliJ IDE can be setup.
       blank lines: 2
     Wrap attributes if long: true
     Wrap text: true
-    Allign attributes: true
-    Keep white spaces: true
+    Allign attributes: false
+    Keep white spaces: false
     Spaces:
       around '=' in attribute: false
       after tag name: false
@@ -47,8 +47,38 @@ This document describes how the IntelliJ IDE can be setup.
     Right margin: 100
   ```
 
+## Eclipse Code Formatter
+
+1. Install Eclipse Code Formatter plugin from Preferences > Plugins.
+
+1. Navigate to Preferences > Other Settings > Eclipse Code Formatter.
+
+1. Select "Use the Eclipse code formatter".
+
+1. Select "New profile" and rename the new profile to "GoogleStyle".
+
+1. Under "Eclipse Java Formatter config file", import `eclipse-java-google-style.xml`.
+
+1. Select "Optimize imports" and import `eclipse-java-google-style.importorder`.
+
+1. Formatting can now be easily done with `Ctrl-Alt-L`.
+
+## Checkstyle
+
+1. Install Checkstyle plugin from Preferences > Plugins.
+
+1. Navigate to Preferences > Other Settings > Checkstyle.
+
+1. Import and activate the `checkstyle.xml` from the project root folder. Select the corresponding Checkstyle version.
+
 ## SonarLint
 
-1. Install Sonarlint from http://www.sonarlint.org/intellij/;
+1. Install Sonarlint plugin from Preferences > Plugins.
 
-1. After installing the plugin you'll get on the fly analysis of your code and a new action called 'Analyze with SonarLint'.
+1. Navigate to Preferences > Other Settings > SonarLint General Settings.
+
+1. Add the SonarQube server (SonarCloud). Select the `dotwebstack` organization.
+
+1. Navigate to Preferences > Other Settings > SonarLint Project Settings.
+
+1. Bind the previously created SonarQube server and select the right project.
