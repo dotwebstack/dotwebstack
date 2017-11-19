@@ -2,6 +2,12 @@
 
 This document describes how the IntelliJ IDE can be setup.
 
+## General
+
+1. Navigate to Settings > Editor > General.
+
+1. Check "Ensure line feed at file end on Save".
+
 ## Code Style
 
 1. Navigate to Preferences > Editor -> Code Style.

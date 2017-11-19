@@ -2,12 +2,6 @@
 
 This document describes how the Eclipse IDE can be setup.
 
-## General
-
-1. Navigate to Settings > Editor > General.
-
-1. Check "Ensure line feed at file end on Save".
-
 ## Checkstyle
 
 1. Install Checkstyle from: http://eclipse-cs.sourceforge.net/
