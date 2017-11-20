@@ -18,72 +18,28 @@ GRAPH config:MainStage {
     elmo:redirectTemplate "$1\\/doc\\/$2";
   .
 
-  # ======
-  # ISSUE (1): How can we determine from the http request which parameters should be input for the information product
-  #
-  # Current situation:
-  # - API component: the OpenAPI spec determines the parameters, with x-dotwebstack-parameter-input the correct parameter is determined
-  # - LD component: query parameters are mapped directory to the information product parameters, based on their name
-  #
-  # The main issue can be separated into two sub issues:
-  # - How can we specify that we need the URL (=requestUri from the http request), and not a parameter from the query-part of the URL
-  # - How can we transform the URL to a URI (for example: changing /doc/ to /id/)
-  #
-  # RELATED ISSUE (2): Another issue rises when we combine URL situations with ?subject=... situations
-  # The requirement is that people can directory use the URL, but also can use a parameter "subject" (or whatever name)
-  #
-  # Two options are investigated:
-  # Optie-1, uses configuration that is quite similar to the OpenAPI spec. This seems a good solution for simple cases, but doesn't solve the related ISSUE (2)
-  # Optie-2, uses a specific SubjectParameter, which is a specialisation of the RequestParameter
-  
-  # A RequestParameter is similar to the parameter element in a OpenAPI. 
-  # A "simple" request parameter as stated below is not necessary, because this is the default behaviour of the LD part
-  
   # A RequestMapper that maps the original URL to the config:Subject parameter
   config:SubjectFromUrl a elmo:RequestMapper;
-    elmo:headerElement http:requestURI;
+    elmo:requestElement http:requestURI;
     elmo:pattern "^(.+)\\/doc\\/(.+)$";
     elmo:template "$1\\/id\\/$2";
     elmo:targetParameter config:Subject;
   .
 
-  # A RequestMapper that maps the query-parameter "subject" to the config:Subject parameter
-  Config:SubjectFromQuery a elmo:RequestMapper;
-    elmo:name "subject";
-    elmo:headerElement http:params;
-    elmo:targetParameter config:Subject;
-  .
-
   # A default representation to be used for any dereferenceable URI's. Two separate representations are needed
-  # (A) The representation that matches a /doc/ path, and uses the original URL to map to the config:Subject parameter
+  # (A) The representation that matches a /resource path, and uses the ?subject=... query to map to the config:Subject parameter
   config:ResourceRepresentation a elmo:Representation;
     elmo:urlPattern "\\/resource$";
     elmo:requestMapper config:SubjectFromQuery;
     elmo:informationProduct config:ResourceInformationProduct
   .
-  # (B) The representation that matches a /resource path, and uses the ?subject=... query to map to the config:Subject parameter
+  # (B) The representation that matches a /doc/ path, and uses the original URL to map to the config:Subject parameter
   config:ResourceRepresentation a elmo:Representation;
-    elmo:urlPattern "\\/resource$";
+    elmo:urlPattern "$1\\/doc\\/$2";
     elmo:requestMapper config:SubjectFromUrl;
     elmo:informationProduct config:ResourceInformationProduct
   .
 
-  # A specific representation to be used for dereferenceable URI's that conform to a specific type
-  # OPEN ISSUE: How do we state that this representation "overrides" the representation above? They use the same url patterns!
-  #             Possible solution: representations with elmo:appliesTo override representations without elmo:appliesTo. But is this enough?
-  # DESIGN CONSIDERATION: urlPattern is still needed, because the dotwebstack framework uses this mechanism to distinguish between API en LD components
-  config:ConceptRepresentation a elmo:Representation;
-    elmo:urlPattern "\\/resource$";
-    elmo:appliesTo [a skos:Concept];
-    elmo:requestMapper config:SubjectFromQuery;
-    elmo:informationProduct config:ConceptInformationProduct
-  .
-  config:ConceptRepresentation a elmo:Representation;
-    elmo:urlPattern "$1\\/doc\\/$2";
-    elmo:appliesTo [a skos:Concept];
-    elmo:requestMapper config:SubjectFromUrl;
-    elmo:informationProduct config:ConceptInformationProduct
-  .
 }
 
 #Backend
@@ -108,16 +64,4 @@ GRAPH config:MainStage {
     ''';
   .
   
-  config:ConceptInformationProduct a elmo:InformationProduct;
-    elmo:requiredParameter config:Subject;
-    elmo:query '''
-      CONSTRUCT {
-        {$subject} skos:prefLabel ?term.
-        {$subject} skos:definition ?definition.
-      }
-      WHERE {
-        {$subject} skos:prefLabel ?term.
-        {$subject} skos:definition ?definition.
-      }
-    ''';
 }

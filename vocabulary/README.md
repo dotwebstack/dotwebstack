@@ -41,6 +41,12 @@ Three subclasses for parameters exists:
 - A `elmo:Paginator` parameter than can be used to paginate the results.
 - A `elmo:SpatialReprojector` parameter that can be used tot reproject spatial resultdata to a specific crs.
 
+### Request mapping
+![](elmo-frontend-requestmapper-diagram.png)
+Parameters in information products get their values by default by a mapping of a query parameter to the parameter of an information product by corresponding names. In some case, you might want to have another name, or you might want to get a value from a different part of the http request, for example the URI itself, or a header value. This is done by use of an `elmo:RequestMapper`.
+
+Request mappers are added to an `elmo:Representation` and are linked to the corresponding parameter via `elmo:targetParameter`. The corresponding http request element is selected via `elmo:requestElement` which uses the [http vocabulary in RDF](http://www.w3.org/TR/HTTP-in-RDF10). Named-value pairs can be selected using the `elmo:name` element. Optionally, you can specify a regex replace template to change the value somewhat.
+
 ### Transactions
 `elmo:Transaction` is used to add data to the backend, and/or manipulate the backend. When applicable, input data is expected as RDF triples, but transformation of non-RDF data is also supported. The properties of a transaction are used to configure the operation flow that is executed when a transaction is requested. The diagram below gives the typical flow.
 ![](transaction-flow.png)
