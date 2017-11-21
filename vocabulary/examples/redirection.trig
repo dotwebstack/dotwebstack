@@ -12,30 +12,38 @@ GRAPH config:MainStage {
 
   # We state that any URI containg /id/ should be considered as a non-information resource. 303 redirection is required.
   # Redirect URL's that contain /id/ to URL's that have this replaced by /doc/
+
+  # Old syntax
   # Double escaping of \\ is needed, because turtle uses a backslash as escape character as well.
-  config:NonInformationResourceRedirection a elmo:Redirection;
+  config:NonInformationResourceRedirectionOLD a elmo:Redirection;
     elmo:urlPattern "^(.+)\\/id\\/(.+)$";
     elmo:redirectTemplate "$1\\/doc\\/$2";
+  .
+  
+  # New syntax (using JAX-RS format)
+  config:NonInformationResourceRedirection a elmo:Redirection;
+    elmo:urlPattern "{path}/id/{reference}";
+    elmo:redirectTemplate "{path}/doc/{reference}";
   .
 
   # A RequestMapper that maps the original URL to the config:Subject parameter
   config:SubjectFromUrl a elmo:RequestMapper;
     elmo:requestElement http:requestURI;
-    elmo:pattern "^(.+)\\/doc\\/(.+)$";
-    elmo:template "$1\\/id\\/$2";
+    elmo:pattern "{path}/id/{reference}";
+    elmo:template "{path}/doc/{reference}";
     elmo:targetParameter config:Subject;
   .
 
   # A default representation to be used for any dereferenceable URI's. Two separate representations are needed
   # (A) The representation that matches a /resource path, and uses the ?subject=... query to map to the config:Subject parameter
   config:ResourceRepresentation a elmo:Representation;
-    elmo:urlPattern "\\/resource$";
+    elmo:urlPattern "/resource";
     elmo:requestMapper config:SubjectFromQuery;
     elmo:informationProduct config:ResourceInformationProduct
   .
   # (B) The representation that matches a /doc/ path, and uses the original URL to map to the config:Subject parameter
   config:ResourceRepresentation a elmo:Representation;
-    elmo:urlPattern "$1\\/doc\\/$2";
+    elmo:urlPattern "/doc/{reference}";
     elmo:requestMapper config:SubjectFromUrl;
     elmo:informationProduct config:ResourceInformationProduct
   .
@@ -43,23 +51,27 @@ GRAPH config:MainStage {
 }
 
 #Backend
+
+# NB: The use of ?SUBJECT (a bounded variable) is recommended above the use of <${SUBJECT}> (a generic template variable)
+#     At this moment, ?SUBJECT only works for string literals, so cannot be used in this case
+
 GRAPH config:MainStage {
 
-  config:Subject a elmo:TermFilter;
-    elmo:name "subject";
+  config:SubjectParameter a elmo:TermFilter;
+    elmo:name "SUBJECT";
     elmo:shape [
       sh:nodeKind sh:IRI;
     ]
   .
   
   config:ResourceInformationProduct a elmo:InformationProduct;
-    elmo:requiredParameter config:Subject;
+    elmo:requiredParameter config:SubjectParameter;
     elmo:query '''
       CONSTRUCT {
-        {$subject} ?p ?o
+        <{$SUBJECT}> ?p ?o
       }
       WHERE {
-        {$subject} ?p ?o
+        <{$SUBJECT}> ?p ?o
       }
     ''';
   .

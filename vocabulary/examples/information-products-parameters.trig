@@ -11,25 +11,50 @@
 #Backend (only information products, theatre system config has been left out)
 GRAPH config:Theatre {
 	#
-	# Example of a predefined parameter (${subject})
+	# Example of a URI parameter (${SUBJECT} or ?SUBJECT)
 	#
+  
+  # You should define the SubjectParameter only ones, probably as part of the System graph
+  config:SubjectParameter a elmo:TermFilter;
+    elmo:name "SUBJECT";
+    elmo:shape [
+      sh:nodeKind sh:IRI;
+    ]
+  .
+
+  # NB: The use of ?SUBJECT (a bounded variable) is recommended above the use of <${SUBJECT}> (a generic template variable)
+  #     At this moment, ?SUBJECT only works for string literals, so cannot be used in this case
 	config:SubjectData a elmo:InformationProduct;
-		# ${subject} is a default parameter, so we don't need to define this one, but we need to reference it
-		elmo:parameter elmo-param:subject;
+		elmo:parameter config:SubjectParameter;
 		elmo:query """
 			construct {
-				${subject} ?p ?o
+				<${SUBJECT}> ?p ?o
 			}
 			where {
-				${subject} ?p ?o
+				<${SUBJECT}> ?p ?o
+			}
+		"""
+	.
+  
+  # The recommended way would be to use a bounded variable. The query might be better understandable if it is visible that
+  # a variable is bounded up front. You might want to use UPPERCASE for these variables.
+	config:SubjectDataBounded a elmo:InformationProduct;
+		elmo:parameter config:SubjectParameter;
+		elmo:query """
+			construct {
+				?SUBJECT ?p ?o
+			}
+			where {
+				?SUBJECT ?p ?o
 			}
 		"""
 	.
 	
 	#
 	# Example of a composite parameter (not predefined, although we might introduce a predefined paginator in the future!)
+  # (Currently, this example is not supported)
 	#
-	config:paginatorParameter a elmo:Parameter;
+	config:PaginatorParameter a elmo:Parameter;
 		elmo:name "paginator";
 		elmo:shape [
 			sh:property [
@@ -47,8 +72,8 @@ GRAPH config:Theatre {
 		]
 	.
 	config:PagedFriendsOfSubject a elmo:InformationProduct;
-		elmo:parameter elmo-param:subject;
-		elmo:parameter config:paginatorParameter;
+		elmo:parameter config:SubjectParameter;
+		elmo:parameter config:PaginatorParameter;
 		elmo:query """
 			select ?friend ?friend_label
 			where {
@@ -64,7 +89,7 @@ GRAPH config:Theatre {
 	# Example of a simple string parameter
 	#
 	config:termParameter a elmo:TermFilter;
-		elmo:name "term";
+		elmo:name "TERM";
 		elmo:shape [
 			sh:datatype xsd:string;
 			sh:minLength 2;
@@ -76,7 +101,7 @@ GRAPH config:Theatre {
 			select ?resource ?resource_label
 			where {
 				?resource rdfs:label ?resource_label.
-				FILTER (regex(?resource_label,"${term}","i"))
+				FILTER (regex(?resource_label,?TERM,"i"))
 			}
 			limit 100
 		"""
@@ -84,8 +109,9 @@ GRAPH config:Theatre {
 	
 	#
 	# Example of a list-of-strings parameter
+  # (Currently not supported)
 	#
-	config:termsParameter a elmo:Parameter;
+	config:termsParameter a elmo:TermFilter;
 		elmo:name "term";
 		elmo:shape [
 			sh:datatype xsd:string;

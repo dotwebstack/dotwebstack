@@ -8,22 +8,35 @@
 @prefix config: <http://dotwebstack.org/configuration/>.
 
 #Backend (only information products, theatre system config has been left out)
+
+# NB: The use of ?SUBJECT (a bounded variable) is recommended above the use of <${SUBJECT}> (a generic template variable)
+#     At this moment, ?SUBJECT only works for string literals, so cannot be used in this case
+
 GRAPH config:Theatre {
+  config:SubjectParameter a elmo:TermFilter;
+    elmo:name "SUBJECT";
+    elmo:shape [
+      sh:nodeKind sh:IRI;
+    ]
+  .
+
   config:SubjectData a elmo:InformationProduct;
+    elmo:requiredParameter config:SubjectParameter
     elmo:query """
       construct {
-        ${subject} ?p ?o
+        <${SUBJECT}> ?p ?o
       }
       where {
-        ${subject} ?p ?o
+        <${SUBJECT}> ?p ?o
       }
     """
   .
   config:FriendsOfSubject a elmo:InformationProduct;
+    elmo:requiredParameter config:SubjectParameter
     elmo:query """
       select ?friend ?friend_label
       where {
-        ${subject} foaf:knows ?friend
+        <${SUBJECT}> foaf:knows ?friend
         OPTIONAL {?friend rdfs:label ?friend_label}
       }
     """
