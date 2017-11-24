@@ -45,7 +45,16 @@ Three subclasses for parameters exists:
 ![](elmo-frontend-requestmapper-diagram.png)
 Parameters in information products get their values by default by a mapping of a query parameter to the parameter of an information product by corresponding names. In some case, you might want to have another name, or you might want to get a value from a different part of the http request, for example the URI itself, or a header value. This is done by use of an `elmo:RequestMapper`.
 
-Request mappers are added to an `elmo:Representation` and are linked to the corresponding parameter via `elmo:targetParameter`. The corresponding http request element is selected via `elmo:requestElement` which uses the [http vocabulary in RDF](http://www.w3.org/TR/HTTP-in-RDF10). Named-value pairs can be selected using the `elmo:name` element. Optionally, you can specify a regex replace template to change the value somewhat.
+Request mappers are added to an `elmo:Representation` and are linked to the corresponding parameter via `elmo:targetParameter`. The corresponding http request element is selected via `elmo:requestElement` which uses the [http vocabulary in RDF](http://www.w3.org/TR/HTTP-in-RDF10). Named-value pairs can be selected using the `elmo:name` element. Optionally, you can specify a template to change the value somewhat. The example below gives an example how to use a RequestMapper to map de URI to the subject parameter.
+
+	config:SubjectFromUrl a elmo:RequestMapper;
+		elmo:requestElement http:requestURI;
+		elmo:pattern "{path}/id/{reference}";
+		elmo:template "{path}/doc/{reference}";
+		elmo:targetParameter config:Subject;
+	.
+
+The syntax for `elmo:pattern` and `elmo:template` conforms to the [JAX-RS Path specification](https://docs.oracle.com/cd/E19798-01/821-1841/ginpw). This means that you can also specify regular expressions as part of the pattern, like: `{path:[a-zA-Z][a-zA-Z_0-9]*}`. 
 
 ### Transactions
 `elmo:Transaction` is used to add data to the backend, and/or manipulate the backend. When applicable, input data is expected as RDF triples, but transformation of non-RDF data is also supported. The properties of a transaction are used to configure the operation flow that is executed when a transaction is requested. The diagram below gives the typical flow.
@@ -75,10 +84,12 @@ Blank versions of `elmo:InformationProduct` and `elmo:Transaction` are depicted 
 ### Redirection
 Information resources are dereferenced using an `elmo:Representation`. To redirect the URL of a non-information using the http 303 response, you will use `elmo:Redirection`. The example below redirect all URL's that contain the substring `/id/` to URL's that have this substring replaced by `/doc/`:
 
-	config:id2doc a elmo:Redirection;
-		elmo:urlPattern "^\\/id\\/(.+)$";
-		elmo:targetUrl "\\/doc\\/$1"
-	.  
+	config:NonInformationResourceRedirection a elmo:Redirection;
+		elmo:urlPattern "{path}/id/{reference}";
+		elmo:redirectTemplate "{path}/doc/{reference}";
+	.
+
+The syntax for `elmo:urlPattern` and `elmo:redirectTemplate` are the same as for `elmo:pattern` and `elmo:template` as used with a [RequestMapper](#RequestMapper).
 
 ### Representation
 To specify which representation is used in a particular situation, you can use the properties `elmo:urlPattern`, `elmo:uriPattern` and `elmo:appliesTo`.
