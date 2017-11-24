@@ -89,7 +89,7 @@ Information resources are dereferenced using an `elmo:Representation`. To redire
 		elmo:redirectTemplate "{path}/doc/{reference}";
 	.
 
-The syntax for `elmo:urlPattern` and `elmo:redirectTemplate` are the same as for `elmo:pattern` and `elmo:template` as used with a [RequestMapper](#RequestMapper).
+The syntax for `elmo:urlPattern` and `elmo:redirectTemplate` are the same as for `elmo:pattern` and `elmo:template` as used with a [RequestMapper](#request-mapper).
 
 ### Representation
 To specify which representation is used in a particular situation, you can use the properties `elmo:urlPattern`, `elmo:uriPattern` and `elmo:appliesTo`.
