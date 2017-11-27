@@ -27,7 +27,7 @@ GRAPH config:MainStage {
   .
 
   # A ParameterMapper maps "something" to a targetParameter
-  # The ParameterMapper uses the Jersey path syntax
+  # The ParameterMapper uses the JAX-RS format
   # A ParameterMapper that maps the original URL to the config:Subject parameter
   config:SubjectFromUrl a elmo:ParameterMapper;
     elmo:source http:requestURI;
@@ -36,7 +36,7 @@ GRAPH config:MainStage {
     elmo:targetParameter config:Subject;
   .
   
-  # --- Informal from here, as examples how we could extend the ParameterMapper structure
+  # --- Informal from here, as examples how we could extend the ParameterMapper structure ---
   # Other more specific ParameterMappers might also exist
   config:SubjectFromUrl a elmo:RegexParameterMapper;
     elmo:source http:requestURI;
@@ -50,6 +50,7 @@ GRAPH config:MainStage {
     elmo:algorithm "base64";
     elmo:targetParameter config:HashOfBody;
   .
+  # --- Informal till here ---
 
   # A default representation to be used for any dereferenceable URI's. Two separate representations are needed
   # (A) The representation that matches a /resource path, and uses the ?subject=... query to map to the config:Subject parameter
