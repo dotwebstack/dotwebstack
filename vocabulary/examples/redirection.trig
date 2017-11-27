@@ -55,13 +55,13 @@ GRAPH config:MainStage {
   # (A) The representation that matches a /resource path, and uses the ?subject=... query to map to the config:Subject parameter
   config:ResourceRepresentation a elmo:Representation;
     elmo:urlPattern "/resource";
-    elmo:requestMapper config:SubjectFromQuery;
+    elmo:parameterMapper config:SubjectFromQuery;
     elmo:informationProduct config:ResourceInformationProduct
   .
   # (B) The representation that matches a /doc/ path, and uses the original URL to map to the config:Subject parameter
   config:ResourceRepresentation a elmo:Representation;
     elmo:urlPattern "/doc/{reference}";
-    elmo:requestMapper config:SubjectFromUrl;
+    elmo:parameterMapper config:SubjectFromUrl;
     elmo:informationProduct config:ResourceInformationProduct
   .
 
