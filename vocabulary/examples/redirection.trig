@@ -26,12 +26,29 @@ GRAPH config:MainStage {
     elmo:redirectTemplate "{path}/doc/{reference}";
   .
 
-  # A RequestMapper that maps the original URL to the config:Subject parameter
-  config:SubjectFromUrl a elmo:RequestMapper;
-    elmo:requestElement http:requestURI;
+  # A ParameterMapper maps "something" to a targetParameter
+  # The ParameterMapper uses the Jersey path syntax
+  # A ParameterMapper that maps the original URL to the config:Subject parameter
+  config:SubjectFromUrl a elmo:ParameterMapper;
+    elmo:source http:requestURI;
     elmo:pattern "{path}/id/{reference}";
     elmo:template "{path}/doc/{reference}";
     elmo:targetParameter config:Subject;
+  .
+  
+  # --- Informal from here, as examples how we could extend the ParameterMapper structure
+  # Other more specific ParameterMappers might also exist
+  config:SubjectFromUrl a elmo:RegexParameterMapper;
+    elmo:source http:requestURI;
+    elmo:pattern "^(.+)\\/id\\/(.+)$";
+    elmo:template "$1\\/doc\\/$2";
+    elmo:targetParameter config:Subject;
+  .
+  # Or even something completely different
+  config:AndNowForSomethingCompletelyDifferent a elmo:HashDecoderParameterMapper;
+    elmo:source http:body;
+    elmo:algorithm "base64";
+    elmo:targetParameter config:HashOfBody;
   .
 
   # A default representation to be used for any dereferenceable URI's. Two separate representations are needed
