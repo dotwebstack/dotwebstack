@@ -72,7 +72,7 @@ GRAPH config:MainStage {
   # (A) The representation that matches a /resource path, and uses the ?subject=... query to map to the config:SubjectParameter
   config:ResourceRepresentation a elmo:Representation;
     elmo:urlPattern "/resource";
-    elmo:parameterMapper config:SubjectFromQuery;
+    # No mapper needed in this case, because query parameters are mapped by default to the corresponding parameters.
     elmo:informationProduct config:ResourceInformationProduct
   .
   # (B) The representation that matches a /doc/ path, and uses the original URL to map to the config:SubjectParameter
