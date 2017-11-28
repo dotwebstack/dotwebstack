@@ -656,9 +656,9 @@ elmo-shape:Representation a sh:NodeShape;
     sh:maxCount 1;
   ];
   sh:property [
-    sh:name "elmo:requestMapper";
-    sh:path elmo:requestMapper;
-    sh:class elmo:RequestMapper;
+    sh:name "elmo:parameterMapper";
+    sh:path elmo:parameterMapper;
+    sh:class elmo:ParameterMapper;
   ];
   sh:property [
     sh:path [sh:inversePath elmo:contains ];
@@ -696,6 +696,7 @@ elmo-shape:ParameterMapper a sh:NodeShape;
     sh:path elmo:source;
     sh:maxCount 1;
     sh:class rdf:Property;
+    sh:node elmo-shape:MapperSource;
     sh:in (http:requestURI)
   ];
   sh:property [
@@ -710,6 +711,14 @@ elmo-shape:ParameterMapper a sh:NodeShape;
     sh:maxCount 1;
     sh:datatype xsd:string;
   ];
+.
+
+#Placeholder, for viewing preferences
+elmo-shape:MapperSource a sh:NodeShape;
+  sh:name "rdf:Property";
+.
+elmo-shape:requestURI sh:targetNode http:requestURI;
+  sh:name "http:requestURI";
 .
 
 elmo-shape:UriParameterMapper a sh:NodeShape;
