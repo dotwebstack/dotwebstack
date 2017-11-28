@@ -26,29 +26,42 @@ GRAPH config:MainStage {
     elmo:redirectTemplate "{path}/doc/{reference}";
   .
 
-  # A ParameterMapper maps "something" to a targetParameter
-  # The ParameterMapper uses the JAX-RS format
-  # A ParameterMapper that maps the original URL to the config:Subject parameter
-  config:SubjectFromUrl a elmo:ParameterMapper;
+  # A ValueMapper maps "something" to "something"
+  # A ValueMapper that maps the original URL to the config:Subject parameter
+  # Source and target might also be another valuemapper, so you can chain ValueMappers
+  # Pattern and Template are optional, without these, target will get the value of source
+  # Default replacement processor is the JAX-RS uri templating
+  config:SubjectFromUrl a elmo:ValueMapper;
     elmo:source http:requestURI;
     elmo:pattern "{path}/id/{reference}";
     elmo:template "{path}/doc/{reference}";
-    elmo:targetParameter config:Subject;
+    elmo:target config:Subject;
   .
   
-  # --- Informal from here, as examples how we could extend the ParameterMapper structure ---
-  # Other more specific ParameterMappers might also exist
-  config:SubjectFromUrl a elmo:RegexParameterMapper;
+  # --- Informal from here, as examples how we could extend the ValueMapper structure ---
+  # Other more specific ValueMappers might also exist
+  config:SubjectFromUrl a elmo:RegexValueMapper;
     elmo:source http:requestURI;
     elmo:pattern "^(.+)\\/id\\/(.+)$";
     elmo:template "$1\\/doc\\/$2";
-    elmo:targetParameter config:Subject;
+    elmo:target config:Subject;
   .
   # Or even something completely different
-  config:AndNowForSomethingCompletelyDifferent a elmo:HashDecoderParameterMapper;
+  config:AndNowForSomethingCompletelyDifferent a elmo:HashDecoderValueMapper;
     elmo:source http:body;
     elmo:algorithm "base64";
-    elmo:targetParameter config:HashOfBody;
+    elmo:target config:HashOfBody;
+  .
+  # Chaining
+  config:ChainedFromUrl a elmo:ValueMapper;
+    elmo:source http:requestURI;
+    elmo:pattern "{path}/id/{reference}";
+    elmo:template "{path}/doc/{reference}";
+    elmo:target [
+      a elmo:HashDecoderValueMapper;
+      elmo:algorithm "base64";
+      elmo:target config:HasOfBody
+    ];
   .
   # --- Informal till here ---
 
