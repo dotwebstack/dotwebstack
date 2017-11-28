@@ -604,8 +604,8 @@ elmo-shape:Redirection a sh:NodeShape;
     sh:maxCount 1;
   ];
   sh:property [
-    sh:name "elmo:targetUrl";
-    sh:path elmo:targetUrl;
+    sh:name "elmo:redirectTemplate";
+    sh:path elmo:redirectTemplate;
     sh:datatype xsd:string;
     sh:minCount 1;
     sh:maxCount 1;
@@ -667,15 +667,15 @@ elmo-shape:Representation a sh:NodeShape;
   ];
 .
 
-elmo-shape:RequestMapper a sh:NodeShape;
-  sh:targetClass elmo:RequestMapper;
-  rdfs:label "Request mapper shape"@en;
-  sh:name "elmo:RequestMapper";
+elmo-shape:ParameterMapper a sh:NodeShape;
+  sh:targetClass elmo:ParameterMapper;
+  rdfs:label "Parameter mapper shape"@en;
+  sh:name "elmo:ParameterMapper";
   sh:closed true;
   sh:property [
     sh:name "rdf:type";
     sh:path rdf:type;
-    sh:hasValue elmo:RequestMapper;
+    sh:hasValue elmo:ParameterMapper;
     sh:maxCount 1;
   ];
   sh:property [
@@ -685,19 +685,18 @@ elmo-shape:RequestMapper a sh:NodeShape;
     sh:maxCount 1;
   ];
   sh:property [
-    sh:name "elmo:targetParameter";
-    sh:path elmo:targetParameter;
+    sh:name "elmo:target";
+    sh:path elmo:target;
     sh:class elmo:Parameter;
     sh:minCount 1;
     sh:maxCount 1;
   ];
   sh:property [
-    sh:name "elmo:requestElement";
-    sh:path elmo:requestElement;
-    sh:minCount 1;
+    sh:name "elmo:source";
+    sh:path elmo:source;
     sh:maxCount 1;
-    sh:node elmo-shape:RequestElement;
-    sh:in (http:requestUri http:params)
+    sh:class rdf:Property;
+    sh:in (http:requestURI)
   ];
   sh:property [
     sh:name "elmo:pattern";
@@ -711,6 +710,12 @@ elmo-shape:RequestMapper a sh:NodeShape;
     sh:maxCount 1;
     sh:datatype xsd:string;
   ];
+.
+
+elmo-shape:UriParameterMapper a sh:NodeShape;
+  sh:targetClass elmo:UriParameterMapper;
+  rdfs:label "UriParameterMapper shape"@en;
+  sh:name "elmo:UriParameterMapper";
 .
 
 elmo-shape:Appearance a sh:NodeShape;
