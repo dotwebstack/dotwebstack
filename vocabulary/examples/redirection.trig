@@ -53,15 +53,12 @@ GRAPH config:MainStage {
     elmo:target config:HashOfBody;
   .
   # Chaining
+  # The elmo:source of chained ValueMappers is ignored, and may be excluded
   config:ChainedFromUrl a elmo:ValueMapper;
     elmo:source http:requestURI;
     elmo:pattern "{path}/id/{reference}";
     elmo:template "{path}/doc/{reference}";
-    elmo:target [
-      a elmo:HashDecoderValueMapper;
-      elmo:algorithm "base64";
-      elmo:target config:HasOfBody
-    ];
+    elmo:target config:AndNowForSomethingCompletelyDifferent;
   .
   # --- Informal till here ---
 
