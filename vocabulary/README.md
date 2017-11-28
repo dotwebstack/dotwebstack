@@ -69,10 +69,27 @@ Blank versions of `elmo:InformationProduct` and `elmo:Transaction` are depicted 
 ### Redirection
 Information resources are dereferenced using an `elmo:Representation`. To redirect the URL of a non-information using the http 303 response, you will use `elmo:Redirection`. The example below redirect all URL's that contain the substring `/id/` to URL's that have this substring replaced by `/doc/`:
 
-	config:id2doc a elmo:Redirection;
-		elmo:urlPattern "^\\/id\\/(.+)$";
-		elmo:targetUrl "\\/doc\\/$1"
-	.  
+	config:NonInformationResourceRedirection a elmo:Redirection;
+		elmo:urlPattern "{path}/id/{reference}";
+		elmo:redirectTemplate "{path}/doc/{reference}";
+	.
+
+The syntax for `elmo:urlPattern` and `elmo:redirectTemplate` are the same as for `elmo:pattern` and `elmo:template` as used with a [ParameterMapper](#parameter-mapping).
+
+### Parameter mapping
+![](elmo-frontend-mapper-diagram.png)
+Parameters in information products get their values by default by a mapping of a query parameter to the parameter of an information product by corresponding names. In some case, you might want to have another name, or you might want to get a value from a different part of the http request, for example the URI itself, or a header value. This is done by use of an `elmo:ParameterMapper`.
+
+Parameter mappers are added to an `elmo:Representation` with `elmo:parameterMapper` and those mappers have a link to the corresponding parameter via `elmo:target`. The corresponding http request element is selected via `elmo:source` which uses the [http vocabulary in RDF](http://www.w3.org/TR/HTTP-in-RDF10). Named-value pairs can be selected using the `elmo:name` element. Optionally, you can specify a template to change the value somewhat. The example below gives an example how to use a RequestMapper to map de URI to the subject parameter.
+
+	config:SubjectFromUrl a elmo:ParameterMapper;
+		elmo:source http:requestURI;
+		elmo:pattern "http://{domain}/{path}/id/{reference}";
+		elmo:template "http://{domain}/{path}/doc/{reference}";
+		elmo:target config:SubjectParameter;
+	.
+
+The syntax for `elmo:pattern` and `elmo:template` conforms to the [JAX-RS Path specification](https://docs.oracle.com/cd/E19798-01/821-1841/ginpw). This means that you can also specify regular expressions as part of the pattern, like: `{path:[a-zA-Z][a-zA-Z_0-9]*}`. The default regex pattern for `{path}` will be: `{path:[^/]+?`. 
 
 ### Representation
 To specify which representation is used in a particular situation, you can use the properties `elmo:urlPattern`, `elmo:uriPattern` and `elmo:appliesTo`.
