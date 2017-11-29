@@ -39,8 +39,8 @@ GRAPH config:MainStage {
   # In this case {domain} is not mapped, so the same URI's will be generated for O, T, A and P
   config:SubjectFromUrl a elmo:UriParameterMapper;
     elmo:source http:requestURI;
-    elmo:pattern "http://{domain}/{path}/id/{reference}";
-    elmo:template "http://demo.dotwebstack.org/{path}/doc/{reference}";
+    elmo:pattern "http://{domain}/{path}/doc/{reference}";
+    elmo:template "http://demo.dotwebstack.org/{path}/id/{reference}";
     elmo:target config:SubjectParameter;
   .
 
@@ -48,8 +48,8 @@ GRAPH config:MainStage {
   # Other more specific ParameterMappers might also exist
   config:SubjectFromUrl a elmo:RegexParameterMapper;
     elmo:source http:requestURI;
-    elmo:pattern "^(.+)\\/id\\/(.+)$";
-    elmo:template "$1\\/doc\\/$2";
+    elmo:pattern "^(.+)\\/doc\\/(.+)$";
+    elmo:template "$1\\/id\\/$2";
     elmo:target config:SubjectParameter;
   .
   # Or even something completely different
@@ -62,8 +62,8 @@ GRAPH config:MainStage {
   # The elmo:source of chained ParameterMappers is ignored, and may be excluded
   config:ChainedFromUrl a elmo:UriParameterMapper;
     elmo:source http:requestURI;
-    elmo:pattern "{path}/id/{reference}";
-    elmo:template "{path}/doc/{reference}";
+    elmo:pattern "{path}/doc/{reference}";
+    elmo:template "{path}/id/{reference}";
     elmo:target config:HashFromBody;
   .
   # --- Informal till here ---
