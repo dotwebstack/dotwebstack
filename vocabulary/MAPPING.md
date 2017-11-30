@@ -43,19 +43,17 @@ A value of "legacy" in the column realised means that the particular element is 
 |-------------|-------------|-------|--------
 ||`elmo2:informationProduct`|Links an `elmo2:Representation` to its `elmo2:InformationProduct`|Yes
 |`rdfs:label`|`rdfs:label`||Yes
-|`elmo1:accept`|||TODO
-|`elmo1:adapter`||Unknown|No
+|`elmo1:accept`|||No
 |`elmo1:appearance`|`elmo2:appearance`|`elmo2:appearance maps` to instances of `elmo2:Appearance`, not to classes as does `elmo1:apearance`|Yes
 |`elmo1:applies-to`|`elmo2:appliesTo`||No
-|`elmo1:container`|||TODO
+|`elmo1:container`|||No
 |`elmo1:contains`|`elmo2:contains`||Yes
 |`elmo1:data`|`elmo2:data`|Static data is net yet supported. You might use an IP dat delivers only static content|No
 |`elmo1:endpoint`|`elmo2:backend`|Moved to `elmo2:InformationProduct`. A separate class `elmo:Backend` is used.|Moved
 |`elmo1:fragment`|`elmo2:fragment`|Moved to `elmo2:Appearance`|Moved
 |`elmo1:index`|`elmo2:index`|Moved to `elmo2:Appearance`|Legacy, not yet
 |`elmo1:layer`||Representation collision cannot occur at this moment, so no need (yet) for `elmo:layer`|No
-|`elmo1:name`|||TODO
-|`elmo1:product`||Unknown|No
+|`elmo1:name`|||No
 |`elmo1:query`|`elmo2:query`|Moved to `elmo2:InformationProduct`|Moved
 |`elmo1:queryForm`|||No
 |`elmo1:service`|||No
@@ -75,9 +73,9 @@ A value of "legacy" in the column realised means that the particular element is 
 |`elmo1:applies-to`|`elmo2:appliesTo`||Yes
 |`elmo1:backmap`|`elmo2:backmap`||Legacy, not yet
 |`elmo1:index`|`elmo2:index`||Legacy, not yet
-|`elmo1:appearance`|||Legacy, not yet
-|`elmo1:glossary`|||Legacy, not yet
-|`elmo1:name`|||Legacy, not yet
+|`elmo1:appearance`|`elmo2:apperance`||Legacy, not yet
+|`elmo1:glossary`|`xhtml:glossary`||Legacy, not yet
+|`elmo1:name`|`elmo2:name`||Legacy, not yet
 |`xhtml:stylesheet`|`xhtml:stylesheet`||Legacy, not yet
 |`xhtml:link`|`xhtml:link`||Legacy, not yet
 |`rdf:value`|`rdf:value`||Legacy, not yet
