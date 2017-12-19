@@ -62,13 +62,15 @@ GRAPH config:CatalogusTheatre {
 ## Naamgeving
 *	Er zijn drie mappen waarin configuratiebestanden gezet kunnen worden:
   *	system. Deze bevat:
-    *	_prefixes.trig
     *	system.trig
+    * parameters.trig
   *	frontend. Deze bevat:
     *	alle bestanden met representaties
   *	backend. Deze bevat:
     *	backend.trig
     *	alle bestanden met informatieproducten
+* Bovendien is er één bestand dat in de root map van de configuratiebestanden gezet moet worden:
+  *	_prefixes.trig
 *	Bestanden met informatieproducten hebben als prefix ip_
 *	elmo:InformationProducts hebben een naam die begint met IP en verder zoveel mogelijk identiek is aan de elmo:Representation waar het informatieproduct bijhoort
 *	elmo:Representations hebben een zo kort mogelijk, maar beschrijvende naam.
@@ -77,4 +79,3 @@ GRAPH config:CatalogusTheatre {
 ## Overig
 *	Bij het opleveren van InformationProducts moet de keuze gemaakt worden of het InformationProduct ook via de API beschikbaar moet zijn.
   *	Zo ja, dan dient ook catalogus.yml geupdate te worden.
-  *	Zo nee, dan dient dit gedocumenteerd te worden in de daarvoor bestemde user story (GCO-178).
