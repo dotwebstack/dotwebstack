@@ -18,6 +18,7 @@ GRAPH config:CatalogusTheatre {
 
     elmo:appearance config:WeergavePaginaProductenAppearance;
     elmo:informationProduct config:IPProducten;
+    elmo:parametermapper config:SubjectFromUrl;
 
     elmo:contains config:DSOMenu
   .
@@ -25,18 +26,19 @@ GRAPH config:CatalogusTheatre {
 ```
 
 ## Representations
-*	Representations bevatten drie onderdelen:
-  *	Bereikbaarheid (optioneel). Hieronder vallen de volgende statements:
-    *	elmo:urlPattern
-    *	elmo:uriPattern
-    *	elmo:appliesTo
-    *	elmo:stage
+*	Representations kunnen drie onderdelen bevatten. Als deze aanwezig zijn, dan worden ze in de hieronder vermelde volgorde opgenomen. Deze onderdelen zijn:
+  *	Bereikbaarheid (verplicht). Hieronder vallen de volgende statements:
+    *	elmo:stage (verplicht)
+    *	elmo:urlPattern (optioneel)
+    *	elmo:uriPattern (optioneel)
+    *	elmo:appliesTo (optioneel)
   *	Beschrijving representation (verplicht). Hieronder vallen:
-    *	elmo:appearance
-    *	elmo:informationProduct
+    *	elmo:appearance (verplicht)
+    *	elmo:informationProduct (verplicht)
+    * elmo:parameterMapper (optioneel)
  *	Overige onderdelen (optioneel). Hieronder vallen:
-    *	elmo:contains
-*	De drie onderdelen dienen middels een comment van elkaar onderscheiden te worden
+    *	elmo:contains (optioneel)
+*	De drie onderdelen dienen middels een witregel van elkaar onderscheiden te worden
 *	Zie voorbeeld hierboven
 
 ## Query’s
