@@ -19,12 +19,14 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix http: <http://www.w3.org/2011/http#>.
 
 # =========
 # Imports
 #
 xsd:string a rdfs:Datatype.
 xsd:integer a rdfs:Datatype.
+http:requestURI a rdf:Property.
 
 # =========
 # Ontology spec
