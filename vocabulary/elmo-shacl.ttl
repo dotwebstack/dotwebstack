@@ -31,7 +31,6 @@ elmo-shape:Theatre a sh:NodeShape;
   rdfs:label "Theatre shape"@en;
   sh:name "elmo:Theatre";
   sh:property [
-    sh:name "rdf:type";
     sh:path rdf:type;
     sh:hasValue elmo:Theatre;
     sh:minCount 1;
@@ -193,7 +192,7 @@ elmo-shape:InformationProduct a sh:NodeShape;
     sh:name "elmo:resultType";
     sh:path elmo:resultType;
     sh:class elmo:ResultType;
-    sh:defaulValue elmo-rt:Graph;
+    sh:defaultValue elmo-rt:Graph;
     sh:node elmo-shape:ResultType;
     sh:maxCount 1;
   ];
@@ -597,6 +596,15 @@ elmo-shape:Redirection a sh:NodeShape;
     sh:datatype xsd:string;
   ];
   sh:property [
+    sh:path rdf:type;
+    sh:hasValue elmo:Redirection;
+    sh:maxCount 1
+  ];
+  sh:property [
+    sh:name "elmo:stage";
+    sh:path elmo:stage
+  ];
+  sh:property [
     sh:name "elmo:urlPattern";
     sh:path elmo:urlPattern;
     sh:datatype xsd:string;
@@ -673,9 +681,8 @@ elmo-shape:ParameterMapper a sh:NodeShape;
   sh:name "elmo:ParameterMapper";
   sh:closed true;
   sh:property [
-    sh:name "rdf:type";
     sh:path rdf:type;
-    sh:hasValue elmo:ParameterMapper;
+    # No specific value, because subtypes of elmo:ParameterMapper are also allowed
     sh:maxCount 1;
   ];
   sh:property [
@@ -733,9 +740,13 @@ elmo-shape:Appearance a sh:NodeShape;
   sh:name "elmo:Appearance";
   sh:closed true;
   sh:property [
-    sh:name "rdf:type";
     sh:path rdf:type;
     sh:hasValue elmo:Appearance;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "elmo:index";
+    sh:path elmo:index;
     sh:maxCount 1;
   ];
   sh:property [
