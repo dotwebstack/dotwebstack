@@ -8,8 +8,12 @@ The global design is created using archi, an open source editor for Archimate di
 
 ### Transaction flow
 
+**Remark: this architecture is not yet final, but the result of an earlier architecture spike**
+
 ![](transaction-flow.png)
 
 ### Front-end architecture
+
+**Remark: this architectur is not yet final, but the result of an earlier architecture spike**
 
 ![](front-end-architecture.png)
