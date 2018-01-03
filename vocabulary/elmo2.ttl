@@ -266,9 +266,17 @@ elmo:Appearance a owl:Class;
   rdfs:label "Appearance"@en;
   rdfs:comment "The class of appearances";
 .
+elmo:Endpoint a owl:Class;
+  rdfs:label "Endpoint"@en;
+  rdfs:comment "The class of endpoints. An endpoint defines a point for http requests to be served as linked data."@en;
+.
 elmo:Fragment a owl:Class;
   rdfs:label "Fragment"@en;
   rdfs:comment "The class of fragments";
+.
+elmo:Layer a owl:Class;
+  rdfs:label "Layer"@en;
+  rdfs:comment "The class of layers. A layer defines the order to find a applicable representations."@en
 .
 elmo:Redirection a owl:Class;
   rdfs:label "Redirection"@en;
@@ -276,7 +284,7 @@ elmo:Redirection a owl:Class;
 .
 elmo:Representation a owl:Class;
   rdfs:label "Representation"@en;
-  rdfs:comment "The class of representations. A representation links a http request to the corresponding information product."@en;
+  rdfs:comment "The class of representations. A representation links an IRI to the corresponding information product."@en;
 .
 elmo:ParameterMapper a owl:Class;
   rdfs:label "Parameter mapper"@en;
@@ -287,6 +295,27 @@ elmo:ParameterMapper a owl:Class;
       rdfs:label "URI parameter mapper"@en;
       rdfs:comment "The class of URI parameter mappers. A parameter mapper maps a URI-value, or a part of a URI to an elmo:Parameter. It uses the JAX-RS path format for pattern and template."@en;
     .
+
+# == INDIVIDUALS ==
+elmo:SubjectParameter a elmo:TermFilter;
+  elmo:name "SUBJECT";
+  elmo:shape [
+    sh:nodeKind sh:IRI;
+  ]
+.
+
+elmo:BottomLayer a elmo:Layer;
+  rdfs:label "Bottom layer"@en;
+  elmo:index -1
+.
+elmo:MiddleLayer a elmo:Layer;
+  rdfs:label "Middle layer"@en;
+  elmo:index 0
+.
+elmo:TopLayer a elmo:Layer;
+  rdfs:label "Top layer"@en;
+  elmo:index 1
+.
 
 # == PROPERTIES ==
 elmo:appearance a owl:ObjectProperty;
@@ -313,6 +342,12 @@ elmo:data a owl:ObjectProperty;
   rdfs:domain elmo:Representation;
   rdfs:range rdfs:Resource;
 .
+elmo:defaultEndpoint a owl:ObjectProperty;
+  rdfs:label "default endpoint"@en;
+  rdfs:comment "Links a stage to the default endpoint for that stage (used for serving non-deferenceable IRIs)"@en;
+  rdfs:domain elmo:Stage;
+  rdfs:range elmo:Endpoint;
+.
 elmo:deleteTransaction a owl:ObjectProperty;
   rdfs:label "transaction"@en;
   rdfs:comment "States the transaction that is executed for a particular representation, in case of a DELETE http request"@en;
@@ -324,6 +359,12 @@ elmo:fragment a owl:ObjectProperty;
   rdfs:comment "Links a particular fragment definition to a representation";
   rdfs:domain elmo:Representation;
   rdfs:range elmo:Fragment;
+.
+elmo:layer a owl:ObjectProperty;
+  rdfs:label "layer"@en;
+  rdfs:comment "Links a representation to a particular layer";
+  rdfs:domain elmo:Representation;
+  rdfs:range elmo:Layer;
 .
 elmo:informationProduct a owl:ObjectProperty;
   rdfs:label "information product"@en;

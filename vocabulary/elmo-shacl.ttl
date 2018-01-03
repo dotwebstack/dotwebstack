@@ -146,6 +146,12 @@ elmo-shape:Stage a sh:NodeShape;
     sh:maxCount 1;
     sh:class elmo:Backend;
   ];
+  sh:property [
+    sh:name "elmo:defaultEndpoint";
+    sh:path elmo:defaultEndpoint;
+    sh:maxCount 1;
+    sh:class elmo:Endpoint
+  ];
 .
 elmo-shape:Layout a sh:NodeShape;
   sh:closed true;
@@ -585,6 +591,44 @@ elmo:FileBackend a sh:NodeShape;
 # =========
 # Frontend vocabulary
 #
+elmo-shape:Endpoint a sh:NodeShape;
+  sh:closed true;
+  sh:targetClass elmo:Endpoint;
+  rdfs:label "Endpoint shape"@en;
+  sh:name "elmo:Endpoint";
+  sh:property [
+    sh:name "rdfs:label";
+    sh:path rdfs:label;
+    sh:datatype xsd:string;
+  ];
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue elmo:Endpoint;
+    sh:maxCount 1
+  ];
+  sh:property [
+    sh:name "elmo:stage";
+    sh:path elmo:stage
+  ];
+  sh:property [
+    sh:name "elmo:urlPattern"; #Should be renamed to elmo:path or elmo:pathPattern, see also elmo:Redirection
+    sh:path elmo:path;
+    sh:datatype xsd:string;
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "elmo:parameterMapper";
+    sh:path elmo:parameterMapper;
+    sh:class elmo:ParameterMapper;
+  ];
+  sh:property [
+    sh:name "elmo:representation";
+    sh:path elmo:representation;
+    sh:class elmo:Representation;
+  ];
+.
+
 elmo-shape:Redirection a sh:NodeShape;
   sh:closed true;
   sh:targetClass elmo:Redirection;
@@ -605,7 +649,7 @@ elmo-shape:Redirection a sh:NodeShape;
     sh:path elmo:stage
   ];
   sh:property [
-    sh:name "elmo:urlPattern";
+    sh:name "elmo:urlPattern"; #Should be renamed to elmo:path or elmo:pathPattern, see also elmo:Endpoint
     sh:path elmo:urlPattern;
     sh:datatype xsd:string;
     sh:minCount 1;
@@ -635,11 +679,12 @@ elmo-shape:Representation a sh:NodeShape;
     sh:datatype xsd:string;
     sh:maxCount 1;
   ];
-  sh:property [
-    sh:name "elmo:urlPattern";
-    sh:path elmo:urlPattern;
-    sh:datatype xsd:string;
-  ];
+# urlPattern has moved to elmo:Endpoint
+#  sh:property [
+#    sh:name "elmo:urlPattern";
+#    sh:path elmo:urlPattern;
+#    sh:datatype xsd:string;
+#  ];
   sh:property [
     sh:name "elmo:uriPattern";
     sh:path elmo:uriPattern;
@@ -651,11 +696,19 @@ elmo-shape:Representation a sh:NodeShape;
     sh:nodeKind sh:BlankNode;
   ];
   sh:property [
-    sh:name "elmo:pageTemplate";
-    sh:path elmo:pageTemplate;
-    sh:datatype xsd:string;
+    sh:name "elmo:layer";
+    sh:path elmo:layer;
+    sh:class elmo:Layer;
     sh:maxCount 1;
+    sh:defaultValue elmo:MiddleLayer
   ];
+# Temporary disabled, not needed yet (part of the React UI prototype)
+#  sh:property [
+#    sh:name "elmo:pageTemplate";
+#    sh:path elmo:pageTemplate;
+#    sh:datatype xsd:string;
+#    sh:maxCount 1;
+#  ];
   sh:property [
     sh:name "elmo:appearance";
     sh:path elmo:appearance;
@@ -663,16 +716,41 @@ elmo-shape:Representation a sh:NodeShape;
     sh:node elmo-shape:Appearance;
     sh:maxCount 1;
   ];
-  sh:property [
-    sh:name "elmo:parameterMapper";
-    sh:path elmo:parameterMapper;
-    sh:class elmo:ParameterMapper;
-  ];
+# parameterMapper has moved to elmo:Endpoint
+#  sh:property [
+#    sh:name "elmo:parameterMapper";
+#    sh:path elmo:parameterMapper;
+#    sh:class elmo:ParameterMapper;
+#  ];
   sh:property [
     sh:path [sh:inversePath elmo:contains ];
     sh:node elmo-shape:TopLevelRepresentation;
     sh:class elmo:Representation;
   ];
+.
+
+elmo-shape:Layer a sh:NodeShape;
+  sh:targetClass elmo:Layer;
+  rdfs:label "Layer shape"@en;
+  sh:name "elmo:Layer";
+  sh:closed true;
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue elmo:Layer;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path rdfs:label;
+    sh:name "rdfs:label";
+    sh:datatype xsd:string
+  ];
+  sh:property [
+    sh:path elmo:index;
+    sh:name "elmo:index";
+    sh:minCount 1;
+    sh:maxCount 1;
+    sh:datatype xsd:integer
+  ]
 .
 
 elmo-shape:ParameterMapper a sh:NodeShape;

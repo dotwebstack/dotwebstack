@@ -13,19 +13,16 @@ GRAPH config:Theatre {
 	#
 	# Example of a URI parameter (${SUBJECT} or ?SUBJECT)
 	#
-  
-  # You should define the SubjectParameter only ones, probably as part of the System graph
-  config:SubjectParameter a elmo:TermFilter;
-    elmo:name "SUBJECT";
-    elmo:shape [
-      sh:nodeKind sh:IRI;
-    ]
-  .
+
+  # See elmo2.ttl for the definition of elmo:SubjectParameter.
+  # elmo:SubjectParameter is a predefined TermFilter that can be used as a regular parameter.
+  # the name of elmo:SubjectParameter is SUBJECT.
+  # the value of elmo:SubjectParameter is also used to find out which elmo:Representation should be used
 
   # NB: The use of ?SUBJECT (a bounded variable) is recommended above the use of <${SUBJECT}> (a generic template variable)
   #     At this moment, ?SUBJECT only works for string literals, so cannot be used in this case
 	config:SubjectData a elmo:InformationProduct;
-		elmo:parameter config:SubjectParameter;
+		elmo:parameter elmo:SubjectParameter;
 		elmo:query """
 			construct {
 				<${SUBJECT}> ?p ?o
