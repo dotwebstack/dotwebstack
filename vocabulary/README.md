@@ -80,19 +80,60 @@ The syntax for `elmo:urlPattern` and `elmo:redirectTemplate` are the same as for
 ![](elmo-frontend-mapper-diagram.png)
 Parameters in information products get their values by default by a mapping of a query parameter to the parameter of an information product by corresponding names. In some case, you might want to have another name, or you might want to get a value from a different part of the http request, for example the URI itself, or a header value. This is done by use of an `elmo:ParameterMapper`.
 
-Parameter mappers are added to an `elmo:Representation` with `elmo:parameterMapper` and those mappers have a link to the corresponding parameter via `elmo:target`. The corresponding http request element is selected via `elmo:source` which uses the [http vocabulary in RDF](http://www.w3.org/TR/HTTP-in-RDF10). Named-value pairs can be selected using the `elmo:name` element. Optionally, you can specify a template to change the value somewhat. The example below gives an example how to use a RequestMapper to map de URI to the subject parameter.
+Parameter mappers are added to an `elmo:Endpoint` with `elmo:parameterMapper` and those mappers have a link to the corresponding parameter via `elmo:target`. The corresponding http request element is selected via `elmo:source` which uses the [http vocabulary in RDF](http://www.w3.org/TR/HTTP-in-RDF10). Named-value pairs can be selected using the `elmo:name` element. Optionally, you can specify a template to change the value somewhat. The example below gives an example how to use a UriParameterMapper to map de URI to the subject parameter.
 
-	config:SubjectFromUrl a elmo:ParameterMapper;
+	config:SubjectFromUrl a elmo:UriParameterMapper;
 		elmo:source http:requestURI;
-		elmo:pattern "http://{domain}/{path}/id/{reference}";
-		elmo:template "http://{domain}/{path}/doc/{reference}";
-		elmo:target config:SubjectParameter;
+		elmo:pattern "http://{domain}/{path}/doc/{reference}";
+		elmo:template "http://{domain}/{path}/id/{reference}";
+		elmo:target elmo:SubjectParameter;
 	.
 
 The syntax for `elmo:pattern` and `elmo:template` conforms to the [JAX-RS Path specification](https://docs.oracle.com/cd/E19798-01/821-1841/ginpw). This means that you can also specify regular expressions as part of the pattern, like: `{path:[a-zA-Z][a-zA-Z_0-9]*}`. The default regex pattern for `{path}` will be: `{path:[^/]+?`. 
 
+### Endpoints
+Endpoints are used to define which specific url patterns (using `elmo:urlPattern`) can be used to resolve linked data URI's. You can use endpoints as direct endpoints or as indirect endpoints.
+
+#### Direct endpoints
+You use direct endpoint if you are sure that the URI of a resource is located at your server, and you know the kind of representation that you want to use. In this case, you specify the representation that used for a specific url(pattern), as in the example below:
+
+	config:Endpoint a elmo:Endpoint;
+		elmo:urlPattern "/query/allitems";
+		elmo:representation elmo:AllItemsRepresentation
+	.
+
+#### Indirect endpoints
+Indirect endpoints are useful when you don't realy know what kind of representation should be used for a URI. This can be useful when:
+
+- The URI of the resource you want to represent isn't located at your server (for example: your server is at `http://myserver.org` and you want to represent a URI that starts with `http://notmyserver.org`);
+- The URI of the resource you want to represent isn't a http-URI (for example: you want to represent a URI that starts with `urn:uuid`);
+- You want to link to some URI, but you are not sure if the URI is located at your server, it might be a URI from the first two categories;
+- The representation of the URI cannot be inferred from the URI of the endpoint.
+
+To configure an indirect endpoint, you specify the urlPattern and you specify the way that the value for a special `elmo:SubjectParameter` is mapped. This value will be used by the framework to find out which representation should actually be used:
+
+	config:Endpoint a elmo:Endpoint;
+		elmo:pattern "{path}/doc/{reference}";
+		elmo:parameterMapper config:SubjectFromUrl
+	.
+
+See the section about parameter mappers to find the specification for `config:SubjectFromUrl`. A representation could be configured as:
+
+	config:Representation a elmo:Representation;
+		elmo:uriPattern "/id/concept/{term}";
+		elmo:informationProduct ...
+	.
+
+This representation will be used whenever the value for the `elmo:SubjectParameter` matches the pattern `/id/concept/{term}`.
+
+#### default endpoint
+
+You can define a default endpoint for each stage. This default endpoint will be used whenever a link is made to a particular resource.
+
+![](elmo-frontend-defaultendpoint.png)
+
 ### Representation
-To specify which representation is used in a particular situation, you can use the properties `elmo:urlPattern`, `elmo:uriPattern` and `elmo:appliesTo`.
+To specify which representation is used in a particular situation, you can use the properties `elmo:uriPattern` and `elmo:appliesTo`.
 
 Only top-level representations should have links to transactions. Only the information product from the top-level representation is serialized with the http response (in a RDF format, or as inline data within the HTML). Data from containing representations are only used for html representations.
 
