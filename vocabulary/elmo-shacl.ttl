@@ -612,7 +612,7 @@ elmo-shape:Endpoint a sh:NodeShape;
   ];
   sh:property [
     sh:name "elmo:urlPattern"; #Should be renamed to elmo:path or elmo:pathPattern, see also elmo:Redirection
-    sh:path elmo:path;
+    sh:path elmo:urlPattern;
     sh:datatype xsd:string;
     sh:minCount 1;
     sh:maxCount 1;

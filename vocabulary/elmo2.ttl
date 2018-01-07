@@ -19,6 +19,7 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix http: <http://www.w3.org/2011/http#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 
 # =========
 # Imports
@@ -84,6 +85,13 @@ elmo:site a owl:ObjectProperty;
 	rdfs:domain elmo:Stage;
 	rdfs:range elmo:Site;
 .
+# At this moment, the 'default behaviour' as stated below isn't implemented yet, so explicitly stating the stage is always necessary at this moment!
+elmo:stage a owl:ObjectProperty;
+  rdfs:label "stage"@en;
+  rdfs:comment "States the stage to which a particular element belongs. By default, an element belong to the stage that is also the named graph to which the element belongs. By explictly stating the stage, you can overrule this behaviour."@en;
+  # No rdfs:domain -> domain could be any element that can be part of a stage
+  rdfs:range elmo:Stage;
+.
 
 # =========
 # Backstage and core layers vocabulary
@@ -126,7 +134,7 @@ elmo:Parameter a owl:Class;
 
 elmo:Query a owl:Class;
   rdfs:label "Query"@en;
-  rdfs:comment "Reification of the query. This makes it possible to reuse a query, or to add metadata to the query"@en;
+  rdfs:comment "Reification of the query (used in preQueries and postQueries of transactions). This makes it possible to reuse a query, or to add metadata to the query"@en;
 .
 elmo:StorageProtocol a owl:Class;
   rdfs:label "StorageProtocol"@en;
@@ -164,11 +172,36 @@ elmo:defaultBackend a owl:ObjectProperty;
   rdfs:range elmo:Backend;
   # No rdfs:domain -> domain could be stage, site or theatre
 .
+elmo:conformsTo a owl:ObjectProperty;
+  rdfs:label "conforms to"@en;
+  rdfs:comment "Defines the shacl graph that a transaction input graph should conform to";
+  rdfs:domain elmo:Transaction;
+  # Range should be a named graph?
+.
 elmo:endpoint a owl:DatatypeProperty;
   rdfs:label "endpoint"@en;
   rdfs:comment "States the (http) endpoint that should be accessed for this particular backend. Note: this property is only relevant for backends that respond to http requests"@en;
   rdfs:domain elmo:Backend;
   rdfs:range xsd:anyURI;
+.
+elmo:path a owl:DatatypeProperty;
+  rdfs:label "path"@en;
+  rdfs:comment "Specifies the location of a file that should be accessed for this particular backend. Note: this property is only relevant for backends are directly linked to a file system"@en;
+  rdfs:domain elmo:Backend;
+  rdfs:range xsd:string;
+  # Comment: this property isn't in use at this moment. Maybe 'location' is a better term for this property?
+.
+elmo:postQueries a owl:ObjectProperty;
+  rdfs:label "post queries"@en;
+  rdfs:comment "Specifies the ordered list of post queries that is executed during the transaction. Post queries are executed after the key action of the transaction (delete, update, insert)";
+  rdfs:domain elmo:Transaction;
+  rdfs:range rdf:List;
+.
+elmo:preQueries a owl:ObjectProperty;
+  rdfs:label "pre queries"@en;
+  rdfs:comment "Specifies the ordered list of pre queries that is executed during the transaction. Pre queries are executed on the transaction data before the data is used in the key action of the transaction (delete, update, insert)";
+  rdfs:domain elmo:Transaction;
+  rdfs:range rdf:List;
 .
 elmo:optionalParameter a owl:ObjectProperty;
   rdfs:label "optional parameter";
@@ -182,15 +215,39 @@ elmo:query a owl:DatatypeProperty;
   rdfs:range xsd:string;
 .
 elmo:requiredParameter a owl:ObjectProperty;
-  rdfs:label "required parameter";
+  rdfs:label "required parameter"@en;
   rdfs:comment "States the optional parameter(s) for an information product, transaction or query";
   rdfs:range elmo:Parameter;
+.
+elmo:resultType a owl:ObjectProperty;
+  rdfs:label "result type"@en;
+  rdfs:comment "Defines the type of query result (TupleQuery or GraphQuery)";
+  rdfs:domain elmo:InformationProduct;
+  rdfs:range skos:Concept
+.
+elmo:shape a owl:ObjectProperty;
+  rdfs:label "shape"@en;
+  rdfs:comment "Defines the shape that a parameter value should conform to";
+  rdfs:domain elmo:Parameter;
+  rdfs:range sh:Shape; #Could be a NodeShape or a PropertyShape, that depends on the kind of parameter
+.
+elmo:sourceGraph a owl:ObjectProperty;
+  rdfs:label "source graph"@en;
+  rdfs:comment "Defines the graph that contains the RML specification";
+  rdfs:domain elmo:RMLTransformation;
+  # rdfs:Range should be a graph?
 .
 elmo:storageProtocol a owl:ObjectProperty;
   rdfs:label "storageProtocol"@en;
   rdfs:comment "Defines the way that the result of a transaction is stored within the persistancy layer";
   rdfs:domain elmo:Transaction;
   rdfs:range elmo:StorageProtocol;
+.
+elmo:stylesheet a owl:ObjectProperty;
+  rdfs:label "stylesheet"@en;
+  rdfs:comment "Defines the stylesheet to be used for an XSLTransformer";
+  rdfs:domain elmo:XSLTransformer;
+  rdfs:range xsd:string;
 .
 elmo:targetGraph a owl:ObjectProperty;
   rdfs:label "targetGraph"@en;
@@ -360,11 +417,11 @@ elmo:fragment a owl:ObjectProperty;
   rdfs:domain elmo:Representation;
   rdfs:range elmo:Fragment;
 .
-elmo:layer a owl:ObjectProperty;
-  rdfs:label "layer"@en;
-  rdfs:comment "Links a representation to a particular layer";
-  rdfs:domain elmo:Representation;
-  rdfs:range elmo:Layer;
+elmo:index a owl:DatatypeProperty;
+  rdfs:label "index"@en;
+  rdfs:comment "Defines the position of an element relative to other elements in the same group, for example to order of representations on a screen";
+  # No rdfs:domain, index can be used in a lot of situations;
+  rdfs:range xsd:integer; #Remark: in elmo1 the range was a string, but in elmo2 the range is - as it should be - an integer
 .
 elmo:informationProduct a owl:ObjectProperty;
   rdfs:label "information product"@en;
@@ -372,18 +429,25 @@ elmo:informationProduct a owl:ObjectProperty;
   rdfs:domain elmo:Representation;
   rdfs:range elmo:InformationProduct;
 .
+elmo:layer a owl:ObjectProperty;
+  rdfs:label "layer"@en;
+  rdfs:comment "Links a representation to a particular layer";
+  rdfs:domain elmo:Representation;
+  rdfs:range elmo:Layer;
+.
 elmo:name a owl:DatatypeProperty;
   rdfs:label "name"@en;
   rdfs:comment "The unique name of a resource, within a certain context";
   # No rdfs:domain, name can be used in a lot of situations;
   rdfs:range xsd:string;
 .
-elmo:pageTemplate a owl:DatatypeProperty;
-  rdfs:label "page template"@en;
-  rdfs:comment "Specifies an optional template for the main page. This template replaces a default generated template from the configuration";
-  rdfs:domain elmo:Representation;
-  rdfs:range xsd:string;
-.
+# Temporary disabled, not needed yet (part of the React UI prototype)
+#elmo:pageTemplate a owl:DatatypeProperty;
+#  rdfs:label "page template"@en;
+#  rdfs:comment "Specifies an optional template for the main page. This template replaces a default generated template from the configuration";
+#  rdfs:domain elmo:Representation;
+#  rdfs:range xsd:string;
+#.
 elmo:pattern a owl:DatatypeProperty;
   rdfs:label "pattern"@en;
   rdfs:comment "A pattern to be used as part of a replace construction";
@@ -425,6 +489,12 @@ elmo:redirectTemplate a owl:DatatypeProperty;
   rdfs:comment "Specifies the template for redirection."@en;
   rdfs:domain elmo:Redirection;
   rdfs:range xsd:string;
+.
+elmo:representation a owl:ObjectProperty;
+  rdfs:label "representation"@en;
+  rdfs:comment "Specifies the representation that should be used with this endpoint";
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Representation;
 .
 elmo:template a owl:DatatypeProperty;
   rdfs:label "template"@en;
