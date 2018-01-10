@@ -613,8 +613,10 @@ elmo-shape:Redirection a sh:NodeShape;
     sh:maxCount 1;
   ];
   sh:property [
-    sh:name "elmo:redirectTemplate";
-    sh:path elmo:redirectTemplate;
+#    sh:name "elmo:redirectTemplate";
+#    sh:path elmo:redirectTemplate;
+    sh:name "elmo:targetUrl"; #Oude naamgeving, wordt opgelost in LDT-206
+    sh:path "elmo:targetUrl"; #
     sh:datatype xsd:string;
     sh:minCount 1;
     sh:maxCount 1;
