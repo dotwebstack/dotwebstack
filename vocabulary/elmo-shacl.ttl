@@ -869,4 +869,10 @@ elmo-shape:Fragment a sh:NodeShape;
     sh:maxCount 1;
     sh:datatype xsd:string;
   ];
+  sh:property [
+    sh:name "xhtml:stylesheet";
+    sh:path xhtml:stylesheet;
+    sh:maxCount 1;
+    sh:datatype xsd:string;
+  ];
 .
