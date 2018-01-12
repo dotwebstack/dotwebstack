@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:archimate="http://www.archimatetool.com/archimate" name="(new model)" id="b31988b5" version="3.1.1">
+<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:archimate="http://www.archimatetool.com/archimate" name="DotWebStack design" id="b31988b5" version="3.1.1">
   <folder name="Business" id="a521bebe" type="business">
     <element xsi:type="archimate:BusinessRole" id="6415cd02" name="Users"/>
     <element xsi:type="archimate:BusinessActor" id="d580dece" name="REST API consuming applications"/>
@@ -30,6 +30,11 @@
     <element xsi:type="archimate:ApplicationComponent" id="c760f396" name="Generic http frontend"/>
     <element xsi:type="archimate:ApplicationComponent" id="9a86ae90" name="OpenAPI"/>
     <element xsi:type="archimate:ApplicationComponent" id="17618c4e" name="Linked Data"/>
+    <element xsi:type="archimate:ApplicationComponent" id="6d7f0605" name="Linked Data"/>
+    <element xsi:type="archimate:ApplicationComponent" id="c5237b8e" name="LD Request mapper"/>
+    <element xsi:type="archimate:ApplicationComponent" id="f5b7f44c" name="LD Request handler"/>
+    <element xsi:type="archimate:DataObject" id="935115e2" name="Representation"/>
+    <element xsi:type="archimate:ApplicationComponent" id="ff84b658" name="LD Representation Request Handler"/>
   </folder>
   <folder name="Technology" id="635cee6d" type="technology">
     <element xsi:type="archimate:Artifact" id="e7b62f8d" name="Configuration"/>
@@ -90,6 +95,14 @@
     <element xsi:type="archimate:AssignmentRelationship" id="db4692da" source="995a388b" target="6415cd02"/>
     <element xsi:type="archimate:FlowRelationship" id="865836a6" source="6415cd02" target="c760f396"/>
     <element xsi:type="archimate:FlowRelationship" id="2814e258" source="c760f396" target="6415cd02"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="3372c99d" name="registers path" source="c5237b8e" target="c760f396"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="8485786a" name="triggers" source="c760f396" target="f5b7f44c"/>
+    <element xsi:type="archimate:CompositionRelationship" id="43d9b580" source="6d7f0605" target="c5237b8e"/>
+    <element xsi:type="archimate:CompositionRelationship" id="d24662da" source="6d7f0605" target="f5b7f44c"/>
+    <element xsi:type="archimate:AccessRelationship" id="0d407fb4" source="c5237b8e" target="935115e2" accessType="1"/>
+    <element xsi:type="archimate:CompositionRelationship" id="48530abe" source="6d7f0605" target="ff84b658"/>
+    <element xsi:type="archimate:AccessRelationship" id="6023963a" source="ff84b658" target="935115e2" accessType="1"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="6ca3d982" name="triggers" source="f5b7f44c" target="ff84b658"/>
   </folder>
   <folder name="Views" id="1b1efcb1" type="diagrams">
     <element xsi:type="archimate:ArchimateDiagramModel" id="47580653" name="Front-end">
@@ -326,6 +339,53 @@
         <child xsi:type="archimate:DiagramObject" id="40ae0469" textAlignment="2" archimateElement="995a388b">
           <bounds x="324" y="36" width="120" height="55"/>
         </child>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" id="4aae199e" name="Linked Data frontend">
+      <child xsi:type="archimate:DiagramObject" id="7059ac06" textAlignment="2" archimateElement="6d7f0605">
+        <bounds x="84" y="156" width="589" height="253"/>
+        <child xsi:type="archimate:DiagramObject" id="1eebd914" textAlignment="2" archimateElement="c5237b8e">
+          <bounds x="96" y="36" width="120" height="55"/>
+          <sourceConnection xsi:type="archimate:Connection" id="60f4a522" source="1eebd914" target="3a0e3f90" relationship="3372c99d"/>
+          <sourceConnection xsi:type="archimate:Connection" id="d107001b" source="1eebd914" target="8873ef0a" relationship="0d407fb4"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="d240b9ff" textAlignment="2" targetConnections="e11ddaf4 ad5b646f" archimateElement="f5b7f44c">
+          <bounds x="396" y="36" width="120" height="55"/>
+          <sourceConnection xsi:type="archimate:Connection" id="181ee28a" source="d240b9ff" target="41932d27" relationship="6ca3d982"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="8873ef0a" textAlignment="2" targetConnections="d107001b d6183cf4" archimateElement="935115e2">
+          <bounds x="96" y="144" width="120" height="55"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="41932d27" textAlignment="2" targetConnections="181ee28a" archimateElement="ff84b658">
+          <bounds x="390" y="144" width="132" height="55"/>
+          <sourceConnection xsi:type="archimate:Connection" id="d6183cf4" source="41932d27" target="8873ef0a" relationship="6023963a"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="3a0e3f90" textAlignment="2" targetConnections="60f4a522" archimateElement="c760f396">
+        <bounds x="84" y="24" width="589" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="e11ddaf4" source="3a0e3f90" target="d240b9ff" relationship="8485786a"/>
+      </child>
+      <child xsi:type="archimate:Note" id="6b134066" textAlignment="1">
+        <bounds x="12" y="84" width="199" height="48"/>
+        <content>Path is registered according to the urlPattern of the Representation</content>
+      </child>
+      <child xsi:type="archimate:Note" id="2507356f" textAlignment="1">
+        <bounds x="564" y="96" width="185" height="43"/>
+        <content>LD Request handler is triggered according to the registered path</content>
+      </child>
+      <child xsi:type="archimate:Note" id="311fc180" textAlignment="1" targetConnections="75fb1088">
+        <bounds x="684" y="204" width="205" height="61"/>
+        <sourceConnection id="ad5b646f" source="311fc180" target="d240b9ff"/>
+        <content>Duplicate paths should be resolved using uriPattern and/or appliesTo to find the appropriate Representation</content>
+      </child>
+      <child xsi:type="archimate:Note" id="98d094b1" textAlignment="1">
+        <bounds x="720" y="288" width="105" height="60"/>
+        <sourceConnection id="75fb1088" source="98d094b1" target="311fc180"/>
+        <content>Currently duplicate paths cannot occur</content>
+      </child>
+      <child xsi:type="archimate:Note" id="a224991f" textAlignment="1">
+        <bounds x="156" y="432" width="480" height="66"/>
+        <content>Design consideration: what should be the value to check the uriPattern? We now have parameters, but should we make some parameters &quot;special&quot; or should we create a specific property linking a Representation to a special Parameter (of ParameterMapper?)</content>
       </child>
     </element>
   </folder>
