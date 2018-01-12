@@ -7,6 +7,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 @prefix http: <http://www.w3.org/2011/http#>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
 
 @prefix elmo-shape: <http://dotwebstack.org/def/elmo-shacl#> .
 @prefix elmo-schemes: <http://dotwebstack.org/def/elmo/>.
@@ -31,7 +32,6 @@ elmo-shape:Theatre a sh:NodeShape;
   rdfs:label "Theatre shape"@en;
   sh:name "elmo:Theatre";
   sh:property [
-    sh:name "rdf:type";
     sh:path rdf:type;
     sh:hasValue elmo:Theatre;
     sh:minCount 1;
@@ -193,7 +193,7 @@ elmo-shape:InformationProduct a sh:NodeShape;
     sh:name "elmo:resultType";
     sh:path elmo:resultType;
     sh:class elmo:ResultType;
-    sh:defaulValue elmo-rt:Graph;
+    sh:defaultValue elmo-rt:Graph;
     sh:node elmo-shape:ResultType;
     sh:maxCount 1;
   ];
@@ -597,6 +597,15 @@ elmo-shape:Redirection a sh:NodeShape;
     sh:datatype xsd:string;
   ];
   sh:property [
+    sh:path rdf:type;
+    sh:hasValue elmo:Redirection;
+    sh:maxCount 1
+  ];
+  sh:property [
+    sh:name "elmo:stage";
+    sh:path elmo:stage
+  ];
+  sh:property [
     sh:name "elmo:urlPattern";
     sh:path elmo:urlPattern;
     sh:datatype xsd:string;
@@ -604,8 +613,10 @@ elmo-shape:Redirection a sh:NodeShape;
     sh:maxCount 1;
   ];
   sh:property [
-    sh:name "elmo:redirectTemplate";
-    sh:path elmo:redirectTemplate;
+#    sh:name "elmo:redirectTemplate";
+#    sh:path elmo:redirectTemplate;
+    sh:name "elmo:targetUrl"; #Oude naamgeving, wordt opgelost in LDT-206
+    sh:path elmo:targetUrl;   #
     sh:datatype xsd:string;
     sh:minCount 1;
     sh:maxCount 1;
@@ -673,9 +684,8 @@ elmo-shape:ParameterMapper a sh:NodeShape;
   sh:name "elmo:ParameterMapper";
   sh:closed true;
   sh:property [
-    sh:name "rdf:type";
     sh:path rdf:type;
-    sh:hasValue elmo:ParameterMapper;
+    # No specific value, because subtypes of elmo:ParameterMapper are also allowed
     sh:maxCount 1;
   ];
   sh:property [
@@ -733,9 +743,12 @@ elmo-shape:Appearance a sh:NodeShape;
   sh:name "elmo:Appearance";
   sh:closed true;
   sh:property [
-    sh:name "rdf:type";
     sh:path rdf:type;
-    sh:hasValue elmo:Appearance;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "elmo:index";
+    sh:path elmo:index;
     sh:maxCount 1;
   ];
   sh:property [
@@ -833,5 +846,45 @@ elmo-shape:Fragment a sh:NodeShape;
     sh:name "rdfs:label";
     sh:path rdfs:label;
     sh:datatype rdf:langString
-  ]
+  ];
+  sh:property [
+    sh:name "elmo:appearance";
+    sh:path elmo:appearance;
+    sh:maxCount 1;
+    sh:nodeKind sh:IRI;
+  ];
+  sh:property [
+    sh:name "elmo:index";
+    sh:path elmo:index;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "elmo:name";
+    sh:path elmo:name;
+    sh:maxCount 1;
+    sh:datatype xsd:string
+  ];
+  sh:property [
+    sh:name "rdf:value";
+    sh:path rdf:value;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "xhtml:link";
+    sh:path xhtml:link;
+    sh:maxCount 1;
+    sh:datatype xsd:string;
+  ];
+  sh:property [
+    sh:name "xhtml:stylesheet";
+    sh:path xhtml:stylesheet;
+    sh:maxCount 1;
+    sh:datatype xsd:string;
+  ];
+  sh:property [
+    sh:name "xhtml:glossary";
+    sh:path xhtml:glossary;
+    sh:maxCount 1;
+    sh:nodeKind sh:IRI;
+  ];
 .
