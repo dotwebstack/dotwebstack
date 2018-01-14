@@ -16,24 +16,24 @@ The elmo vocabulary exists, because no vocabulary for an application like the do
 - [SHACL](http://www.w3.org/ns/shacl#) and [XSD](http://www.w3.org/2001/XMLSchema#);
 - [XHTML](http://www.w3.org/1999/xhtml/vocab#) and [HTTP](http://www.w3.org/2011/http#).
 
-## General meaning
+## General
 
-1. Terms should refer to the actual meaning of a class or property as it is be understood by the person that uses the vocabulary for dotwebstack configurations. The "most commonly understood term" should be used.
+1. Terms should refer to the actual meaning of a class or property as it is understood by the person that uses the vocabulary for dotwebstack configurations. The "most commonly understood term" should be used.
 2. Terms should be as short as possible, while upholding guideline 1.
 3. Introduction of new terms should not be taken lightly. Terms are reused, except when reuse would violate general guideline 1. The vocabulary should not contain synonyms.
 3. The meaning of a term should be understood from a declarative perspective, and not from an implementation perspective (for example: the class *InformationProduct* classifies something as a product of information, no subclass for particular backends should be introduced, because the particular backend is only an implementation concern). 
-4. The vocabulary should not contain homonyms (any single term should not refer to different meanings), except in the case as described by property guideline 2.
+4. The vocabulary should not contain homonyms (any single term should not refer to multiple meanings), except in the case as described by property guideline 2.
 
 ## Classes
 
 1. Class terms should be singular nouns.
 2. The term of a subclass should end with the term of the superclass, except when general guideline 1 dictates otherwise.
 3. If a class is used in a specific role with respect to another class, a new term (and subclass) **should not** be introduced. In such cases, a term that indicates the role should be part of the property (see also property guideline 3).
-4. If a class term consists of multiple words, the fundamental meaning should be contained in the last world (for example: A *ParameterMapper* is a mapper and not a parameter, a *SubjectParameter* is a parameter and not a subject).
+4. If a class term consists of multiple words, the fundamental meaning should be contained in the last word (for example: A *ParameterMapper* is a mapper and not a parameter, a *SubjectParameter* is a parameter and not a subject).
 
 ## Properties
 
-1. Property terms should be predicates (in most cases this means a verb with a preposition, like `appliesTo`), except...
+1. Property terms should be predicates (in most cases this means a verb with a preposition, like `appliesTo`), except in cases where property guideline 2 or 3 applies.
 2. Property terms should be equal (in lowerCamelCase) to the class of the object if the predicate verb would be `has`, (like `appearance` instead of `hasAppearance`). The property term should be singular except when the object is a rdf:List of objects (in such a case the term should be plural).
 3. Property terms should end with the class of the object if the predicate verb would be `has` **and** refer to the role of the class with regard to the class of the subject. For example `defaultBackend` is a property that links a class to an object of the class `Backend` that performs the role of the `defaultBackend` with regard to the former class.
 4. Guideline 3 also applies to properties that refer to literals that play a specific role with regard to the class of the subject.
