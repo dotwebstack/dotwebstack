@@ -6,7 +6,7 @@ Guidelines how to extend the elmo vocabulary with new terms (classes, properties
 1. Terms for classes use UpperCamelCase.
 2. Terms for properties use lowerCamelCase.
 3. Terms for instances use UpperCamelCase.
-4. All terms consist of one or more US english words.
+4. All terms consist of one or more US English words.
 5. Reuse elements of existing, widely used vocabularies. New terms are only introduced when an applicable term isn't available in an existing vocabulary (a term is "applicable" if the intended meaning is the same as the defined meaning in the existing vocabulary).
 
 The elmo vocabulary exists, because no vocabulary for an application like the dotwebstack exists at this moment. However, some particular classes and properties are already available and should be used. At least elements from the following vocabularies should be considered before extending the elmo vocabulary:
@@ -21,8 +21,8 @@ The elmo vocabulary exists, because no vocabulary for an application like the do
 1. Terms should refer to the actual meaning of a class or property as it is understood by the person that uses the vocabulary for dotwebstack configurations. The "most commonly understood term" should be used.
 2. Terms should be as short as possible, while upholding guideline 1.
 3. Introduction of new terms should not be taken lightly. Terms are reused, except when reuse would violate general guideline 1. The vocabulary should not contain synonyms.
-3. The meaning of a term should be understood from a declarative perspective, and not from an implementation perspective (for example: the class *InformationProduct* classifies something as a product of information, no subclass for particular backends should be introduced, because the particular backend is only an implementation concern). 
-4. The vocabulary should not contain homonyms (any single term should not refer to multiple meanings), except in the case as described by property guideline 2.
+4. The meaning of a term should be understood from a declarative perspective, and not from an implementation perspective (for example: the class *InformationProduct* classifies something as a product of information. *SparqlBackendInformationProduct* should not be introduced, because the particular backend is only an implementation concern). 
+5. The vocabulary should not contain term that are homonyms within the scope of the vocabulary (any single term should not refer to multiple intended meanings), except in the case as described by property guideline 2.
 
 ## Classes
 
@@ -44,14 +44,15 @@ The elmo vocabulary exists, because no vocabulary for an application like the do
 
 The table below gives examples of terms that are part of the elmo vocabulary and explains how the guidelines are used for these terms and why alternative terms are not used:
 
-Term | Alternative | Rationale | Guideline
------|-------------|-----------|-----------
+Correct term | Wrong term | Rationale | Guideline
+-------------|------------|-----------|-----------
 pathPattern | urlPattern | The property refers to a pattern of paths, and not a pattern of URLs | G1
 pathPattern | path | The property refers to a pattern and not (only) to a path. Although the JAX-RS implementation uses path, the implemention may not be known to the user. | G1, G4, P4
 TermParameter | TermFilter | TermParameter is a subclass of Parameter | C2
-shape | NodeShape, PropertyShape | Only one property is necessary | G3
+shape | nodeShape, propertyShape | Only one property is necessary | G3
 xhtml:stylesheet | elmo:stylesheet | Existing vocabulary | L5
 redirectTemplate | redirectUrl | The property refers to a template. It is a template of URL's.| G1, P4
 redirectTemplate | redirectUrlTemplate | A redirection is always to a Url|G2
 redirectTemplate | redirectPattern | Pattern is confusing, because a pattern is used to 'match' something, a template is used to 'create' something. The used of pattern and template should be the same for the whole vocabulary| G1, G5
 redirectTemplate | template | It is not simply a template, but a template used in a specific role, to create the redirect URL| G1, G5, P4
+Backend | DefaultBackend | Role should be part of property (defaultBackend) | C3
