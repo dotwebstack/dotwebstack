@@ -24,61 +24,11 @@ GRAPH config:Theatre {
 
 	# Transaction: replace resource from graph
 	config:InsertOrReplaceConcept a elmo:Transaction;
-    #With containing steps
-    elmo:contains [
-      elmo:index 1;
-      a elmo:ShaclValidation;
-      rdfs:label "Validate input graph"
-      conformsTo config:ConceptShapeGraph
-    ];
-    elmo:contains [
-      elmo:index 2;
-      a elmo:preQuery
-      rdfs:label "Add missing labels";
-      elmo:query """
-        insert {
-          ?concept rdfs:label ?label
-        }
-        where {
-          ?concept skos:prefLabel ?label.
-          FILTER NOT EXISTS {
-            ?concept rdfs:label ?existinglabel
-          }
-        }
-      """;
-    ];
-    elmo:contains [
-      elmo:index 3;
-      a elmo:InsertOrReplaceResourceInGraph;
-      elmo:targetGraph <http://dotwebstack.org/all-concepts>;
-    ];
-    elmo:contains [
-      elmo:index 4;
-				a elmo:postQuery;
-				rdfs:label "Add hash";
-				elmo:query """
-					insert {
-						graph <http://dotwebstack.org/all-concepts> {
-							?concept wdrs:hash ?hash
-						}
-					}
-					where {
-						graph <http://dotwebstack.org/all-concepts> {
-							select (md5(?definition) as ?hash) {
-								?concept skos:definition ?definition
-							}
-						}
-					}
-				"""
-    ];
-    #With steps rdf:List
-    elmo:steps (
-      [ a elmo:ShaclValidation;
-        rdfs:label "Validate input graph"
-        conformsTo config:ConceptShapeGraph
-      ]
-      [ a elmo:preQuery
+    elmo:conformsTo config:ConceptShapeGraph;
+    elmo:sequentialFlow (
+      [ a elmo:Query
         rdfs:label "Add missing labels";
+        elmo:backend elmo:TransactionMemory;
 				elmo:query """
 					insert {
 						?concept rdfs:label ?label
@@ -92,7 +42,8 @@ GRAPH config:Theatre {
 				""";
       ]
       [
-        a elmo-sp:InsertOrReplaceResourceInGraph;
+        a elmo:InsertIntoGraph;
+        elmo:backend config:SparqlBackend;
         elmo:targetGraph <http://dotwebstack.org/all-concepts>;
       ]
       [
@@ -114,59 +65,27 @@ GRAPH config:Theatre {
 				"""
       ]
     );
-    # Original
-		elmo:conformsTo config:ConceptShapeGraph;
-		elmo:preQueries (
-			[
-				a elmo:Query;
-				rdfs:label "Add missing labels";
-				elmo:query """
-					insert {
-						?concept rdfs:label ?label
-					}
-					where {
-						?concept skos:prefLabel ?label.
-						FILTER NOT EXISTS {
-							?concept rdfs:label ?existinglabel
-						}
-					}
-				""";
-			]
-		);
-		elmo:storageProtocol elmo-sp:InsertOrReplaceResourceInGraph;
-		elmo:targetGraph <http://dotwebstack.org/all-concepts>;
-		elmo:postQueries (
-			[
-				a elmo:Query;
-				rdfs:label "Add hash";
-				elmo:query """
-					insert {
-						graph <http://dotwebstack.org/all-concepts> {
-							?concept wdrs:hash ?hash
-						}
-					}
-					where {
-						graph <http://dotwebstack.org/all-concepts> {
-							select (md5(?definition) as ?hash) {
-								?concept skos:definition ?definition
-							}
-						}
-					}
-				"""
-			]
-		)
-	.
-	config:DeleteConcept a elmo:Transaction;
-		elmo:storageProtocol elmo-sp:DeleteResourceFromGraph;
-		elmo:targetGraph <http://dotwebstack.org/all-concepts>;
+
+  config:DeleteConcept a elmo:Transaction;
+    elmo:ParallelFlow ( #Parallel or Sequential flow doesn't really matter when only one step is present
+      [
+        a elmo-sp:DeleteResourceFromGraph;
+        elmo:targetGraph <http://dotwebstack.org/all-concepts>;
+      ]
+    )
 	.
 	config:Transform a elmo:Transaction;
+    # Transformer should not be part of the transaction!
 		elmo:transformer [
 			a elmo:RMLTransformer;
 			elmo:sourceGraph config:RMLMap;
 		];
-		elmo:storageProtocol elmo-sp:ReplaceGraph;
-		elmo:targetGraph <http://dotwebstack.org/uploaded-data>
+    elmo:SequentialFlow (
+      [
+        a elmo-sp:ReplaceGraph;
+        elmo:targetGraph <http://dotwebstack.org/uploaded-data>
+      ]
+    )
 	.
 }
 
