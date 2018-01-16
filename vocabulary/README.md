@@ -66,16 +66,6 @@ The picture below gives a visual representation of the elmo vocabulary with resp
 ![](elmo-frontend-diagram.png)
 Blank versions of `elmo:InformationProduct` and `elmo:Transaction` are depicted in the picture above, to describe the way that an `elmo:Representation` is linked to these components.
 
-### Redirection
-Information resources are dereferenced using an `elmo:Representation`. To redirect the URL of a non-information using the http 303 response, you will use `elmo:Redirection`. The example below redirect all URL's that contain the substring `/id/` to URL's that have this substring replaced by `/doc/`:
-
-	config:NonInformationResourceRedirection a elmo:Redirection;
-		elmo:urlPattern "{path}/id/{reference}";
-		elmo:redirectTemplate "{path}/doc/{reference}";
-	.
-
-The syntax for `elmo:urlPattern` and `elmo:redirectTemplate` are the same as for `elmo:pattern` and `elmo:template` as used with a [ParameterMapper](#parameter-mapping).
-
 ### Parameter mapping
 ![](elmo-frontend-mapper-diagram.png)
 Parameters in information products get their values by default by a mapping of a query parameter to the parameter of an information product by corresponding names. In some case, you might want to have another name, or you might want to get a value from a different part of the http request, for example the URI itself, or a header value. This is done by use of an `elmo:ParameterMapper`.
@@ -92,35 +82,51 @@ Parameter mappers are added to an `elmo:Endpoint` with `elmo:parameterMapper` an
 The syntax for `elmo:pattern` and `elmo:template` conforms to the [JAX-RS Path specification](https://docs.oracle.com/cd/E19798-01/821-1841/ginpw). This means that you can also specify regular expressions as part of the pattern, like: `{path:[a-zA-Z][a-zA-Z_0-9]*}`. The default regex pattern for `{path}` will be: `{path:[^/]+?`. 
 
 ### Endpoints
-Endpoints are used to define which specific url patterns (using `elmo:urlPattern`) can be used to resolve linked data URI's. You can use endpoints as direct endpoints or as indirect endpoints.
+Endpoints are used to define which specific path patterns (using `elmo:pathPattern`) can be used to resolve linked data URI's. Three different kinds of endpoints are available:
 
-#### Direct endpoints
-You use direct endpoint if you are sure that the URI of a resource is located at your server, and you know the kind of representation that you want to use. In this case, you specify the representation that used for a specific url(pattern), as in the example below:
+- Representations.
+- (direct) endpoints.
+- Dynamic endpoints.
 
-	config:Endpoint a elmo:Endpoint;
-		elmo:urlPattern "/query/allitems";
-		elmo:representation elmo:AllItemsRepresentation
+#### Redirection
+Information resources are dereferenced using an `elmo:Representation`. To redirect the URL of a non-information using the http 303 response, you will use `elmo:Redirection`. The example below redirect all URL's that contain the substring `/id/` to URL's that have this substring replaced by `/doc/`:
+
+	config:NonInformationResourceRedirection a elmo:Redirection;
+		elmo:pathPattern "{path}/id/{reference}";
+		elmo:redirectTemplate "{path}/doc/{reference}";
 	.
 
-#### Indirect endpoints
-Indirect endpoints are useful when you don't realy know what kind of representation should be used for a URI. This can be useful when:
+The syntax for `elmo:pathPattern` and `elmo:redirectTemplate` are the same as for `elmo:pattern` and `elmo:template` as used with a [ParameterMapper](#parameter-mapping).
+
+#### Direct endpoints
+You use direct endpoints if you are sure that the URI of a resource is located at your server and you know the kind of representation that you want to use. In this case, you specify the representation that is used for a GET to a specific url(pattern), as in the example below:
+
+	config:DirectEndpoint a elmo:Endpoint;
+		elmo:pathPattern "/query/allitems";
+		elmo:getRepresentation elmo:AllItemsRepresentation
+	.
+
+Other http methods are also available via `postRepresentation`, `putRepresentation` and `deleteRepresentation`.
+
+#### Dynamic endpoints
+Dynamic endpoints are useful when you don't really know what kind of representation should be used for a URI. This can be useful when:
 
 - The URI of the resource you want to represent isn't located at your server (for example: your server is at `http://myserver.org` and you want to represent a URI that starts with `http://notmyserver.org`);
 - The URI of the resource you want to represent isn't a http-URI (for example: you want to represent a URI that starts with `urn:uuid`);
 - You want to link to some URI, but you are not sure if the URI is located at your server, it might be a URI from the first two categories;
 - The representation of the URI cannot be inferred from the URI of the endpoint.
 
-To configure an indirect endpoint, you specify the urlPattern and you specify the way that the value for a special `elmo:SubjectParameter` is mapped. This value will be used by the framework to find out which representation should actually be used:
+To configure an indirect endpoint, you specify the pathPattern and you specify the way that the value for a special `elmo:SubjectParameter` is mapped. This value will be used by the framework to find out which representation should actually be used:
 
-	config:Endpoint a elmo:Endpoint;
-		elmo:pattern "{path}/doc/{reference}";
+	config:DynamicEndpoint a elmo:DynamicEndpoint;
+		elmo:pathPattern "{path}/doc/{reference}";
 		elmo:parameterMapper config:SubjectFromUrl
 	.
 
 See the section about parameter mappers to find the specification for `config:SubjectFromUrl`. A representation could be configured as:
 
 	config:Representation a elmo:Representation;
-		elmo:uriPattern "/id/concept/{term}";
+		elmo:appliesTo "/id/concept/{term}";
 		elmo:informationProduct ...
 	.
 
@@ -133,7 +139,10 @@ You can define a default endpoint for each stage. This default endpoint will be 
 ![](elmo-frontend-defaultendpoint.png)
 
 ### Representation
-To specify which representation is used in a particular situation, you can use the properties `elmo:uriPattern` and `elmo:appliesTo`.
+Direct endpoints are linked to representations. In such a case, it is clear which representation should be used for a particular endpoint. For dynamic endpoints you need to specify which representation should be used, by using the property `elmo:appliesTo`. This property may contain a URI pattern, or a reference to a sh:NodeShape profile:
+
+- Pattern: the value for `elmo:SubjectParameter` matches the specified pattern;
+- Profile: the CBD for `elmo:SubjectParameter` conforms to the specified shape (CBD = Concise Bounded Description, the triples <S,P,O> with S = the value of `elmo:SubjectParameter`.
 
 Only top-level representations should have links to transactions. Only the information product from the top-level representation is serialized with the http response (in a RDF format, or as inline data within the HTML). Data from containing representations are only used for html representations.
 
