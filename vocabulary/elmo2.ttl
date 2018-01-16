@@ -487,7 +487,7 @@ elmo:source a owl:ObjectProperty;
 elmo:parameterMapper a owl:ObjectProperty;
   rdfs:label "parameter mapper"@en;
   rdfs:comment "Specifies a parameter mapper that is used with a particular Representation"@en;
-  rdfs:domain elmo:Representation;
+  # No rdfs:domain, domain might be elmo:Endpoint or elmo:Representation;
   rdfs:range elmo:ParameterMapper;
 .
 elmo:target a owl:ObjectProperty;

@@ -70,7 +70,7 @@ Blank versions of `elmo:InformationProduct` and `elmo:Transaction` are depicted 
 ![](elmo-frontend-mapper-diagram.png)
 Parameters in information products get their values by default by a mapping of a query parameter to the parameter of an information product by corresponding names. In some case, you might want to have another name, or you might want to get a value from a different part of the http request, for example the URI itself, or a header value. This is done by use of an `elmo:ParameterMapper`.
 
-Parameter mappers are added to an `elmo:Endpoint` with `elmo:parameterMapper` and those mappers have a link to the corresponding parameter via `elmo:target`. The corresponding http request element is selected via `elmo:source` which uses the [http vocabulary in RDF](http://www.w3.org/TR/HTTP-in-RDF10). Named-value pairs can be selected using the `elmo:name` element. Optionally, you can specify a template to change the value somewhat. The example below gives an example how to use a UriParameterMapper to map de URI to the subject parameter.
+Parameter mappers are added to `elmo:Representation` and `elmo:Endpoint` with `elmo:parameterMapper`. Those mappers have a link to the corresponding parameter via `elmo:target`. The corresponding http request element is selected via `elmo:source` which uses the [http vocabulary in RDF](http://www.w3.org/TR/HTTP-in-RDF10). Named-value pairs can be selected using the `elmo:name` element. Optionally, you can specify a template to change the value somewhat. The example below gives an example how to use a UriParameterMapper to map de URI to the subject parameter.
 
 	config:SubjectFromUrl a elmo:UriParameterMapper;
 		elmo:source http:requestURI;

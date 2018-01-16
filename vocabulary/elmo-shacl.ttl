@@ -583,19 +583,18 @@ elmo:FileBackend a sh:NodeShape;
 # Frontend vocabulary
 #
 elmo-shape:Endpoint a sh:NodeShape;
-  sh:closed true;
   sh:targetClass elmo:Endpoint;
   rdfs:label "Endpoint shape"@en;
   sh:name "elmo:Endpoint";
+  sh:or (elmo-shape:Redirection elmo-shape:DirectEndpoint elmo-shape:DynamicEndpoint)
+.
+
+elmo-shape:DirectEndpoint a sh:NodeShape;
+  sh:closed true;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
     sh:datatype xsd:string;
-  ];
-  sh:property [
-    sh:path rdf:type;
-    sh:hasValue elmo:Endpoint;
-    sh:maxCount 1
   ];
   sh:property [
     sh:name "elmo:stage";
@@ -607,6 +606,11 @@ elmo-shape:Endpoint a sh:NodeShape;
     sh:datatype xsd:string;
     sh:minCount 1;
     sh:maxCount 1;
+  ];
+  sh:property [
+    sh:path rdf:type;
+    sh:hasValue elmo:Endpoint;
+    sh:maxCount 1
   ];
   sh:property [
     sh:name "elmo:getRepresentation";
@@ -754,7 +758,23 @@ elmo-shape:Representation a sh:NodeShape;
   sh:property [
     sh:path [sh:inversePath elmo:contains ];
     sh:node elmo-shape:TopLevelRepresentation;
-    sh:class elmo:Representation;
+  ];
+  # Link to elmo:DirectEndpoint
+  sh:property [
+    sh:path [sh:inversePath elmo:getRepresentation ];
+    sh:node elmo-shape:DirectEndpoint
+  ];
+  sh:property [
+    sh:path [sh:inversePath elmo:putRepresentation ];
+    sh:node elmo-shape:DirectEndpoint
+  ];
+  sh:property [
+    sh:path [sh:inversePath elmo:postRepresentation ];
+    sh:node elmo-shape:DirectEndpoint
+  ];
+  sh:property [
+    sh:path [sh:inversePath elmo:deleteRepresentation ];
+    sh:node elmo-shape:DirectEndpoint
   ];
 .
 
