@@ -64,7 +64,7 @@ We have created a [configuration file](examples/transactions.trig) that contains
 ## Front-end configuration
 The picture below gives a visual representation of the elmo vocabulary with respect to the front-end configuration. You use the front-end configuration to serve regular linked data serializations and HTML. The front-end configuration is not meant for API specifications, for this you will need to create an OpenAPI specification document.
 ![](elmo-frontend-diagram.png)
-Blank versions of `elmo:InformationProduct` and `elmo:Transaction` are depicted in the picture above, to describe the way that an `elmo:Representation` is linked to these components.
+Blank versions of `elmo:InformationProduct` and `elmo:Transaction` are depicted in the picture above, to describe the way that an `elmo:Representation` or `elmo:Service` is linked to these components.
 
 ### Parameter mapping
 ![](elmo-frontend-mapper-diagram.png)
@@ -99,14 +99,18 @@ Information resources are dereferenced using an `elmo:Representation`. To redire
 The syntax for `elmo:pathPattern` and `elmo:redirectTemplate` are the same as for `elmo:pattern` and `elmo:template` as used with a [ParameterMapper](#parameter-mapping).
 
 #### Direct endpoints
-You use direct endpoints if you are sure that the URI of a resource is located at your server and you know the kind of representation that you want to use. In this case, you specify the representation that is used for a GET to a specific url(pattern), as in the example below:
+You use direct endpoints if you are sure that the URI of a resource is located at your server and you know the kind of representation that you want to use. In this case, you specify the representation that is used for a GET to a specific path pattern, as in the example below:
 
 	config:DirectEndpoint a elmo:Endpoint;
 		elmo:pathPattern "/query/allitems";
 		elmo:getRepresentation elmo:AllItemsRepresentation
 	.
 
-Other http methods are also available via `postRepresentation`, `putRepresentation` and `deleteRepresentation`.
+A GET http method is the most common method for retrieving a representation. A POST http method is also possible, in which case the parameters are encoding within the body of the http request. In such cases, you use `elmo:postRepresentation` (probably to the same representation).
+
+The POST, PUT and DELETE http methods are used to execute transactions. These methods are used to link an endpoint to one or more services, via `elmo:postService`, `elmo:putService` or `elmo:deleteService`. Services are subclasses of representations and give access to transactions. 
+
+It is possible to combine `elmo:getRepresentation` and `elmo:postService` in the same endpoint. It is also possible that these properties refer to the same service. You can even combine `elmo:postRepresentation` and `elmo:postService` with the same endpoint. In this special case, a http POST request will only be directed via `elmo:postRepresentation` if the value for the http content-type header is equal to `application/x-www-form-urlencoded` or `multipart/form-data`.
 
 #### Dynamic endpoints
 Dynamic endpoints are useful when you don't really know what kind of representation should be used for a URI. This can be useful when:
@@ -144,7 +148,7 @@ Direct endpoints are linked to representations. In such a case, it is clear whic
 - Pattern: the value for `elmo:SubjectParameter` matches the specified pattern;
 - Profile: the CBD for `elmo:SubjectParameter` conforms to the specified shape (CBD = Concise Bounded Description, the triples <S,P,O> with S = the value of `elmo:SubjectParameter`.
 
-Only top-level representations should have links to transactions. Only the information product from the top-level representation is serialized with the http response (in a RDF format, or as inline data within the HTML). Data from containing representations are only used for html representations.
+Only the information product from the top-level representation is serialized with the http response (in a RDF format, or as inline data within the HTML). Data from containing representations are only used for html representations.
 
 A representation is linked to a particular appearance that specifies how the data is presented in the browser.
 
