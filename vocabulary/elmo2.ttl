@@ -349,6 +349,11 @@ elmo:Representation a owl:Class;
   rdfs:label "Representation"@en;
   rdfs:comment "The class of representations. A representation links an IRI to the corresponding information product."@en;
 .
+    elmo:Service a owl:Class;
+      rdfs:subClassOf elmo:Representation;
+      rdfs:label "Service"@en;
+      rdfs:comment "The class of services. A service links an IRi to the corresponding transaction."@en;
+    .
 elmo:ParameterMapper a owl:Class;
   rdfs:label "Parameter mapper"@en;
   rdfs:comment "The class of parameter mappers. A parameter mapper maps a value (generally from the http request) to a elmo:Parameter"@en;
