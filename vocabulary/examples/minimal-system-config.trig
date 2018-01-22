@@ -48,14 +48,20 @@ GRAPH config:DemoTheatre {
 # URI of configuration named graph MUST be the same as the corresponding elmo:Stage
 # Elements within the stage graph are local to that particular stage
 GRAPH config:MainStage {
-	config:Representation a elmo:Representation;
+  config:Endpoint a elmo:Endpoint;
 		elmo:urlPattern "/count-all";
+    elmo:representation config:Representation
+  .
+	config:Representation a elmo:Representation;
 		elmo:informationProduct config:CountAllInfo;
 	.
 }
 GRAPH config:SecondStage {
-	config:Representation a elmo:Representation;
+  config:Endpoint a elmo:Endpoint;
 		elmo:urlPattern "/all-count";
+    elmo:representation a elmo:Representation
+  .
+	config:Representation a elmo:Representation;
 		elmo:informationProduct config:CountAllInfo;
 	.
 }
