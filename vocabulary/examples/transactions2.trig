@@ -24,11 +24,13 @@ GRAPH config:Theatre {
 
 	# Transaction: replace resource from graph
 	config:InsertOrReplaceConcept a elmo:Transaction;
-    elmo:conformsTo config:ConceptShapeGraph;
     elmo:sequentialFlow (
-      [ a elmo:UpdateQuery
+      [ a elmo:ValidationStep
+        elmo:conformsTo config:ConceptShapeGraph;
+      ]
+      [ a elmo:UpdateStep
         rdfs:label "Add missing labels";
-        elmo:backend elmo:TransactionMemory;
+        elmo:backend elmo:TransactionRepository;
 				elmo:query """
 					insert {
 						?concept rdfs:label ?label
@@ -42,13 +44,13 @@ GRAPH config:Theatre {
 				""";
       ]
       [
-        a elmo:Storage;
-        elmo:storageProtocol a elmo-sp:InsertIntoGraph;
+        a elmo:PersistancyStep;
+        elmo:persistancyProtocol a elmo-sp:InsertIntoGraph;
         elmo:backend config:SparqlBackend;
         elmo:targetGraph <http://dotwebstack.org/all-concepts>;
       ]
       [
-				a elmo:UpdateQuery;
+				a elmo:UpdateStep;
 				rdfs:label "Add hash";
         elmo:backend config:MySparqlBackend;
 				elmo:query """
@@ -71,7 +73,8 @@ GRAPH config:Theatre {
   config:DeleteConcept a elmo:Transaction;
     elmo:ParallelFlow ( #Parallel or Sequential flow doesn't really matter when only one step is present
       [
-        a elmo-sp:DeleteResourceFromGraph;
+        a elmo:PersistencyStep
+        elmo:persistencyProtocol elmo-sp:DeleteResourceFromGraph;
         elmo:backend config:MySparqlBackend;
         elmo:targetGraph <http://dotwebstack.org/all-concepts>;
       ]

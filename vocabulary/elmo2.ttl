@@ -136,10 +136,31 @@ elmo:Query a owl:Class;
   rdfs:label "Query"@en;
   rdfs:comment "Reification of the query (used in preQueries and postQueries of transactions). This makes it possible to reuse a query, or to add metadata to the query"@en;
 .
-elmo:StorageProtocol a owl:Class;
-  rdfs:label "StorageProtocol"@en;
-  rdfs:comment "The class of storage protocols. Instances of this class define how a transactionresult is stored within the persistancy layer";
+elmo:PersistencyProtocol a owl:Class;
+  rdfs:label "PersistencyProtocol"@en;
+  rdfs:comment "The class of persistency protocols. Instances of this class define how a transaction result is stored within the persistancy layer";
 .
+
+elmo:Step a owl:Class;
+  rdfs:label "Step"@en;
+  rdfs:comment "The class of transaction steps. Subclasses of this class define what kind of step is to be performed";
+.
+    elmo:ValidationStep a owl:Class;
+      rdfs:subClassOf elmo:Step;
+      rdfs:label "Validation step"@en;
+      rdfs:comment "A step that performs a validation on the transaction repository, using some SHACL shape graph";
+    .
+    elmo:UpdateStep a owl:Class;
+      rdfs:subClassOf elmo:Step;
+      rdfs:label "Update step";
+      rdfs:comment "A step that performs some update operation on a backend";
+    .
+    elmo:PersistencyStep a owl:Class;
+      rdfs:subClassOf elmo:Step;
+      rdfs:label "Persistency step";
+      rdfs:comment "A step that persist the data in the transaction repository to some backend";
+    .
+
 elmo:Transaction a owl:Class;
   rdfs:label "Transaction"@en;
   rdfs:comment "The class of transaction specifications. A transaction creates or deletes data according to a specific transaction request. A transaction is defined as a sequence of tasks."@en;
@@ -180,16 +201,15 @@ elmo:conformsTo a owl:ObjectProperty;
 .
 elmo:endpoint a owl:DatatypeProperty;
   rdfs:label "endpoint"@en;
-  rdfs:comment "States the (http) endpoint that should be accessed for this particular backend. Note: this property is only relevant for backends that respond to http requests"@en;
+  rdfs:comment "States the endpoint (http, file, ftp, etc) that should be accessed for this particular backend."@en;
   rdfs:domain elmo:Backend;
   rdfs:range xsd:anyURI;
 .
-elmo:path a owl:DatatypeProperty;
+elmo:location a owl:DatatypeProperty;
   rdfs:label "path"@en;
-  rdfs:comment "Specifies the location of a file that should be accessed for this particular backend. Note: this property is only relevant for backends are directly linked to a file system"@en;
+  rdfs:comment "Specifies the path to a (API) service or a file that should be accessed for this particular backend."@en;
   rdfs:domain elmo:Backend;
   rdfs:range xsd:string;
-  # Comment: this property isn't in use at this moment. Maybe 'location' is a better term for this property?
 .
 elmo:postQueries a owl:ObjectProperty;
   rdfs:label "post queries"@en;
