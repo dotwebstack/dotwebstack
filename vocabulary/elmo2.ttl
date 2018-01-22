@@ -19,6 +19,7 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix http: <http://www.w3.org/2011/http#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 
 # =========
 # Imports
@@ -84,6 +85,13 @@ elmo:site a owl:ObjectProperty;
 	rdfs:domain elmo:Stage;
 	rdfs:range elmo:Site;
 .
+# At this moment, the 'default behaviour' as stated below isn't implemented yet, so explicitly stating the stage is always necessary at this moment!
+elmo:stage a owl:ObjectProperty;
+  rdfs:label "stage"@en;
+  rdfs:comment "States the stage to which a particular element belongs. By default, an element belong to the stage that is also the named graph to which the element belongs. By explictly stating the stage, you can overrule this behaviour."@en;
+  # No rdfs:domain -> domain could be any element that can be part of a stage
+  rdfs:range elmo:Stage;
+.
 
 # =========
 # Backstage and core layers vocabulary
@@ -126,7 +134,7 @@ elmo:Parameter a owl:Class;
 
 elmo:Query a owl:Class;
   rdfs:label "Query"@en;
-  rdfs:comment "Reification of the query. This makes it possible to reuse a query, or to add metadata to the query"@en;
+  rdfs:comment "Reification of the query (used in preQueries and postQueries of transactions). This makes it possible to reuse a query, or to add metadata to the query"@en;
 .
 elmo:StorageProtocol a owl:Class;
   rdfs:label "StorageProtocol"@en;
@@ -164,11 +172,36 @@ elmo:defaultBackend a owl:ObjectProperty;
   rdfs:range elmo:Backend;
   # No rdfs:domain -> domain could be stage, site or theatre
 .
+elmo:conformsTo a owl:ObjectProperty;
+  rdfs:label "conforms to"@en;
+  rdfs:comment "Defines the shacl graph that a transaction input graph should conform to";
+  rdfs:domain elmo:Transaction;
+  # Range should be a named graph?
+.
 elmo:endpoint a owl:DatatypeProperty;
   rdfs:label "endpoint"@en;
   rdfs:comment "States the (http) endpoint that should be accessed for this particular backend. Note: this property is only relevant for backends that respond to http requests"@en;
   rdfs:domain elmo:Backend;
   rdfs:range xsd:anyURI;
+.
+elmo:path a owl:DatatypeProperty;
+  rdfs:label "path"@en;
+  rdfs:comment "Specifies the location of a file that should be accessed for this particular backend. Note: this property is only relevant for backends are directly linked to a file system"@en;
+  rdfs:domain elmo:Backend;
+  rdfs:range xsd:string;
+  # Comment: this property isn't in use at this moment. Maybe 'location' is a better term for this property?
+.
+elmo:postQueries a owl:ObjectProperty;
+  rdfs:label "post queries"@en;
+  rdfs:comment "Specifies the ordered list of post queries that is executed during the transaction. Post queries are executed after the key action of the transaction (delete, update, insert)";
+  rdfs:domain elmo:Transaction;
+  rdfs:range rdf:List;
+.
+elmo:preQueries a owl:ObjectProperty;
+  rdfs:label "pre queries"@en;
+  rdfs:comment "Specifies the ordered list of pre queries that is executed during the transaction. Pre queries are executed on the transaction data before the data is used in the key action of the transaction (delete, update, insert)";
+  rdfs:domain elmo:Transaction;
+  rdfs:range rdf:List;
 .
 elmo:optionalParameter a owl:ObjectProperty;
   rdfs:label "optional parameter";
@@ -182,15 +215,39 @@ elmo:query a owl:DatatypeProperty;
   rdfs:range xsd:string;
 .
 elmo:requiredParameter a owl:ObjectProperty;
-  rdfs:label "required parameter";
+  rdfs:label "required parameter"@en;
   rdfs:comment "States the optional parameter(s) for an information product, transaction or query";
   rdfs:range elmo:Parameter;
+.
+elmo:resultType a owl:ObjectProperty;
+  rdfs:label "result type"@en;
+  rdfs:comment "Defines the type of query result (TupleQuery or GraphQuery)";
+  rdfs:domain elmo:InformationProduct;
+  rdfs:range skos:Concept
+.
+elmo:shape a owl:ObjectProperty;
+  rdfs:label "shape"@en;
+  rdfs:comment "Defines the shape that a parameter value should conform to";
+  rdfs:domain elmo:Parameter;
+  rdfs:range sh:Shape; #Could be a NodeShape or a PropertyShape, that depends on the kind of parameter
+.
+elmo:sourceGraph a owl:ObjectProperty;
+  rdfs:label "source graph"@en;
+  rdfs:comment "Defines the graph that contains the RML specification";
+  rdfs:domain elmo:RMLTransformation;
+  # rdfs:Range should be a graph?
 .
 elmo:storageProtocol a owl:ObjectProperty;
   rdfs:label "storageProtocol"@en;
   rdfs:comment "Defines the way that the result of a transaction is stored within the persistancy layer";
   rdfs:domain elmo:Transaction;
   rdfs:range elmo:StorageProtocol;
+.
+elmo:stylesheet a owl:ObjectProperty;
+  rdfs:label "stylesheet"@en;
+  rdfs:comment "Defines the stylesheet to be used for an XSLTransformer";
+  rdfs:domain elmo:XSLTransformer;
+  rdfs:range xsd:string;
 .
 elmo:targetGraph a owl:ObjectProperty;
   rdfs:label "targetGraph"@en;
@@ -266,18 +323,37 @@ elmo:Appearance a owl:Class;
   rdfs:label "Appearance"@en;
   rdfs:comment "The class of appearances";
 .
+elmo:Endpoint a owl:Class;
+  rdfs:label "Endpoint"@en;
+  rdfs:comment "The class of endpoints. An endpoint defines a point for http requests to be served as linked data."@en;
+.
+    elmo:DynamicEndpoint a owl:Class;
+      rdfs:subClassOf elmo:Endpoint;
+      rdfs:label "Dynamic endpoint"@en;
+      rdfs:comment "A dynamic endpoint is an endpoint that can be used for multiple representations."@en;
+    .
+    elmo:Redirection a owl:Class;
+      rdfs:subClassOf elmo:Endpoint;
+      rdfs:label "Redirection"@en;
+      rdfs:comment "The class of redirections. A redirection is an endpoint that redirects a http request to another URL via the http 303 response"@en;
+    .
 elmo:Fragment a owl:Class;
   rdfs:label "Fragment"@en;
   rdfs:comment "The class of fragments";
 .
-elmo:Redirection a owl:Class;
-  rdfs:label "Redirection"@en;
-  rdfs:comment "The class of redirections. A redirection redirects a http request to another URL via the http 303 response"@en;
+elmo:Layer a owl:Class;
+  rdfs:label "Layer"@en;
+  rdfs:comment "The class of layers. A layer defines the order to find a applicable representations."@en
 .
 elmo:Representation a owl:Class;
   rdfs:label "Representation"@en;
-  rdfs:comment "The class of representations. A representation links a http request to the corresponding information product."@en;
+  rdfs:comment "The class of representations. A representation links an IRI to the corresponding information product."@en;
 .
+    elmo:Service a owl:Class;
+      rdfs:subClassOf elmo:Representation;
+      rdfs:label "Service"@en;
+      rdfs:comment "The class of services. A service links an IRi to the corresponding transaction."@en;
+    .
 elmo:ParameterMapper a owl:Class;
   rdfs:label "Parameter mapper"@en;
   rdfs:comment "The class of parameter mappers. A parameter mapper maps a value (generally from the http request) to a elmo:Parameter"@en;
@@ -288,6 +364,27 @@ elmo:ParameterMapper a owl:Class;
       rdfs:comment "The class of URI parameter mappers. A parameter mapper maps a URI-value, or a part of a URI to an elmo:Parameter. It uses the JAX-RS path format for pattern and template."@en;
     .
 
+# == INDIVIDUALS ==
+elmo:SubjectParameter a elmo:TermFilter;
+  elmo:name "SUBJECT";
+  elmo:shape [
+    sh:nodeKind sh:IRI;
+  ]
+.
+
+elmo:BottomLayer a elmo:Layer;
+  rdfs:label "Bottom layer"@en;
+  elmo:index -1
+.
+elmo:MiddleLayer a elmo:Layer;
+  rdfs:label "Middle layer"@en;
+  elmo:index 0
+.
+elmo:TopLayer a elmo:Layer;
+  rdfs:label "Top layer"@en;
+  elmo:index 1
+.
+
 # == PROPERTIES ==
 elmo:appearance a owl:ObjectProperty;
   rdfs:label "appearance"@en;
@@ -297,9 +394,9 @@ elmo:appearance a owl:ObjectProperty;
 .
 elmo:appliesTo a owl:ObjectProperty;
   rdfs:label "applies to"@en;
-  rdfs:comment "Specifies the resource profile for which this representation should be used. A resource profile is a set of triples ([]?p?o). A particular resource ?s matches a resource profile if and only if all triples ?s?p?o exist. For example: the resource profile [rdf:type skos:Concept] whould match any resource that is of type skos:Concept."@en;
+  rdfs:comment "specifies when a representation or fragment should be applies."@en;
   # no rdfs:domain: it could be elmo:Representation, but also elmo:Fragment;
-  rdfs:range rdfs:Resource;
+  # no rdfs:range: it could be an xsd:string, but also an rdfs:Resource
 .
 elmo:contains a owl:ObjectProperty;
   rdfs:label "contains"@en;
@@ -313,17 +410,29 @@ elmo:data a owl:ObjectProperty;
   rdfs:domain elmo:Representation;
   rdfs:range rdfs:Resource;
 .
-elmo:deleteTransaction a owl:ObjectProperty;
-  rdfs:label "transaction"@en;
-  rdfs:comment "States the transaction that is executed for a particular representation, in case of a DELETE http request"@en;
-  rdfs:domain elmo:Representation;
-  rdfs:range elmo:Transaction;
+elmo:defaultEndpoint a owl:ObjectProperty;
+  rdfs:label "default endpoint"@en;
+  rdfs:comment "Links a stage to the default endpoint for that stage (used for serving non-deferenceable IRIs)"@en;
+  rdfs:domain elmo:Stage;
+  rdfs:range elmo:Endpoint;
 .
 elmo:fragment a owl:ObjectProperty;
   rdfs:label "fragment"@en;
-  rdfs:comment "Links a particular fragment definition to a representation";
+  rdfs:comment "Links a particular fragment definition to a representation"@en;
   rdfs:domain elmo:Representation;
   rdfs:range elmo:Fragment;
+.
+elmo:getRepresentation a owl:ObjectProperty;
+  rdfs:label "GET-representation"@en;
+  rdfs:comment "The representation to be used for a GET request to a certain endpoint"@en;
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Representation
+.
+elmo:index a owl:DatatypeProperty;
+  rdfs:label "index"@en;
+  rdfs:comment "Defines the position of an element relative to other elements in the same group, for example to order of representations on a screen";
+  # No rdfs:domain, index can be used in a lot of situations;
+  rdfs:range xsd:integer; #Remark: in elmo1 the range was a string, but in elmo2 the range is - as it should be - an integer
 .
 elmo:informationProduct a owl:ObjectProperty;
   rdfs:label "information product"@en;
@@ -331,16 +440,29 @@ elmo:informationProduct a owl:ObjectProperty;
   rdfs:domain elmo:Representation;
   rdfs:range elmo:InformationProduct;
 .
+elmo:layer a owl:ObjectProperty;
+  rdfs:label "layer"@en;
+  rdfs:comment "Links a representation to a particular layer";
+  rdfs:domain elmo:Representation;
+  rdfs:range elmo:Layer;
+.
 elmo:name a owl:DatatypeProperty;
   rdfs:label "name"@en;
   rdfs:comment "The unique name of a resource, within a certain context";
   # No rdfs:domain, name can be used in a lot of situations;
   rdfs:range xsd:string;
 .
-elmo:pageTemplate a owl:DatatypeProperty;
-  rdfs:label "page template"@en;
-  rdfs:comment "Specifies an optional template for the main page. This template replaces a default generated template from the configuration";
-  rdfs:domain elmo:Representation;
+# Temporary disabled, not needed yet (part of the React UI prototype)
+#elmo:pageTemplate a owl:DatatypeProperty;
+#  rdfs:label "page template"@en;
+#  rdfs:comment "Specifies an optional template for the main page. This template replaces a default generated template from the configuration";
+#  rdfs:domain elmo:Representation;
+#  rdfs:range xsd:string;
+#.
+elmo:pathPattern a owl:DatatypeProperty;
+  rdfs:label "URL pattern"@en;
+  rdfs:comment "Specifies the URL pattern for which this endpoint should be used. The path pattern is matched to the part of the http request after removing the domain name of the site and the base path of the stage."@en;
+  rdfs:domain elmo:Endpoint;
   rdfs:range xsd:string;
 .
 elmo:pattern a owl:DatatypeProperty;
@@ -349,17 +471,17 @@ elmo:pattern a owl:DatatypeProperty;
   rdfs:domain elmo:ParameterMapper;
   rdfs:range xsd:string;
 .
-elmo:postTransaction a owl:ObjectProperty;
-  rdfs:label "transaction"@en;
-  rdfs:comment "States the transaction that is executed for a particular representation, in case of a POST http request"@en;
-  rdfs:domain elmo:Representation;
-  rdfs:range elmo:Transaction;
+elmo:postRepresentation a owl:ObjectProperty;
+  rdfs:label "POST-representation"@en;
+  rdfs:comment "The representation to be used for a POST request to a certain endpoint"@en;
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Representation
 .
-elmo:putTransaction a owl:ObjectProperty;
-  rdfs:label "transaction"@en;
-  rdfs:comment "States the transaction that is executed for a particular representation, in case of a PUT http request"@en;
-  rdfs:domain elmo:Representation;
-  rdfs:range elmo:Transaction;
+elmo:putRepresentation a owl:ObjectProperty;
+  rdfs:label "PUT-representation"@en;
+  rdfs:comment "The representation to be used for a PUT request to a certain endpoint"@en;
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Representation
 .
 elmo:source a owl:ObjectProperty;
   rdfs:label "source"@en;
@@ -370,7 +492,7 @@ elmo:source a owl:ObjectProperty;
 elmo:parameterMapper a owl:ObjectProperty;
   rdfs:label "parameter mapper"@en;
   rdfs:comment "Specifies a parameter mapper that is used with a particular Representation"@en;
-  rdfs:domain elmo:Representation;
+  # No rdfs:domain, domain might be elmo:Endpoint or elmo:Representation;
   rdfs:range elmo:ParameterMapper;
 .
 elmo:target a owl:ObjectProperty;
@@ -379,28 +501,28 @@ elmo:target a owl:ObjectProperty;
   rdfs:domain elmo:ParameterMapper;
   # No rdfs:range, target may have elmo:Parameter or elmo:ParameterMapper as domain;
 .
+elmo:transaction a owl:ObjectProperty;
+  rdfs:label "transaction"@en;
+  rdfs:comment "States the transaction of a particular representation"@en;
+  rdfs:domain elmo:Representation;
+  rdfs:range elmo:Transaction;
+.
 elmo:redirectTemplate a owl:DatatypeProperty;
   rdfs:label "redirect template"@en;
   rdfs:comment "Specifies the template for redirection."@en;
   rdfs:domain elmo:Redirection;
   rdfs:range xsd:string;
 .
+elmo:representation a owl:ObjectProperty;
+  rdfs:label "representation"@en;
+  rdfs:comment "Specifies the representation that should be used with this endpoint";
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Representation;
+.
 elmo:template a owl:DatatypeProperty;
   rdfs:label "template"@en;
   rdfs:comment "A template to be used as part of a replace construction"@en;
   rdfs:domain elmo:RequestMapper;
-  rdfs:range xsd:string;
-.
-elmo:urlPattern a owl:DatatypeProperty;
-  rdfs:label "URL pattern"@en;
-  rdfs:comment "Specifies the URL pattern for which this representation should be used. The URL pattern is matched to the part of the http request after removing the domain name of the site and the base path of the stage."@en;
-  # No rdfs:domain, a urlPattern can be used with elmo:Representation and elmo:Redirection
-  rdfs:range xsd:string;
-.
-elmo:uriPattern a owl:DatatypeProperty;
-  rdfs:label "URI pattern"@en;
-  rdfs:comment "Specifies the URI pattern of the subject resource for which this representation should be used. The subject is equal to a dereferenceable URI or the value of the 'subject' or URL parameter if present. In all other cases, no match will be made."@en;
-  rdfs:domain elmo:Representation;
   rdfs:range xsd:string;
 .
 
