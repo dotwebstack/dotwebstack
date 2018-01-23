@@ -57,7 +57,7 @@ The diagram below gives a typical sequential flow.
 
 Shape validation (as stated with `elmo:conformsTo`) is performed against the data submitted as part of the request. The UpdateStep can be used to change the data in the transaction repository (typically performed before a PersistencyStep) or to change the data in some backend persistancy storage (typically performed after a PersistencyStep).
 
-Via `elmo:persistencyProtocol` you specify which kind of persistency protocol is used to manipulate the persistency store. The following persistency protocols are available:
+Via `elmo:persistenceStrategy` you specify which kind of persistence strategy is used to manipulate the persistence store. The following persistence strategies are available:
 
 - `elmo-up:DeleteGraph`: clears the content of the target graph;
 - `elmo-up:ReplaceGraph`: replaces the content of the target graph with the content of the transaction dataset;

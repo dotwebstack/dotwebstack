@@ -342,14 +342,14 @@ elmo-shape:UpdateStep a sh:NodeShape;
   ];
 .
 
-elmo-shape:PersistencyStep a sh:NodeShape;
+elmo-shape:PersistenceStep a sh:NodeShape;
   sh:closed true;
-  sh:targetClass elmo:PersistencyStep;
-  rdfs:label "Persistency step shape"@en;
-  sh:name "elmo:PersistencyStep";
+  sh:targetClass elmo:PersistenceStep;
+  rdfs:label "Persistence step shape"@en;
+  sh:name "elmo:PersistenceStep";
   sh:property [
     sh:path rdf:type;
-    sh:hasValue elmo:PersistencyStep;
+    sh:hasValue elmo:PersistenceStep;
   ];
   sh:property [
     sh:path elmo:backend;
@@ -357,10 +357,10 @@ elmo-shape:PersistencyStep a sh:NodeShape;
     sh:class elmo:Backend;
   ];
   sh:property [
-    sh:name "elmo:persistencyProtocol";
-    sh:path elmo:persistencyProtocol;
-    sh:class elmo:PersistencyProtocol;
-    sh:node elmo-shape:PersistencyProtocol;
+    sh:name "elmo:persistenceStrategy";
+    sh:path elmo:persistenceStrategy;
+    sh:class elmo:PersistenceStrategy;
+    sh:node elmo-shape:PersistenceStrategy;
     sh:maxCount 1;
   ];
   sh:property [
@@ -517,12 +517,12 @@ elmo-shape:IRI sh:targetNode sh:IRI;
   sh:name "sh:IRI";
 .
 
-elmo-shape:PersistencyProtocol a sh:NodeShape;
-  rdfs:label "PersistencyProtocol shape"@en;
-  sh:name "elmo:PersistencyProtocol";
+elmo-shape:PersistenceStrategy a sh:NodeShape;
+  rdfs:label "PersistenceStrategy shape"@en;
+  sh:name "elmo:PersistenceStrategy";
   sh:property [
     sh:path skos:inScheme;
-    sh:hasValue elmo-schemes:persistency-protocol;
+    sh:hasValue elmo-schemes:persistence-strategy;
     sh:minCount 1;
     sh:maxCount 1;
   ];

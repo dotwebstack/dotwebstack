@@ -15,12 +15,12 @@
     <element xsi:type="archimate:ApplicationComponent" id="2c4546f1" name="Browser"/>
     <element xsi:type="archimate:ApplicationFunction" id="a11adb17" name="Store into transaction repository"/>
     <element xsi:type="archimate:ApplicationFunction" id="cc3012b3" name="Transaction repository update step"/>
-    <element xsi:type="archimate:ApplicationFunction" id="6cfd55ec" name="Persistancy step"/>
-    <element xsi:type="archimate:ApplicationFunction" id="3bd4e012" name="Backend update step (post persistency)"/>
+    <element xsi:type="archimate:ApplicationFunction" id="6cfd55ec" name="Persistance step"/>
+    <element xsi:type="archimate:ApplicationFunction" id="3bd4e012" name="Backend update step (post persistence)"/>
     <element xsi:type="archimate:ApplicationFunction" id="4e140102" name="Shape validation step"/>
     <element xsi:type="archimate:DataObject" id="ee5c0fca" name="RDF model from http request"/>
     <element xsi:type="archimate:DataObject" id="35ee95c0" name="Transaction repository"/>
-    <element xsi:type="archimate:DataObject" id="ba8799c9" name="Backend persistancy"/>
+    <element xsi:type="archimate:DataObject" id="ba8799c9" name="Backend persistance"/>
     <element xsi:type="archimate:ApplicationComponent" id="0d031501" name="SPARQL backend"/>
     <element xsi:type="archimate:ApplicationComponent" id="ac55f4a8" name="ElasticSearch backend"/>
     <element xsi:type="archimate:ApplicationComponent" id="647c9c5c" name="LD Resource backend"/>
@@ -249,12 +249,12 @@
       <child xsi:type="archimate:Note" id="7b7f8c0e" textAlignment="1">
         <bounds x="56" y="265" width="150" height="54"/>
         <sourceConnection id="463cfa24" source="7b7f8c0e" target="27eb525d"/>
-        <content>Stores the transaction data according to a particular update protocol</content>
+        <content>Stores the transaction data according to a particular persistence strategy</content>
       </child>
       <child xsi:type="archimate:Note" id="77badd81" textAlignment="1">
         <bounds x="55" y="349" width="121" height="54"/>
         <sourceConnection id="df1b696a" source="77badd81" target="1feb3f86"/>
-        <content>Manipulates the triples in the backend persistancy</content>
+        <content>Manipulates the triples in the backend persistance</content>
       </child>
     </element>
     <element xsi:type="archimate:ArchimateDiagramModel" id="93b5cd4c" name="Top-level architecture">

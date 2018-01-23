@@ -13,13 +13,13 @@
     <element xsi:type="archimate:ApplicationComponent" id="67aa4127" name="Html serializer"/>
     <element xsi:type="archimate:ApplicationComponent" id="660f2a94" name="Information product layer"/>
     <element xsi:type="archimate:ApplicationComponent" id="2c4546f1" name="Browser"/>
-    <element xsi:type="archimate:ApplicationFunction" id="a11adb17" name="Transform &amp; Store"/>
-    <element xsi:type="archimate:ApplicationFunction" id="cc3012b3" name="PreQueries"/>
-    <element xsi:type="archimate:ApplicationFunction" id="6cfd55ec" name="Persistancy"/>
-    <element xsi:type="archimate:ApplicationFunction" id="3bd4e012" name="PostQueries"/>
-    <element xsi:type="archimate:ApplicationFunction" id="4e140102" name="Shape validation"/>
-    <element xsi:type="archimate:DataObject" id="ee5c0fca" name="http request"/>
-    <element xsi:type="archimate:DataObject" id="35ee95c0" name="In-memory dataset"/>
+    <element xsi:type="archimate:ApplicationFunction" id="a11adb17" name="Store into transaction repository"/>
+    <element xsi:type="archimate:ApplicationFunction" id="cc3012b3" name="Transaction repository update step"/>
+    <element xsi:type="archimate:ApplicationFunction" id="6cfd55ec" name="Persistancy step"/>
+    <element xsi:type="archimate:ApplicationFunction" id="3bd4e012" name="Backend update step (post persistency)"/>
+    <element xsi:type="archimate:ApplicationFunction" id="4e140102" name="Shape validation step"/>
+    <element xsi:type="archimate:DataObject" id="ee5c0fca" name="RDF model from http request"/>
+    <element xsi:type="archimate:DataObject" id="35ee95c0" name="Transaction repository"/>
     <element xsi:type="archimate:DataObject" id="ba8799c9" name="Backend persistancy"/>
     <element xsi:type="archimate:ApplicationComponent" id="0d031501" name="SPARQL backend"/>
     <element xsi:type="archimate:ApplicationComponent" id="ac55f4a8" name="ElasticSearch backend"/>
@@ -201,34 +201,34 @@
       </child>
     </element>
     <element xsi:type="archimate:ArchimateDiagramModel" id="4743e9ea" name="Transaction flow">
-      <child xsi:type="archimate:DiagramObject" id="1d1213bc" textAlignment="2" targetConnections="ae3642ad" archimateElement="a11adb17">
-        <bounds x="240" y="12" width="120" height="55"/>
+      <child xsi:type="archimate:DiagramObject" id="1d1213bc" textAlignment="2" archimateElement="a11adb17">
+        <bounds x="240" y="12" width="133" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="5665ff55" source="1d1213bc" target="82c0ce35" relationship="be2599b5"/>
         <sourceConnection xsi:type="archimate:Connection" id="2cfdc459" source="1d1213bc" target="1449d983" relationship="af64d96c"/>
         <sourceConnection xsi:type="archimate:Connection" id="9b23f65a" source="1d1213bc" target="5e787de2" relationship="6484ce9a"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="eb052f3d" textAlignment="2" targetConnections="0711ca52 583fc473" archimateElement="cc3012b3">
-        <bounds x="240" y="180" width="120" height="55"/>
+        <bounds x="240" y="180" width="133" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="e03ac6f5" source="eb052f3d" target="27eb525d" relationship="4c863780"/>
         <sourceConnection xsi:type="archimate:Connection" id="80b7aec3" source="eb052f3d" target="5e787de2" relationship="2b48cacd"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="27eb525d" textAlignment="2" targetConnections="e03ac6f5 463cfa24" archimateElement="6cfd55ec">
-        <bounds x="241" y="264" width="120" height="55"/>
+        <bounds x="241" y="264" width="132" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="634218c9" source="27eb525d" target="1feb3f86" relationship="3bdc0650"/>
         <sourceConnection xsi:type="archimate:Connection" id="01ee7389" source="27eb525d" target="5e787de2" relationship="d6430c3f"/>
         <sourceConnection xsi:type="archimate:Connection" id="4f9a1aca" source="27eb525d" target="11ff04c2" relationship="86dc9d07"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="1feb3f86" textAlignment="2" targetConnections="634218c9 df1b696a" archimateElement="3bd4e012">
-        <bounds x="241" y="348" width="120" height="55"/>
+        <bounds x="241" y="348" width="132" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="2237b19d" source="1feb3f86" target="11ff04c2" relationship="47d1b90b"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="1449d983" textAlignment="2" targetConnections="2cfdc459 6488cc93" archimateElement="4e140102">
-        <bounds x="241" y="96" width="120" height="55"/>
+        <bounds x="241" y="96" width="132" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="0711ca52" source="1449d983" target="eb052f3d" relationship="78a5e691"/>
         <sourceConnection xsi:type="archimate:Connection" id="520db2e7" source="1449d983" target="5e787de2" relationship="079fb426"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="82c0ce35" textAlignment="2" targetConnections="5665ff55" archimateElement="ee5c0fca">
-        <bounds x="56" y="12" width="120" height="55"/>
+        <bounds x="48" y="12" width="128" height="55"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="5e787de2" textAlignment="2" targetConnections="9b23f65a 520db2e7 80b7aec3 01ee7389" archimateElement="35ee95c0">
         <bounds x="432" y="96" width="120" height="55"/>
@@ -236,25 +236,20 @@
       <child xsi:type="archimate:DiagramObject" id="11ff04c2" textAlignment="2" targetConnections="4f9a1aca 2237b19d" archimateElement="ba8799c9">
         <bounds x="432" y="348" width="120" height="55"/>
       </child>
-      <child xsi:type="archimate:Note" id="9e2c9eb6" textAlignment="1">
-        <bounds x="444" y="12" width="265" height="73"/>
-        <sourceConnection id="ae3642ad" source="9e2c9eb6" target="1d1213bc"/>
-        <content>If http request contains RDF triples, these triples are stored in an in-memory dataset. Otherwise, the data is first transformed and the resulting RDF triples are stored in an in-memory dataset.</content>
-      </child>
       <child xsi:type="archimate:Note" id="77c6a70b" textAlignment="1">
-        <bounds x="55" y="97" width="121" height="53"/>
+        <bounds x="55" y="97" width="126" height="53"/>
         <sourceConnection id="6488cc93" source="77c6a70b" target="1449d983"/>
-        <content>Checks a shape graph against the in memory dataset</content>
+        <content>Checks the transaction data agains a shape graph</content>
       </child>
       <child xsi:type="archimate:Note" id="43c76cc1" textAlignment="1">
         <bounds x="55" y="181" width="121" height="54"/>
         <sourceConnection id="583fc473" source="43c76cc1" target="eb052f3d"/>
-        <content>Manipulates the in memory dataset</content>
+        <content>Manipulates the transaction data</content>
       </child>
       <child xsi:type="archimate:Note" id="7b7f8c0e" textAlignment="1">
         <bounds x="56" y="265" width="150" height="54"/>
         <sourceConnection id="463cfa24" source="7b7f8c0e" target="27eb525d"/>
-        <content>Stores the in memory dataset according to a particular update protocol</content>
+        <content>Stores the transaction data according to a particular update protocol</content>
       </child>
       <child xsi:type="archimate:Note" id="77badd81" textAlignment="1">
         <bounds x="55" y="349" width="121" height="54"/>

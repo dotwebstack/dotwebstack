@@ -3,7 +3,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
-@prefix elmo-sp: <http://dotwebstack.org/def/elmo/storage-protocol/>.
+@prefix elmo-sp: <http://dotwebstack.org/def/elmo/persistence-strategy/>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
 
 @prefix config: <http://dotwebstack.org/configuration/>.
@@ -44,8 +44,8 @@ GRAPH config:Theatre {
 				""";
       ]
       [
-        a elmo:PersistencyStep;
-        elmo:persistencyProtocol a elmo-sp:InsertIntoGraph;
+        a elmo:PersistenceStep;
+        elmo:persistenceStrategy a elmo-sp:InsertIntoGraph;
         elmo:backend config:SparqlBackend;
         elmo:targetGraph <http://dotwebstack.org/all-concepts>;
       ]
@@ -73,8 +73,8 @@ GRAPH config:Theatre {
   config:DeleteConcept a elmo:Transaction;
     elmo:ParallelFlow ( #Parallel or Sequential flow doesn't really matter when only one step is present
       [
-        a elmo:PersistencyStep
-        elmo:persistencyProtocol elmo-sp:DeleteResourceFromGraph;
+        a elmo:PersistenceStep
+        elmo:persistenceStrategy elmo-sp:DeleteResourceFromGraph;
         elmo:backend config:MySparqlBackend;
         elmo:targetGraph <http://dotwebstack.org/all-concepts>;
       ]
