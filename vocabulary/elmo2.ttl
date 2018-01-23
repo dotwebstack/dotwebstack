@@ -138,7 +138,7 @@ elmo:Query a owl:Class;
 .
 elmo:PersistencyProtocol a owl:Class;
   rdfs:label "PersistencyProtocol"@en;
-  rdfs:comment "The class of persistency protocols. Instances of this class define how a transaction result is stored within the persistancy layer";
+  rdfs:comment "The class of persistency protocols. Instances of this class define how a transaction result is stored within the persistency layer";
 .
 
 elmo:Step a owl:Class;
@@ -211,22 +211,16 @@ elmo:location a owl:DatatypeProperty;
   rdfs:domain elmo:Backend;
   rdfs:range xsd:string;
 .
-elmo:postQueries a owl:ObjectProperty;
-  rdfs:label "post queries"@en;
-  rdfs:comment "Specifies the ordered list of post queries that is executed during the transaction. Post queries are executed after the key action of the transaction (delete, update, insert)";
-  rdfs:domain elmo:Transaction;
-  rdfs:range rdf:List;
-.
-elmo:preQueries a owl:ObjectProperty;
-  rdfs:label "pre queries"@en;
-  rdfs:comment "Specifies the ordered list of pre queries that is executed during the transaction. Pre queries are executed on the transaction data before the data is used in the key action of the transaction (delete, update, insert)";
-  rdfs:domain elmo:Transaction;
-  rdfs:range rdf:List;
-.
 elmo:optionalParameter a owl:ObjectProperty;
   rdfs:label "optional parameter";
   rdfs:comment "States the optional parameter(s) for an information product, transaction or query";
   rdfs:range elmo:Parameter;
+.
+elmo:persistencyProtocol a owl:ObjectProperty;
+  rdfs:label "persistencyProtocol"@en;
+  rdfs:comment "Defines the way that the result of a transaction is stored within the persistency layer";
+  rdfs:domain elmo:Transaction;
+  rdfs:range elmo:PersistencyProtocol;
 .
 elmo:query a owl:DatatypeProperty;
   rdfs:label "query"@en;
@@ -256,12 +250,6 @@ elmo:sourceGraph a owl:ObjectProperty;
   rdfs:comment "Defines the graph that contains the RML specification";
   rdfs:domain elmo:RMLTransformation;
   # rdfs:Range should be a graph?
-.
-elmo:storageProtocol a owl:ObjectProperty;
-  rdfs:label "storageProtocol"@en;
-  rdfs:comment "Defines the way that the result of a transaction is stored within the persistancy layer";
-  rdfs:domain elmo:Transaction;
-  rdfs:range elmo:StorageProtocol;
 .
 elmo:stylesheet a owl:ObjectProperty;
   rdfs:label "stylesheet"@en;

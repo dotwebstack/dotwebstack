@@ -13,7 +13,7 @@
 
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
 @prefix elmo-schemes: <http://dotwebstack.org/def/elmo/>.
-@prefix elmo-sp: <http://dotwebstack.org/def/elmo/storage-protocol/>.
+@prefix elmo-sp: <http://dotwebstack.org/def/elmo/persistency-protocol/>.
 
 elmo-sp:DeleteGraph a elmo:PersistencyProtocol;
 	skos:inScheme elmo-schemes:persistency-protocol;

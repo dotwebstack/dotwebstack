@@ -44,8 +44,8 @@ GRAPH config:Theatre {
 				""";
       ]
       [
-        a elmo:PersistancyStep;
-        elmo:persistancyProtocol a elmo-sp:InsertIntoGraph;
+        a elmo:PersistencyStep;
+        elmo:persistencyProtocol a elmo-sp:InsertIntoGraph;
         elmo:backend config:SparqlBackend;
         elmo:targetGraph <http://dotwebstack.org/all-concepts>;
       ]
