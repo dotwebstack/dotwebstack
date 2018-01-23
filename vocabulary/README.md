@@ -4,7 +4,8 @@ A vocabulary for the dotwebstack framework configuration.
 Two files contain the specification for the elmo vocabulary:
 
 - elmo2.ttl: the ontology/vocabulary for elmo;
-- elmo-shacl.ttl: the shapes that describe which properties are allowed for which classes (using SHACL shapes).
+- elmo-shacl.ttl: the shapes that describe which 
+- properties are allowed for which classes (using SHACL shapes).
 
 Some example files are also included.
 
@@ -50,12 +51,12 @@ At this moment, dotwebstack framework contains three specific steps:
 
 1. `elmo:ValidationStep`, to validate the transaction data agains a SHACL shapes graph;
 2. `elmo:UpdateStep`, to execute SPARUL update statements against a particular backend (this might be the transaction repository, or some other specified backend)
-3. `elmo:PersistencyStep`, to store the transaction data into a particular backend and target named graph, using a specified persistency protocol.
+3. `elmo:PersistenceStep`, to store the transaction data into a particular backend and target named graph, using a specified persistence strategy.
 
 The diagram below gives a typical sequential flow.
 ![](transaction-flow.png)
 
-Shape validation (as stated with `elmo:conformsTo`) is performed against the data submitted as part of the request. The UpdateStep can be used to change the data in the transaction repository (typically performed before a PersistencyStep) or to change the data in some backend persistancy storage (typically performed after a PersistencyStep).
+Shape validation (as stated with `elmo:conformsTo`) is performed against the data submitted as part of the request. The UpdateStep can be used to change the data in the transaction repository (typically performed before a PersistenceStep) or to change the data in some backend persistancy storage (typically performed after a PersistenceStep).
 
 Via `elmo:persistenceStrategy` you specify which kind of persistence strategy is used to manipulate the persistence store. The following persistence strategies are available:
 
