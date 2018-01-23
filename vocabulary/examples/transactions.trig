@@ -24,11 +24,13 @@ GRAPH config:Theatre {
 
 	# Transaction: replace resource from graph
 	config:InsertOrReplaceConcept a elmo:Transaction;
-		elmo:conformsTo config:ConceptShapeGraph;
-		elmo:preQueries (
-			[
-				a elmo:Query;
-				rdfs:label "Add missing labels";
+    elmo:sequentialFlow (
+      [ a elmo:ValidationStep
+        elmo:conformsTo config:ConceptShapeGraph;
+      ]
+      [ a elmo:UpdateStep
+        rdfs:label "Add missing labels";
+        elmo:backend elmo:TransactionRepository;
 				elmo:query """
 					insert {
 						?concept rdfs:label ?label
@@ -40,14 +42,17 @@ GRAPH config:Theatre {
 						}
 					}
 				""";
-			]
-		);
-		elmo:storageProtocol elmo-sp:InsertOrReplaceResourceInGraph;
-		elmo:targetGraph <http://dotwebstack.org/all-concepts>;
-		elmo:postQueries (
-			[
-				a elmo:Query;
+      ]
+      [
+        a elmo:PersistancyStep;
+        elmo:persistancyProtocol a elmo-sp:InsertIntoGraph;
+        elmo:backend config:SparqlBackend;
+        elmo:targetGraph <http://dotwebstack.org/all-concepts>;
+      ]
+      [
+				a elmo:UpdateStep;
 				rdfs:label "Add hash";
+        elmo:backend config:MySparqlBackend;
 				elmo:query """
 					insert {
 						graph <http://dotwebstack.org/all-concepts> {
@@ -62,33 +67,52 @@ GRAPH config:Theatre {
 						}
 					}
 				"""
-			]
-		)
-	.
-	config:DeleteConcept a elmo:Transaction;
-		elmo:storageProtocol elmo-sp:DeleteResourceFromGraph;
-		elmo:targetGraph <http://dotwebstack.org/all-concepts>;
+      ]
+    );
+
+  config:DeleteConcept a elmo:Transaction;
+    elmo:ParallelFlow ( #Parallel or Sequential flow doesn't really matter when only one step is present
+      [
+        a elmo:PersistencyStep
+        elmo:persistencyProtocol elmo-sp:DeleteResourceFromGraph;
+        elmo:backend config:MySparqlBackend;
+        elmo:targetGraph <http://dotwebstack.org/all-concepts>;
+      ]
+    )
 	.
 	config:Transform a elmo:Transaction;
+    # Transformer should not be part of the transaction!
 		elmo:transformer [
 			a elmo:RMLTransformer;
 			elmo:sourceGraph config:RMLMap;
 		];
-		elmo:storageProtocol elmo-sp:ReplaceGraph;
-		elmo:targetGraph <http://dotwebstack.org/uploaded-data>
+    elmo:SequentialFlow (
+      [
+        a elmo-sp:ReplaceGraph;
+        elmo:backend config:MySparqlBackend;
+        elmo:targetGraph <http://dotwebstack.org/uploaded-data>
+      ]
+    )
 	.
 }
 
 #Frontend
 GRAPH config:MainStage {
+  config:DefaultEndpoint a elmo:DynamicEndpoint;
+    elmo:pathPattern "/doc/";
+    elmo:parameterMapper config:SubjectFromUrl;
+  .
 	# Representation and storage of concepts
-	config:ConceptResource a elmo:Representation;
+	config:ConceptResource a elmo:Service;
 		elmo:uri-pattern "/id/concept/";
 		elmo:informationProduct config:SubjectData;
-		elmo:postTransaction config:InsertOrReplaceConcept;
-		elmo:putTransaction config:InsertOrReplaceConcept;
-		elmo:deleteTransaction config:DeleteConcept;
+		elmo:transaction config:InsertOrReplaceConcept;
+		
 	.
+  config:DeleteResource a elmo:Service;
+    elmo:uri-pattern "/id/concept/";
+    elmo:transaction config:DeleteConcept;
+  .
 }
 
 #Concept Shape graph
