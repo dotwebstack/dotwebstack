@@ -205,7 +205,7 @@ elmo:endpoint a owl:DatatypeProperty;
   rdfs:domain elmo:Backend;
   rdfs:range xsd:anyURI;
 .
-elmo:location a owl:DatatypeProperty;
+elmo:path a owl:DatatypeProperty;
   rdfs:label "path"@en;
   rdfs:comment "Specifies the path to a (API) service or a file that should be accessed for this particular backend."@en;
   rdfs:domain elmo:Backend;
@@ -238,6 +238,18 @@ elmo:resultType a owl:ObjectProperty;
   rdfs:comment "Defines the type of query result (TupleQuery or GraphQuery)";
   rdfs:domain elmo:InformationProduct;
   rdfs:range skos:Concept
+.
+elmo:sequentialFlow a owl:ObjectProperty;
+  rdfs:label "sequential flow"@en;
+  rdfs:comment "Refers to a list of transaction steps that are executed in sequential order, as part of a transaction";
+  rdfs:domain elmo:Transaction;
+  rdfs:range rdf:List;
+.
+elmo:parallelFlow a owl:ObjectProperty;
+  rdfs:label "parallel flow"@en;
+  rdfs:comment "Refers to a list of transaction steps that are executed in parallel order, as part of a transaction";
+  rdfs:domain elmo:Transaction;
+  rdfs:range rdf:List;
 .
 elmo:shape a owl:ObjectProperty;
   rdfs:label "shape"@en;
@@ -424,6 +436,12 @@ elmo:defaultEndpoint a owl:ObjectProperty;
   rdfs:domain elmo:Stage;
   rdfs:range elmo:Endpoint;
 .
+elmo:deleteService a owl:ObjectProperty;
+  rdfs:label "DELETE-service"@en;
+  rdfs:comment "The service to be used for a DELETE request to a certain endpoint"@en;
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Service
+.
 elmo:fragment a owl:ObjectProperty;
   rdfs:label "fragment"@en;
   rdfs:comment "Links a particular fragment definition to a representation"@en;
@@ -485,11 +503,17 @@ elmo:postRepresentation a owl:ObjectProperty;
   rdfs:domain elmo:Endpoint;
   rdfs:range elmo:Representation
 .
-elmo:putRepresentation a owl:ObjectProperty;
-  rdfs:label "PUT-representation"@en;
-  rdfs:comment "The representation to be used for a PUT request to a certain endpoint"@en;
+elmo:postService a owl:ObjectProperty;
+  rdfs:label "POST-service"@en;
+  rdfs:comment "The service to be used for a POST request to a certain endpoint"@en;
   rdfs:domain elmo:Endpoint;
-  rdfs:range elmo:Representation
+  rdfs:range elmo:Service
+.
+elmo:putService a owl:ObjectProperty;
+  rdfs:label "PUT-service"@en;
+  rdfs:comment "The service to be used for a PUT request to a certain endpoint"@en;
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Service
 .
 elmo:source a owl:ObjectProperty;
   rdfs:label "source"@en;
@@ -520,12 +544,6 @@ elmo:redirectTemplate a owl:DatatypeProperty;
   rdfs:comment "Specifies the template for redirection."@en;
   rdfs:domain elmo:Redirection;
   rdfs:range xsd:string;
-.
-elmo:representation a owl:ObjectProperty;
-  rdfs:label "representation"@en;
-  rdfs:comment "Specifies the representation that should be used with this endpoint";
-  rdfs:domain elmo:Endpoint;
-  rdfs:range elmo:Representation;
 .
 elmo:template a owl:DatatypeProperty;
   rdfs:label "template"@en;

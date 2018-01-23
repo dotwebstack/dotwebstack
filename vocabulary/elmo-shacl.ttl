@@ -294,7 +294,7 @@ elmo-shape:Transaction a sh:NodeShape;
   ];
 .
 
-elmo-shape:Step a owl:Class;
+elmo-shape:Step a sh:NodeShape;
   sh:targetClass elmo:Step;
   rdfs:label "Step shape";
   sh:name "elmo:Step";
@@ -305,7 +305,7 @@ elmo-shape:Step a owl:Class;
   ];
 .
 
-elmo-shape:ValidationStep a owl:Class;
+elmo-shape:ValidationStep a sh:NodeShape;
   sh:closed true;
   sh:targetClass elmo:ValidationStep;
   rdfs:label "Validation step shape"@en;
@@ -321,7 +321,7 @@ elmo-shape:ValidationStep a owl:Class;
   ];
 .
 
-elmo-shape:UpdateStep a owl:Class;
+elmo-shape:UpdateStep a sh:NodeShape;
   sh:closed true;
   sh:targetClass elmo:UpdateStep;
   rdfs:label "Update step shape"@en;
@@ -342,7 +342,7 @@ elmo-shape:UpdateStep a owl:Class;
   ];
 .
 
-elmo-shape:PersistencyStep a owl:Class;
+elmo-shape:PersistencyStep a sh:NodeShape;
   sh:closed true;
   sh:targetClass elmo:PersistencyStep;
   rdfs:label "Persistency step shape"@en;
