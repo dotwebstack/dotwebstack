@@ -11,7 +11,6 @@
 #
 
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
-@prefix elmo-sp: <http://dotwebstack.org/def/elmo/storage-protocol/>.
 
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -136,10 +135,31 @@ elmo:Query a owl:Class;
   rdfs:label "Query"@en;
   rdfs:comment "Reification of the query (used in preQueries and postQueries of transactions). This makes it possible to reuse a query, or to add metadata to the query"@en;
 .
-elmo:StorageProtocol a owl:Class;
-  rdfs:label "StorageProtocol"@en;
-  rdfs:comment "The class of storage protocols. Instances of this class define how a transactionresult is stored within the persistancy layer";
+elmo:PersistenceStrategy a owl:Class;
+  rdfs:label "PersistenceStrategy"@en;
+  rdfs:comment "The class of persistence strategies. Instances of this class define how a transaction result is stored within the persistence layer";
 .
+
+elmo:Step a owl:Class;
+  rdfs:label "Step"@en;
+  rdfs:comment "The class of transaction steps. Subclasses of this class define what kind of step is to be performed";
+.
+    elmo:ValidationStep a owl:Class;
+      rdfs:subClassOf elmo:Step;
+      rdfs:label "Validation step"@en;
+      rdfs:comment "A step that performs a validation on the transaction repository, using some SHACL shape graph";
+    .
+    elmo:UpdateStep a owl:Class;
+      rdfs:subClassOf elmo:Step;
+      rdfs:label "Update step";
+      rdfs:comment "A step that performs some update operation on a backend";
+    .
+    elmo:PersistenceStep a owl:Class;
+      rdfs:subClassOf elmo:Step;
+      rdfs:label "Persistence step";
+      rdfs:comment "A step that persist the data in the transaction repository to some backend";
+    .
+
 elmo:Transaction a owl:Class;
   rdfs:label "Transaction"@en;
   rdfs:comment "The class of transaction specifications. A transaction creates or deletes data according to a specific transaction request. A transaction is defined as a sequence of tasks."@en;
@@ -180,33 +200,26 @@ elmo:conformsTo a owl:ObjectProperty;
 .
 elmo:endpoint a owl:DatatypeProperty;
   rdfs:label "endpoint"@en;
-  rdfs:comment "States the (http) endpoint that should be accessed for this particular backend. Note: this property is only relevant for backends that respond to http requests"@en;
+  rdfs:comment "States the endpoint (http, file, ftp, etc) that should be accessed for this particular backend."@en;
   rdfs:domain elmo:Backend;
   rdfs:range xsd:anyURI;
 .
 elmo:path a owl:DatatypeProperty;
   rdfs:label "path"@en;
-  rdfs:comment "Specifies the location of a file that should be accessed for this particular backend. Note: this property is only relevant for backends are directly linked to a file system"@en;
+  rdfs:comment "Specifies the path to a (API) service or a file that should be accessed for this particular backend."@en;
   rdfs:domain elmo:Backend;
   rdfs:range xsd:string;
-  # Comment: this property isn't in use at this moment. Maybe 'location' is a better term for this property?
-.
-elmo:postQueries a owl:ObjectProperty;
-  rdfs:label "post queries"@en;
-  rdfs:comment "Specifies the ordered list of post queries that is executed during the transaction. Post queries are executed after the key action of the transaction (delete, update, insert)";
-  rdfs:domain elmo:Transaction;
-  rdfs:range rdf:List;
-.
-elmo:preQueries a owl:ObjectProperty;
-  rdfs:label "pre queries"@en;
-  rdfs:comment "Specifies the ordered list of pre queries that is executed during the transaction. Pre queries are executed on the transaction data before the data is used in the key action of the transaction (delete, update, insert)";
-  rdfs:domain elmo:Transaction;
-  rdfs:range rdf:List;
 .
 elmo:optionalParameter a owl:ObjectProperty;
   rdfs:label "optional parameter";
   rdfs:comment "States the optional parameter(s) for an information product, transaction or query";
   rdfs:range elmo:Parameter;
+.
+elmo:persistenceStrategy a owl:ObjectProperty;
+  rdfs:label "persistenceStrategy"@en;
+  rdfs:comment "Defines the way that the result of a transaction is stored within the persistence layer";
+  rdfs:domain elmo:Transaction;
+  rdfs:range elmo:PersistenceStrategy;
 .
 elmo:query a owl:DatatypeProperty;
   rdfs:label "query"@en;
@@ -225,6 +238,18 @@ elmo:resultType a owl:ObjectProperty;
   rdfs:domain elmo:InformationProduct;
   rdfs:range skos:Concept
 .
+elmo:sequentialFlow a owl:ObjectProperty;
+  rdfs:label "sequential flow"@en;
+  rdfs:comment "Refers to a list of transaction steps that are executed in sequential order, as part of a transaction";
+  rdfs:domain elmo:Transaction;
+  rdfs:range rdf:List;
+.
+elmo:parallelFlow a owl:ObjectProperty;
+  rdfs:label "parallel flow"@en;
+  rdfs:comment "Refers to a list of transaction steps that are executed in parallel order, as part of a transaction";
+  rdfs:domain elmo:Transaction;
+  rdfs:range rdf:List;
+.
 elmo:shape a owl:ObjectProperty;
   rdfs:label "shape"@en;
   rdfs:comment "Defines the shape that a parameter value should conform to";
@@ -237,12 +262,6 @@ elmo:sourceGraph a owl:ObjectProperty;
   rdfs:domain elmo:RMLTransformation;
   # rdfs:Range should be a graph?
 .
-elmo:storageProtocol a owl:ObjectProperty;
-  rdfs:label "storageProtocol"@en;
-  rdfs:comment "Defines the way that the result of a transaction is stored within the persistancy layer";
-  rdfs:domain elmo:Transaction;
-  rdfs:range elmo:StorageProtocol;
-.
 elmo:stylesheet a owl:ObjectProperty;
   rdfs:label "stylesheet"@en;
   rdfs:comment "Defines the stylesheet to be used for an XSLTransformer";
@@ -251,7 +270,7 @@ elmo:stylesheet a owl:ObjectProperty;
 .
 elmo:targetGraph a owl:ObjectProperty;
   rdfs:label "targetGraph"@en;
-  rdfs:comment "States the named graph that is affected by the transaction. If no target graph is mentioned, and the storageProtocol needs one, the value of the subject parameter is used";
+  rdfs:comment "States the named graph that is affected by the transaction. If no target graph is mentioned, and the persistenceStrategy needs one, the value of the subject parameter is used";
   rdfs:domain elmo:Transaction;
   rdfs:range rdfs:Resource;
 .
@@ -264,55 +283,6 @@ elmo:transformer a owl:ObjectProperty;
 elmo:uriTemplate a owl:DatatypeProperty;
   rdfs:label "uriTemplate"@en;
   rdfs:comment "Specifies the template that is used for minting a URI during a transaction.";
-.
-
-# =========
-# Storage protocols
-#
-# Used terminology in the description of the storage protocols:
-# - subject parameter: the parameter that identifies the subject of the transaction. In REST API's this will be similar to the URL
-# - target graph: the URI of an explicitly specified target graph (as part of the transaction configuration), or the value of the subject parameter in case no target graph is specified
-# - transaction dataset: the in memory dataset that is loaded from the http request body (and may be changed by an pre-query)
-#
-elmo-sp:DeleteGraph a elmo:StorageProtocol;
-  rdfs:label "Clear graph";
-  rdfs:comment "Clears the content of the target graph";
-.
-elmo-sp:ReplaceGraph a elmo:StorageProtocol;
-  rdfs:label "Replace graph";
-  rdfs:comment "Replaces the content of the target graph with the content of the transaction dataset";
-.
-elmo-sp:InsertIntoGraph a elmo:StorageProtocol;
-  rdfs:label "Insert into graph";
-  rdfs:comment "Inserts the content of the transaction dataset in the target graph, without deleting any triples in the target graph";
-.
-elmo-sp:InsertOrReplaceResourceInGraph a elmo:StorageProtocol;
-  rdfs:label "Insert or replace resource in graph";
-  rdfs:comment "Insert the content of the transaction dataset in the target graph, and deletes any triples <s,p,o> for any s that is present in the transaction dataset";
-.
-elmo-sp:DeleteResourceFromGraph a elmo:StorageProtocol;
-  rdfs:label "Delete resource from graph";
-  rdfs:comment "Deletes any triples <s,p,o> from the target graph where s is equal to the value of the subject parameter";
-.
-elmo-sp:CreateResourceInGraph a elmo:StorageProtocol;
-  rdfs:label "Create resource in graph";
-  rdfs:comment "mints URIs for any resource in the transaction dataset (as defined by elmo:uriTemplate), and inserts the transaction dataset into the target graph.";
-.
-elmo-sp:InsertIntoVersionGraph a elmo:StorageProtocol;
-  rdfs:label "Insert into version graph";
-  rdfs:comment "inserts the content of the transaction dataset into a newly created versioned target graph.";
-.
-elmo-sp:InvalidateVersionGraph a elmo:StorageProtocol;
-  rdfs:label "Invalidate version graph";
-  rdfs:comment "invalidates the current version (this created a new version that states that the previous version is invalid)";
-.
-elmo-sp:DeleteVersionGraph a elmo:StorageProtocol;
-  rdfs:label "Delete version graph";
-  rdfs:comment "deletes a particular version graph.";
-.
-elmo-sp:CreateResourceInVersionGraph a elmo:StorageProtocol;
-  rdfs:label "Create resource in version graph";
-  rdfs:comment "mints URIs for any resource in the transaction dataset (as defined by elmo:uriTemplate), and inserts the content of the transaction dataset into a newly created versioned target graph.";
 .
 
 # =========
@@ -416,6 +386,12 @@ elmo:defaultEndpoint a owl:ObjectProperty;
   rdfs:domain elmo:Stage;
   rdfs:range elmo:Endpoint;
 .
+elmo:deleteService a owl:ObjectProperty;
+  rdfs:label "DELETE-service"@en;
+  rdfs:comment "The service to be used for a DELETE request to a certain endpoint"@en;
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Service
+.
 elmo:fragment a owl:ObjectProperty;
   rdfs:label "fragment"@en;
   rdfs:comment "Links a particular fragment definition to a representation"@en;
@@ -477,11 +453,17 @@ elmo:postRepresentation a owl:ObjectProperty;
   rdfs:domain elmo:Endpoint;
   rdfs:range elmo:Representation
 .
-elmo:putRepresentation a owl:ObjectProperty;
-  rdfs:label "PUT-representation"@en;
-  rdfs:comment "The representation to be used for a PUT request to a certain endpoint"@en;
+elmo:postService a owl:ObjectProperty;
+  rdfs:label "POST-service"@en;
+  rdfs:comment "The service to be used for a POST request to a certain endpoint"@en;
   rdfs:domain elmo:Endpoint;
-  rdfs:range elmo:Representation
+  rdfs:range elmo:Service
+.
+elmo:putService a owl:ObjectProperty;
+  rdfs:label "PUT-service"@en;
+  rdfs:comment "The service to be used for a PUT request to a certain endpoint"@en;
+  rdfs:domain elmo:Endpoint;
+  rdfs:range elmo:Service
 .
 elmo:source a owl:ObjectProperty;
   rdfs:label "source"@en;
@@ -512,12 +494,6 @@ elmo:redirectTemplate a owl:DatatypeProperty;
   rdfs:comment "Specifies the template for redirection."@en;
   rdfs:domain elmo:Redirection;
   rdfs:range xsd:string;
-.
-elmo:representation a owl:ObjectProperty;
-  rdfs:label "representation"@en;
-  rdfs:comment "Specifies the representation that should be used with this endpoint";
-  rdfs:domain elmo:Endpoint;
-  rdfs:range elmo:Representation;
 .
 elmo:template a owl:DatatypeProperty;
   rdfs:label "template"@en;
