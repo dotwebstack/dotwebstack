@@ -18,18 +18,18 @@ Definition of Done (DoD) is a list of criteria which must be met before a produc
 ### 1. Good code
 
 * Code does not contain any (Eclipse) warnings or errors.
-* Code is has 100% unittest coverage for testable code.
+* Code has 100% unittest coverage for testable code.
 * Code review has been performed:
-  * Code is pushed to a feature branch, not directory to the main branch;
-  * At least one member is requested to review a pull request;
-  * Code is well documented;
+  * Code has been pushed to a feature branch, not directory to the main branch;
+  * At least one member has been requested to review a pull request;
+  * Code has been well documented;
   * Code does not contain any TODOs (they must be administered as new Jira issues);
-  * Code follows the [coding-](coding.md), [logging-](logging.md) and [exception handling](exception-handling.md) guidelines.
+  * Code follows the [coding-](./qa/coding.md), [logging-](./qa/logging.md) and [exception handling](./qa/exception-handling.md) guidelines.
 * Code does not introduce any new [SonarCloud issues][1].
 
-### 2. Throughly tested
+### 2. Thoroughly tested
 
-* Code is tested locally and can be demo-ed in the sandbox project.
+* Code is tested locally and can be demoed in the sandbox project.
 * Sandbox project contains configuration for any new feature (added to regression test).
 * Configuration of sandbox project conforms to the [shapes graph](../vocabulary/elmo-shacl.ttl) for the [elmo vocabulary](../vocabulary/elmo2.ttl). See also the [elmo documentation page](../vocabulary/README.md).
 * Sandbox project regression test has been performed.
@@ -40,7 +40,7 @@ Definition of Done (DoD) is a list of criteria which must be met before a produc
 
 ### 4. Properly discussed
 
-* Name of the feature branch starts with `[{$ISSUE_NUMMER}]`.
+* Name of the feature branch starts with `[{$ISSUE_NUMBER}]`.
 * All requirements in the user story are met, or deviations are documented as new issues and approved by the Product Owner:
   * Requirements validation is performed by tester as part of DoD check.
 * Code is merged with master and feature branch has been removed.
