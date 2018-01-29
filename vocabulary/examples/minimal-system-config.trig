@@ -49,7 +49,7 @@ GRAPH config:DemoTheatre {
 # Elements within the stage graph are local to that particular stage
 GRAPH config:MainStage {
   config:Endpoint a elmo:Endpoint;
-		elmo:urlPattern "/count-all";
+		elmo:pathPattern "/count-all";
     elmo:representation config:Representation
   .
 	config:Representation a elmo:Representation;
@@ -58,7 +58,7 @@ GRAPH config:MainStage {
 }
 GRAPH config:SecondStage {
   config:Endpoint a elmo:Endpoint;
-		elmo:urlPattern "/all-count";
+		elmo:pathPattern "/all-count";
     elmo:representation a elmo:Representation
   .
 	config:Representation a elmo:Representation;
