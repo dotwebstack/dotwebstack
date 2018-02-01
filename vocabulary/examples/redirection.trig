@@ -79,12 +79,12 @@ GRAPH config:MainStage {
   # The ConceptRepresentation will "override" the default representation, because the default representation is present at the bottom layer
   # Three layers are predefined: BottomLayer, MiddleLayer and TopLayer. The default value is MiddleLayer.
   config:ResourceRepresentation a elmo:Representation;
-    elmo:appliesTo config:DefaultEndpoint;
+    elmo:appliesTo "http://{domain}/{path}/resource/{resource}";
     elmo:layer elmo:BottomLayer;
     elmo:informationProduct config:ResourceInformationProduct
   .
   config:ConceptRepresentation a elmo:Representation;
-    elmo:appliesTo config:DocEndpoint;
+    elmo:appliesTo "http://{domain}/{path}/id/{reference}";
     elmo:layer elmo:BottomLayer;
     elmo:informationProduct config:ConceptInformationProduct
   .
