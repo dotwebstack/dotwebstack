@@ -38,7 +38,7 @@ Both informationproducts and transactions can be parameterized. The diagram belo
 ![](elmo-core-parameters-diagram.png)
 Three subclasses for parameters exists:
 
-- A `elmo:TermFilter` parameter that can be used to filter the results of an information product by using the value of the parameter as part of the `elmo:query`. You use a shacl shape to specify the constraints on the parameter datatype en values. The type of constraints differ per datatype, as is depicted in the diagram.
+- A `elmo:TermParameter` parameter that can be used to filter the results of an information product by using the value of the parameter as part of the `elmo:query`. You use a shacl shape to specify the constraints on the parameter datatype en values. The type of constraints differ per datatype, as is depicted in the diagram.
 - A `elmo:Paginator` parameter than can be used to paginate the results.
 - A `elmo:SpatialReprojector` parameter that can be used tot reproject spatial resultdata to a specific crs.
 

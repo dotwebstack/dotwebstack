@@ -13,7 +13,7 @@
 #     At this moment, ?SUBJECT only works for string literals, so cannot be used in this case
 
 GRAPH config:Theatre {
-  config:SubjectParameter a elmo:TermFilter;
+  config:SubjectParameter a elmo:TermParameter;
     elmo:name "SUBJECT";
     elmo:shape [
       sh:nodeKind sh:IRI;
