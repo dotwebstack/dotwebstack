@@ -25,10 +25,10 @@ GRAPH config:Theatre {
 	# Transaction: replace resource from graph
 	config:InsertOrReplaceConcept a elmo:Transaction;
     elmo:sequentialFlow (
-      [ a elmo:ValidationStep
+      [ a elmo:ValidationStep;
         elmo:conformsTo config:ConceptShapeGraph;
       ]
-      [ a elmo:UpdateStep
+      [ a elmo:UpdateStep;
         rdfs:label "Add missing labels";
         elmo:backend elmo:TransactionRepository;
 				elmo:query """
@@ -45,7 +45,7 @@ GRAPH config:Theatre {
       ]
       [
         a elmo:PersistenceStep;
-        elmo:persistenceStrategy a elmo-sp:InsertIntoGraph;
+        elmo:persistenceStrategy elmo-sp:InsertIntoGraph;
         elmo:backend config:SparqlBackend;
         elmo:targetGraph <http://dotwebstack.org/all-concepts>;
       ]
