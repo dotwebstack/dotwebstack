@@ -11,7 +11,7 @@
 
 @prefix elmo-shape: <http://dotwebstack.org/def/elmo-shacl#> .
 @prefix elmo-schemes: <http://dotwebstack.org/def/elmo/>.
-@prefix elmo-rt: <http://dotwebstack.org/def/elmo/result-types/>.
+@prefix elmo-rt: <http://dotwebstack.org/def/elmo/result-type/>.
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
 
 elmo-shape:
@@ -172,9 +172,9 @@ elmo-shape:Layout a sh:NodeShape;
   ];
   sh:property [
     sh:name "xhtml:stylesheet";
-     sh:path xhtml:stylesheet;
-     sh:datatype xsd:string;
-     sh:maxCount 1;
+    sh:path xhtml:stylesheet;
+    sh:datatype xsd:string;
+    sh:maxCount 1;
   ];
 .
 
@@ -388,9 +388,9 @@ elmo-shape:Parameter a sh:NodeShape;
     sh:datatype xsd:string;
   ];
 .
-elmo-shape:TermFilter a sh:NodeShape;
-  sh:targetClass elmo:TermFilter;
-  sh:name "elmo:TermFilter";
+elmo-shape:TermParameter a sh:NodeShape;
+  sh:targetClass elmo:TermParameter;
+  sh:name "elmo:TermParameter";
   sh:property [
     sh:path elmo:shape;
     sh:name "elmo:shape";
