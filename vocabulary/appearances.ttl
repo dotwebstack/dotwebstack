@@ -6,7 +6,6 @@
 #
 
 @prefix elmo: <http://dotwebstack.org/def/elmo#>.
-@prefix elmo-sp: <http://dotwebstack.org/def/elmo/storage-protocol/>.
 
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
