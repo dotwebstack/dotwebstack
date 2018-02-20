@@ -50,13 +50,42 @@ The transactions start with the storage of the input RDF data into an internal t
 At this moment, dotwebstack framework contains three specific steps:
 
 1. `elmo:ValidationStep`, to validate the transaction data agains a SHACL shapes graph;
-2. `elmo:UpdateStep`, to execute SPARUL update statements against a particular backend (this might be the transaction repository, or some other specified backend)
-3. `elmo:PersistenceStep`, to store the transaction data into a particular backend and target named graph, using a specified persistence strategy.
+2. `elmo:AssertionStep`, to assert that the transaction data conforms to a SPARQL ASK query;
+3. `elmo:UpdateStep`, to execute SPARUL update statements against a particular backend (this might be the transaction repository, or some other specified backend)
+4. `elmo:PersistenceStep`, to store the transaction data into a particular backend and target named graph, using a specified persistence strategy.
 
 The diagram below gives a typical sequential flow.
 ![](transaction-flow.png)
 
+#### Validation
+
 Shape validation (as stated with `elmo:conformsTo`) is performed against the data submitted as part of the request. The UpdateStep can be used to change the data in the transaction repository (typically performed before a PersistenceStep) or to change the data in some backend persistancy storage (typically performed after a PersistenceStep).
+
+#### Assertion
+Sometimes you need to have more control over the validation of the transaction data. For this you can use the `elmo:AssertionStep`. By specifing ASK queries using `elmo:assert` or `elmo:assertNot` you can specify assertion to which the data should comply. The assertion query is executed against the internal transaction repository, but you can use federated SPARQL queries to assert that the transaction data is valid with respect to the current state of your persistent backend.
+
+	config:MyBackend a elmo:SparqlBackend;
+		elmo:endpoint "http://localhost:8888/sparql"
+	.
+	config:AssertNoDuplicated a elmo:ValidationStep;
+		rdfs:label "The concept already exists";
+		elmo:assert-not '''
+			ASK {
+				?concept a skos:Concept.
+				SERVICE config:MyBackend {
+					?concept a skos:Concept
+				}
+			}
+		'''
+	.
+
+This example retrieves all resources of type `skos:Concept` from the internal transaction repository and checks whether such a resource already exists in the backend (located at `http://localhost:8888/sparql`). Please notice that you **don't** specify the endpoint in the assertion query, but the URI of the backend itself.
+
+
+#### Update
+An update step executes an `elmo:Query` against a particular `elmo:backend`. Only `elmo:SparqlBackend`s are supported at this moment. An update step can be executed against the internal transaction repository by using the predefined `elmo:TransactionRepository` backend.
+
+#### Persistence
 
 Via `elmo:persistenceStrategy` you specify which kind of persistence strategy is used to manipulate the persistence store. The following persistence strategies are available:
 

@@ -321,6 +321,28 @@ elmo-shape:ValidationStep a sh:NodeShape;
   ];
 .
 
+elmo-shape:AssertionStep a sh:NodeShape;
+  sh:closed true;
+  sh:targetClass elmo:AssertionStep;
+  sh:property [
+    sh:name "rdfs:label";
+    sh:path rdfs:label;
+    sh:datatype rdf:langString
+  ];
+  sh:property [
+    sh:name "elmo:assert";
+    sh:path elmo:assert;
+    sh:datatype xsd:string;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "elmo:assertNot";
+    sh:path elmo:assertNot;
+    sh:datatype xsd:string;
+    sh:maxCount 1;
+  ];
+.
+
 elmo-shape:UpdateStep a sh:NodeShape;
   sh:closed true;
   sh:targetClass elmo:UpdateStep;
