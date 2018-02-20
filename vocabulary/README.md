@@ -69,7 +69,7 @@ Sometimes you need to have more control over the validation of the transaction d
 	.
 	config:AssertNoDuplicated a elmo:ValidationStep;
 		rdfs:label "The concept already exists";
-		elmo:assert-not '''
+		elmo:assertNot '''
 			ASK {
 				?concept a skos:Concept.
 				SERVICE config:MyBackend {
