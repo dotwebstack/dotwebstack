@@ -33,7 +33,7 @@ Definition of Done (DoD) is a list of criteria which must be met before a produc
 
 
 ### 3. Well documented
-* Consider documenting relevent new features and changes in configuration at dotwebstack.org.
+* Consider documenting relevant new features and changes in configuration at dotwebstack.org.
 * Any new element to the elmo vocabulary is added to the vocabulary, shapes and documentation pages.
 
 ### 4. Properly discussed
