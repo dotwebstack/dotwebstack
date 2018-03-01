@@ -29,7 +29,7 @@ Definition of Done (DoD) is a list of criteria which must be met before a produc
 
 ### 2. Thoroughly tested
 
-* Code is tested locally and can be demoed in the an implementing project.
+* Code is tested locally and can be demoed in an implementing project.
 
 
 ### 3. Well documented
