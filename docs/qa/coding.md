@@ -4,7 +4,7 @@
 
 1. Use [Google's coding standards](https://google.github.io/styleguide/javaguide.html).
 
-1. Check every required method parameter with Objects#requireNonNull (fail fast - fail hard);
+1. Check every required method parameter with Lombok's `@NonNull` annotation (fail fast - fail hard);
 
 1. Use String#format where possible. For example, replace:
 
