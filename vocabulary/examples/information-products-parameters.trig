@@ -15,7 +15,7 @@ GRAPH config:Theatre {
 	#
 
   # See elmo2.ttl for the definition of elmo:SubjectParameter.
-  # elmo:SubjectParameter is a predefined TermFilter that can be used as a regular parameter.
+  # elmo:SubjectParameter is a predefined TermParameter that can be used as a regular parameter.
   # the name of elmo:SubjectParameter is SUBJECT.
   # the value of elmo:SubjectParameter is also used to find out which elmo:Representation should be used
 
@@ -85,7 +85,7 @@ GRAPH config:Theatre {
 	#
 	# Example of a simple string parameter
 	#
-	config:termParameter a elmo:TermFilter;
+	config:termParameter a elmo:TermParameter;
 		elmo:name "TERM";
 		elmo:shape [
 			sh:datatype xsd:string;
@@ -108,7 +108,7 @@ GRAPH config:Theatre {
 	# Example of a list-of-strings parameter
   # (Currently not supported)
 	#
-	config:termsParameter a elmo:TermFilter;
+	config:termsParameter a elmo:TermParameter;
 		elmo:name "term";
 		elmo:shape [
 			sh:datatype xsd:string;

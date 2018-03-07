@@ -59,7 +59,7 @@ A value of "legacy" in the column realised means that the particular element is 
 |`elmo1:service`|||No
 |`elmo1:translator`|||No
 |`xhtml:stylesheet`|`xhtml:stylesheet`|Moved to `elmo2:Appearance`|Legacy, not yet
-|`elmo1:url-pattern`|`elmo2:urlPattern`||Yes
+|`elmo1:path-pattern`|`elmo2:pathPattern`||Yes
 |`elmo1:uri-pattern`|`elmo2:uriPattern`||No
 |`elmo1:webpage`|||No
 |`elmo1:with-parameter`|||No

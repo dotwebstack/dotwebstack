@@ -14,7 +14,7 @@ Voorbeeld van correct inspringen:
 ```
 GRAPH config:CatalogusTheatre {
   config:WeergavePaginaProducten a elmo:Representation;
-    elmo:urlPattern “/producten”;
+    elmo:pathPattern “/producten”;
 
     elmo:appearance config:WeergavePaginaProductenAppearance;
     elmo:informationProduct config:IPProducten;
@@ -29,7 +29,7 @@ GRAPH config:CatalogusTheatre {
 *	Representations kunnen drie onderdelen bevatten. Als deze aanwezig zijn, dan worden ze in de hieronder vermelde volgorde opgenomen. Deze onderdelen zijn:
   *	Bereikbaarheid (verplicht). Hieronder vallen de volgende statements:
     *	elmo:stage (verplicht)
-    *	elmo:urlPattern (optioneel)
+    *	elmo:pathPattern (optioneel)
     *	elmo:uriPattern (optioneel)
     *	elmo:appliesTo (optioneel)
   *	Beschrijving representation (verplicht). Hieronder vallen:

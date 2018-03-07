@@ -15,7 +15,7 @@ GRAPH config:MainStage {
 
   # New syntax (using JAX-RS format)
   config:NonInformationResourceRedirection a elmo:Redirection;
-    elmo:urlPattern "{path}/id/{reference}";
+    elmo:pathPattern "{path}/id/{reference}";
     elmo:redirectTemplate "{path}/doc/{reference}";
   .
 
@@ -79,13 +79,12 @@ GRAPH config:MainStage {
   # The ConceptRepresentation will "override" the default representation, because the default representation is present at the bottom layer
   # Three layers are predefined: BottomLayer, MiddleLayer and TopLayer. The default value is MiddleLayer.
   config:ResourceRepresentation a elmo:Representation;
-    elmo:appliesTo "http://{domain}/{path}/resource/{resource}";
+    elmo:appliesTo "http://{domain}/{path}/id/{reference}";
     elmo:layer elmo:BottomLayer;
     elmo:informationProduct config:ResourceInformationProduct
   .
   config:ConceptRepresentation a elmo:Representation;
-    elmo:appliesTo "http://{domain}/{path}/id/{reference}";
-    elmo:layer elmo:BottomLayer;
+    elmo:appliesTo "http://{domain}/{path}/id/concept/{term}";
     elmo:informationProduct config:ConceptInformationProduct
   .
   
