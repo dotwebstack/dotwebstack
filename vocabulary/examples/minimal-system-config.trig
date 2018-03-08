@@ -50,7 +50,7 @@ GRAPH config:DemoTheatre {
 GRAPH config:MainStage {
   config:Endpoint a elmo:Endpoint;
 		elmo:pathPattern "/count-all";
-    elmo:representation config:Representation
+    elmo:getRepresentation config:Representation
   .
 	config:Representation a elmo:Representation;
 		elmo:informationProduct config:CountAllInfo;
@@ -59,7 +59,7 @@ GRAPH config:MainStage {
 GRAPH config:SecondStage {
   config:Endpoint a elmo:Endpoint;
 		elmo:pathPattern "/all-count";
-    elmo:representation a elmo:Representation
+    elmo:getRepresentation a elmo:Representation
   .
 	config:Representation a elmo:Representation;
 		elmo:informationProduct config:CountAllInfo;

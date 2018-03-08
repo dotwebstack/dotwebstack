@@ -63,13 +63,13 @@ GRAPH config:MainStage {
 
   # A default representation to be used for any dereferenceable URI's. Two separate endpoints are needed
   # (A) The default endpoint that matches a /resource path, and uses the ?subject=... query to map to the elmo:SubjectParameter
-  config:DefaultEndpoint a elmo:Endpoint;
+  config:DefaultEndpoint a elmo:DynamicEndpoint;
     elmo:pathPattern "/resource";
     # No mapper needed in this case, because query parameters are mapped by default to the corresponding parameters.
     # No link to a representation is needed, the correct representation is found using the properties of the representation itself
   .
   # (B) The endpoint that matches a /doc/ path, and uses the original URL to map to the elmo:SubjectParameter
-  config:DocEndpoint a elmo:Representation;
+  config:DocEndpoint a elmo:DynamicEndpoint;
     elmo:pathPattern "/doc/{reference}";
     elmo:parameterMapper config:SubjectFromUrl;
     # No link to a representation is needed, the correct representation is found using the properties of the representation itself
