@@ -801,7 +801,7 @@ elmo-shape:DynamicEndpoint a sh:NodeShape;
     sh:name "elmo:parameterMapper";
     sh:path elmo:parameterMapper;
     sh:class elmo:ParameterMapper;
-    sh:minCount 1;
+    //minCount can be zero, in such a case the subject URL-parameter will be mapped
     sh:maxCount 1
   ];
 .
@@ -858,17 +858,31 @@ elmo-shape:Representation a sh:NodeShape;
     sh:datatype xsd:string;
     sh:maxCount 1;
   ];
-  sh:property [
-    sh:name "elmo:appliesTo";
-    sh:path elmo:appliesTo;
-    sh:datatype xsd:string;
-  ];
-  sh:property [
-    sh:name "elmo:appliesTo";
-    sh:path elmo:appliesTo;
-    sh:nodeKind sh:BlankNodeOrIRI;
-    sh:node elmo-shape:Profile
-  ];
+  sh:xone (
+    [
+      sh:property [
+        sh:path elmo:appliesTo;
+        sh:maxCount 0;
+      ];
+    ]
+    [
+      sh:property [
+        sh:name "elmo:appliesTo";
+        sh:path elmo:appliesTo;
+        sh:datatype xsd:string;
+        sh:minCount 1;
+      ];
+    ]
+    [
+      sh:property [
+        sh:name "elmo:appliesTo";
+        sh:path elmo:appliesTo;
+        sh:nodeKind sh:BlankNodeOrIRI;
+        sh:node elmo-shape:Profile;
+        sh:minCount 1;
+      ];
+    ]
+  );
   sh:property [
     sh:name "elmo:layer";
     sh:path elmo:layer;

@@ -67,7 +67,7 @@ Sometimes you need to have more control over the validation of the transaction d
 	config:MyBackend a elmo:SparqlBackend;
 		elmo:endpoint "http://localhost:8888/sparql"
 	.
-	config:AssertNoDuplicated a elmo:ValidationStep;
+	config:AssertNoDuplicated a elmo:AssertionStep;
 		rdfs:label "The concept already exists";
 		elmo:assertNot '''
 			ASK {
