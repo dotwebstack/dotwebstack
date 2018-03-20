@@ -64,7 +64,7 @@ elmo:Theatre a owl:Class;
 # == PROPERTIES ==
 elmo:basePath a owl:DatatypeProperty;
 	rdfs:label "base path"@en;
-	rdfs:comment "States the base path of a stage, the first part of the path after the domain name, typically up to the next slash. A base path may include slashes"@en;
+	rdfs:comment "States the base path of a site or stage, the first part of the path after the domain name, typically up to the next slash. A base path may include slashes"@en;
 .
 elmo:domain a owl:DatatypeProperty;
 	rdfs:label "domain"@en;

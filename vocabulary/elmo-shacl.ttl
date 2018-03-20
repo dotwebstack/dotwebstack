@@ -78,6 +78,13 @@ elmo-shape:Site a sh:NodeShape;
     sh:datatype xsd:string
   ];
   sh:property [
+    sh:name "sh:basePath";
+    sh:path elmo:basePath;
+    sh:minCount 0;
+    sh:maxCount 1;
+    sh:datatype xsd:string;
+  ];
+  sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
     sh:datatype xsd:string;
