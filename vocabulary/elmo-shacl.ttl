@@ -964,7 +964,7 @@ elmo-shape:Layer a sh:NodeShape;
   sh:property [
     sh:path rdfs:label;
     sh:name "rdfs:label";
-    sh:datatype xsd:string
+    sh:datatype rdf:langString
   ];
   sh:property [
     sh:path elmo:index;
