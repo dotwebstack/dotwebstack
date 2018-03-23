@@ -59,7 +59,7 @@ GRAPH config:MainStage {
 GRAPH config:SecondStage {
   config:Endpoint a elmo:Endpoint;
 		elmo:pathPattern "/all-count";
-    elmo:getRepresentation a elmo:Representation
+    elmo:getRepresentation config:Representation
   .
 	config:Representation a elmo:Representation;
 		elmo:informationProduct config:CountAllInfo;

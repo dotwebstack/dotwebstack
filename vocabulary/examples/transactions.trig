@@ -68,12 +68,13 @@ GRAPH config:Theatre {
 					}
 				"""
       ]
-    );
+    )
+  .
 
   config:DeleteConcept a elmo:Transaction;
     elmo:ParallelFlow ( #Parallel or Sequential flow doesn't really matter when only one step is present
       [
-        a elmo:PersistenceStep
+        a elmo:PersistenceStep;
         elmo:persistenceStrategy elmo-sp:DeleteResourceFromGraph;
         elmo:backend config:MySparqlBackend;
         elmo:targetGraph <http://dotwebstack.org/all-concepts>;

@@ -1,7 +1,0 @@
-@prefix elmo: <http://dotwebstack.org/def/elmo#>.
-@prefix config: <http://dotwebstack.org/validation-test#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-
-config:Representation a elmo:Representation;
-  rdfs:label "Some representation";
-.
