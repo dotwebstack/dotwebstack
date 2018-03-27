@@ -648,18 +648,31 @@ elmo-shape:SparqlBackend a sh:NodeShape;
   ];
   sh:property [
     sh:path [sh:inversePath elmo:backend ];
-    sh:node [
-      rdfs:label "IP constraints for sparql backend";
-      sh:name "elmo:InformationProduct (Sparql)";
-      sh:property [
-        sh:path elmo:query;
-        sh:name "elmo:query";
-        sh:minCount 1;
-        sh:maxCount 1;
-      ];
-    ];
-    sh:class elmo:InformationProduct;
+    sh:xone (
+      [
+        sh:node elmo-shape:SparqlBackendStep;
+        sh:class elmo:Step
+      ]
+      [
+        sh:node elmo-shape:SparqlBackendInformationProduct;
+        sh:class elmo:InformationProduct
+      ]
+    )
   ]
+.
+elmo-shape:SparqlBackendInformationProduct a sh:NodeShape;
+  rdfs:label "IP constraints for sparql backend";
+  sh:name "elmo:InformationProduct (Sparql)";
+  sh:property [
+    sh:path elmo:query;
+    sh:name "elmo:query";
+    sh:minCount 1;
+    sh:maxCount 1;
+  ];
+.
+elmo-shape:SparqlBackendStep a sh:NodeShape;
+  rdfs:label "Step constraints for sparql backend";
+  sh:name "elmo:Step (Sparql)";
 .
 
 elmo-shape:ElasticSearchBackend a sh:NodeShape;
@@ -1109,11 +1122,11 @@ elmo-shape:Service a sh:NodeShape;
   ];
 .
 elmo-shape:InformationProductRepresentation a sh:NodeShape;
-  rdfs:label "RP constraints for transactions";
+  rdfs:label "RP constraints for information products";
   sh:name "elmo:Representation (Information Product)";
   sh:property [
     sh:path rdf:type;
-    sh:hasValue elmo:Representation;
+    sh:in (elmo:Representation elmo:Service);
   ];
   sh:property [
     sh:path elmo:informationProduct;
@@ -1124,7 +1137,7 @@ elmo-shape:InformationProductRepresentation a sh:NodeShape;
   ];
 .
 elmo-shape:DataRepresentation a sh:NodeShape;
-  rdfs:label "RP constraints for transactions";
+  rdfs:label "RP constraints for information products";
   sh:name "elmo:Representation (Data)";
   sh:property [
     sh:path rdf:type;
