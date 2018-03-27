@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.jena.graph.Factory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -25,7 +25,8 @@ public class Validator {
     File[] files = dir.listFiles(fileFilter);
     for (int i = 0; i < files.length; i++) {
       System.out.println(String.format("Loading file: %s",files[i].toString()));
-      model.read(new FileInputStream(files[i]), "urn:dummy",FilenameUtils.getExtension(files[i].toString()));
+      model.read(new FileInputStream(files[i]), "urn:dummy",
+          FilenameUtils.getExtension(files[i].toString()));
     }
   
   }
@@ -63,11 +64,9 @@ public class Validator {
         
         // Print violations
         System.out.println(ModelPrinter.get().print(report.getModel()));
-      }
-      catch (FileNotFoundException e) {
+      } catch (FileNotFoundException e) {
         System.out.println(e.getMessage());
-      }
-      catch (RiotException e) {
+      } catch (RiotException e) {
         //Already send to output via SLF4J
       }
     }

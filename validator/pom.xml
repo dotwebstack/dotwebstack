@@ -3,28 +3,30 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.dotwebstack</groupId>
-    <artifactId>validator</artifactId>
-    <version>0.0.18-SNAPSHOT</version>
+	<groupId>org.dotwebstack</groupId>
+	<artifactId>validator</artifactId>
+	<version>0.0.18-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Validator</name>
 	
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>https://opensource.org/licenses/MIT</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
-    <organization>
-        <name>DotWebStack</name>
-        <url>http://dotwebstack.org</url>
-    </organization>
+	<organization>
+		<name>DotWebStack</name>
+		<url>http://dotwebstack.org</url>
+	</organization>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -47,24 +49,52 @@
 	<build>
 		<plugins>
 			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-checkstyle-plugin</artifactId>
+			<version>2.17</version>
+			<executions>
+				<execution>
+					<id>validate</id>
+					<phase>validate</phase>
+					<configuration>
+						<configLocation>checkstyle.xml</configLocation>
+						<consoleOutput>true</consoleOutput>
+						<failOnViolation>true</failOnViolation>
+						<violationSeverity>warning</violationSeverity>
+						<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					</configuration>
+					<goals>
+						<goal>check</goal>
+					</goals>
+				</execution>
+			</executions>
+			<dependencies>
+				<dependency>
+					<groupId>com.puppycrawl.tools</groupId>
+					<artifactId>checkstyle</artifactId>
+					<version>8.4</version>
+				</dependency>
+			</dependencies>
+			</plugin>
+			<plugin>
 			  <artifactId>maven-assembly-plugin</artifactId>
 			  <configuration>
 				<archive>
-				  <manifest>
-					<mainClass>org.dotwebstack.validator.Validator</mainClass>
-				  </manifest>
+					<manifest>
+						<mainClass>org.dotwebstack.validator.Validator</mainClass>
+					</manifest>
 				</archive>
 				<descriptorRefs>
-				  <descriptorRef>jar-with-dependencies</descriptorRef>
+					<descriptorRef>jar-with-dependencies</descriptorRef>
 				</descriptorRefs>
 			  </configuration>
 			  <executions>
 				<execution>
-				  <id>make-assembly</id>
-				  <phase>package</phase>
-				  <goals>
-					<goal>single</goal>
-				  </goals>
+					<id>make-assembly</id>
+					<phase>package</phase>
+					<goals>
+						<goal>single</goal>
+					</goals>
 				</execution>
 			  </executions>
 			</plugin>
