@@ -7,9 +7,13 @@ import java.io.FileNotFoundException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.jena.graph.Factory;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.util.FileUtils;
 import org.topbraid.shacl.util.ModelPrinter;
@@ -25,8 +29,17 @@ public class Validator {
     File[] files = dir.listFiles(fileFilter);
     for (int i = 0; i < files.length; i++) {
       System.out.println(String.format("Loading file: %s",files[i].toString()));
-      model.read(new FileInputStream(files[i]), "urn:dummy",
-          FilenameUtils.getExtension(files[i].toString()));
+      String ext = FilenameUtils.getExtension(files[i].toString());
+      if (ext.equals("trig")) {
+        // Trig files contain multiple names graph.
+        // We combine those graphs, and add them to the model
+        Dataset ds = DatasetFactory.create();
+        RDFDataMgr.read(ds, new FileInputStream(files[i]), "urn:dummy", Lang.TRIG);
+        model.add(ds.getUnionModel());
+        ds.close();
+      } else {
+        model.read(new FileInputStream(files[i]), "urn:dummy", ext);
+      }
     }
   
   }

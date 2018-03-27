@@ -2,7 +2,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
-@prefix config: <http://dotwebstack.org/configuration/>.
+@prefix config: <http://dotwebstack.org/configuration/msc/>.
 
 # Configuration prefix could be anything: properties.yml must contain the name of the system configuration graph (in this case: <http://dotwebstack.org/configuration/DummyTheatre>)
 # (no system configuration graph means - failure to start-up the dotwebstack)
@@ -48,7 +48,7 @@ GRAPH config:DemoTheatre {
 # URI of configuration named graph MUST be the same as the corresponding elmo:Stage
 # Elements within the stage graph are local to that particular stage
 GRAPH config:MainStage {
-  config:Endpoint a elmo:Endpoint;
+  config:EndpointMainStage a elmo:Endpoint;
 		elmo:pathPattern "/count-all";
     elmo:getRepresentation config:Representation
   .
@@ -57,7 +57,7 @@ GRAPH config:MainStage {
 	.
 }
 GRAPH config:SecondStage {
-  config:Endpoint a elmo:Endpoint;
+  config:EndpointSecondStage a elmo:Endpoint;
 		elmo:pathPattern "/all-count";
     elmo:getRepresentation config:Representation
   .

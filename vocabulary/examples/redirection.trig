@@ -3,9 +3,10 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix http: <http://www.w3.org/2011/http#>.
 
-@prefix config: <http://dotwebstack.org/configuration/>.
+@prefix config: <http://dotwebstack.org/configuration/redir/>.
 
 #Frontend
 GRAPH config:MainStage {
@@ -39,17 +40,24 @@ GRAPH config:MainStage {
 
   # --- Informal from here, as examples how we could extend the ParameterMapper structure ---
   # Other more specific ParameterMappers might also exist
-  config:SubjectFromUrl a elmo:RegexParameterMapper;
+  config:SubjectFromUrlRegex a elmo:RegexParameterMapper;
     elmo:source http:requestURI;
     elmo:pattern "^(.+)\\/doc\\/(.+)$";
     elmo:template "$1\\/id\\/$2";
     elmo:target elmo:SubjectParameter;
   .
   # Or even something completely different
+  elmo:HashParameterMapper rdfs:subClassOf elmo:ParameterMapper.
   config:HashFromBody a elmo:HashParameterMapper;
     elmo:source http:body;
-    elmo:algorithm "base64";
+    # elmo:algorithm "base64"; (algorithm is not yet part of elmo-shacl, so we need to comment this one out)
     elmo:target config:HashOfBody;
+  .
+  config:HashOfBody a elmo:TermParameter;
+		elmo:name "hash";
+		elmo:shape [
+			sh:datatype xsd:string;
+		]
   .
   # Chaining
   # The elmo:source of chained ParameterMappers is ignored, and may be excluded

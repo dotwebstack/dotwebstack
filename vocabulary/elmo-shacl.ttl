@@ -273,12 +273,12 @@ elmo-shape:Transaction a sh:NodeShape;
     sh:node elmo-shape:FlowList;
     sh:maxCount 1;
   ];
-# At first, only sequential flows
-#  sh:property [
-#    sh:path elmo:parallelFlow;
-#    sh:node elmo-shape:FlowList;
-#    sh:maxCount 1;
-#  ];
+  # Sequential flows are not supported yet, but we won't deny such a configuration
+  sh:property [
+    sh:path elmo:parallelFlow;
+    sh:node elmo-shape:FlowList;
+    sh:maxCount 1;
+  ];
 # Maybe a default backend for a transaction might be nice, first version is without such a default
 #  sh:property [
 #    sh:name "elmo:backend";
@@ -1004,7 +1004,10 @@ elmo-shape:ParameterMapper a sh:NodeShape;
   sh:property [
     sh:name "elmo:target";
     sh:path elmo:target;
-    sh:class elmo:Parameter;
+    sh:xone (
+      [sh:class elmo:Parameter]
+      [sh:class elmo:ParameterMapper]
+    );
     sh:minCount 1;
     sh:maxCount 1;
   ];
@@ -1014,7 +1017,7 @@ elmo-shape:ParameterMapper a sh:NodeShape;
     sh:maxCount 1;
     sh:class rdf:Property;
     sh:node elmo-shape:MapperSource;
-    sh:in (http:requestURI)
+    sh:in (http:requestURI http:body)
   ];
   sh:property [
     sh:name "elmo:pattern";

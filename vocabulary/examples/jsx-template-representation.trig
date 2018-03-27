@@ -6,7 +6,7 @@
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
 
-@prefix config: <http://dotwebstack.org/configuration/>.
+@prefix config: <http://dotwebstack.org/configuration/jtr/>.
 
 #Backend (only information products, theatre system config has been left out)
 

@@ -7,7 +7,7 @@
 @prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
 @prefix elmo-param: <http://dotwebstack.org/def/elmo/parameter/>.
 
-@prefix config: <http://dotwebstack.org/configuration/>.
+@prefix config: <http://dotwebstack.org/configuration/ipp/>.
 
 #Backend (only information products, theatre system config has been left out)
 GRAPH config:Theatre {
@@ -23,7 +23,7 @@ GRAPH config:Theatre {
   # NB: The use of ?SUBJECT (a bounded variable) is recommended above the use of <${SUBJECT}> (a generic template variable)
   #     At this moment, ?SUBJECT only works for string literals, so cannot be used in this case
 	config:SubjectData a elmo:InformationProduct;
-		elmo:parameter elmo:SubjectParameter;
+		elmo:requiredParameter elmo:SubjectParameter;
 		elmo:query """
 			construct {
 				<${SUBJECT}> ?p ?o
@@ -37,7 +37,7 @@ GRAPH config:Theatre {
   # The recommended way would be to use a bounded variable. The query might be better understandable if it is visible that
   # a variable is bounded up front. You might want to use UPPERCASE for these variables.
 	config:SubjectDataBounded a elmo:InformationProduct;
-		elmo:parameter config:SubjectParameter;
+		elmo:requiredParameter elmo:SubjectParameter;
 		elmo:query """
 			construct {
 				?SUBJECT ?p ?o
@@ -70,8 +70,8 @@ GRAPH config:Theatre {
 		]
 	.
 	config:PagedFriendsOfSubject a elmo:InformationProduct;
-		elmo:parameter config:SubjectParameter;
-		elmo:parameter config:PaginatorParameter;
+		elmo:requiredParameter elmo:SubjectParameter;
+		elmo:requiredParameter config:PaginatorParameter;
 		elmo:query """
 			select ?friend ?friend_label
 			where {
@@ -107,18 +107,18 @@ GRAPH config:Theatre {
 	
 	#
 	# Example of a list-of-strings parameter
-  # (Currently not supported)
+  # (Currently not supported, minCount and maxCount are commented out for this reason)
 	#
 	config:termsParameter a elmo:TermParameter;
 		elmo:name "term";
 		elmo:shape [
 			sh:datatype xsd:string;
-			sh:minCount 1;
-			sh:maxCount 10; #Maximum of 10 terms kan be used
+			#sh:minCount 1;
+			#sh:maxCount 10; (Maximum of 10 terms kan be used)
 		];
 	.
 	config:SearchResult a elmo:InformationProduct;
-		elmo:parameter config:termsParameter;
+		elmo:requiredParameter config:termsParameter;
 		elmo:query """
 			select ?resource ?resource_label
 			where {

@@ -26,6 +26,7 @@
 xsd:string a rdfs:Datatype.
 xsd:integer a rdfs:Datatype.
 http:requestURI a rdf:Property.
+http:body a rdf:Property.
 
 # =========
 # Ontology spec
@@ -361,6 +362,8 @@ elmo:PageSizeParameter a elmo:TermParameter;
     sh:defaultValue 10;
   ];
 .
+
+elmo:TransactionRepository a elmo:Backend.
 
 elmo:BottomLayer a elmo:Layer;
   rdfs:label "Bottom layer"@en;
