@@ -16,10 +16,14 @@ import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RiotException;
 import org.apache.jena.util.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.topbraid.shacl.util.ModelPrinter;
 import org.topbraid.shacl.validation.ValidationUtil;
 
 public class Validator {
+
+  private static final Logger LOG = LoggerFactory.getLogger(Validator.class);
 
   private static void loadFiles(Model model, String filter) throws FileNotFoundException {
 
@@ -27,18 +31,18 @@ public class Validator {
     File dir = new File(path.getParent());
     FileFilter fileFilter = new WildcardFileFilter(path.getName());
     File[] files = dir.listFiles(fileFilter);
-    for (int i = 0; i < files.length; i++) {
-      System.out.println(String.format("Loading file: %s",files[i].toString()));
-      String ext = FilenameUtils.getExtension(files[i].toString());
+    for (File file : files) {
+      LOG.info(String.format("Loading file: %s",file.toString()));
+      String ext = FilenameUtils.getExtension(file.toString());
       if (ext.equals("trig")) {
         // Trig files contain multiple names graph.
         // We combine those graphs, and add them to the model
         Dataset ds = DatasetFactory.create();
-        RDFDataMgr.read(ds, new FileInputStream(files[i]), "urn:dummy", Lang.TRIG);
+        RDFDataMgr.read(ds, new FileInputStream(file), "urn:dummy", Lang.TRIG);
         model.add(ds.getUnionModel());
         ds.close();
       } else {
-        model.read(new FileInputStream(files[i]), "urn:dummy", ext);
+        model.read(new FileInputStream(file), "urn:dummy", ext);
       }
     }
   
@@ -47,38 +51,38 @@ public class Validator {
   public static void main(String[] args) {
 
     if (args.length != 3) {
-      System.out.println("Usage: validator data-graph-file ontology-graph-file shapes-graph-file");
+      LOG.info("Usage: validator data-graph-file ontology-graph-file shapes-graph-file");
     } else {
 
-      System.out.println("Starting the validator");
-      System.out.println(String.format("File(s) containing the data graph: %s",args[0]));
-      System.out.println(String.format("File(s) containing the ontology graph: %s",args[1]));
-      System.out.println(String.format("File(s) containing the shapes graph: %s",args[2]));
+      LOG.info("Starting the validator");
+      LOG.info(String.format("File(s) containing the data graph: %s",args[0]));
+      LOG.info(String.format("File(s) containing the ontology graph: %s",args[1]));
+      LOG.info(String.format("File(s) containing the shapes graph: %s",args[2]));
       
       try {
         Model dataModel = ModelFactory.createModelForGraph(Factory.createDefaultGraph());
 
         // Load the data model
-        System.out.println("Loading data files");
+        LOG.info("Loading data files");
         loadFiles(dataModel, args[0]);
 
         // Load the ontology model into the data model
-        System.out.println("Loading ontology files");
+        LOG.info("Loading ontology files");
         loadFiles(dataModel, args[1]);
 
         // Load the shapes model
         Model shapesModel = ModelFactory.createModelForGraph(Factory.createDefaultGraph());
-        System.out.println("Loading shape files");
+        LOG.info("Loading shape files");
         loadFiles(shapesModel, args[2]);
         
         // Perform the validation of everything, using the data model
-        System.out.println("Start validation");
+        LOG.info("Start validation");
         Resource report = ValidationUtil.validateModel(dataModel, shapesModel, true);
         
         // Print violations
-        System.out.println(ModelPrinter.get().print(report.getModel()));
+        LOG.info(ModelPrinter.get().print(report.getModel()));
       } catch (FileNotFoundException e) {
-        System.out.println(e.getMessage());
+        LOG.error(e.getMessage());
       } catch (RiotException e) {
         //Already send to output via SLF4J
       }
