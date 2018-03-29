@@ -1,0 +1,17 @@
+@base          <http://dotwebstack.org/validator> .
+@prefix elmo-sp: <http://dotwebstack.org/def/elmo/persistence-strategy/> .
+@prefix elmo-rt: <http://dotwebstack.org/def/elmo/result-type/> .
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix elmo:  <http://dotwebstack.org/def/elmo#> .
+@prefix elmo-schemes: <http://dotwebstack.org/def/elmo/> .
+@prefix elmo-param: <http://dotwebstack.org/def/elmo/parameter/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix http:  <http://www.w3.org/2011/http#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+[ a            sh:ValidationReport ;
+  sh:conforms  true
+] .

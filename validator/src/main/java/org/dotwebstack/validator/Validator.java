@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.jena.graph.Factory;
@@ -11,6 +13,7 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFWriter;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
@@ -18,13 +21,14 @@ import org.apache.jena.riot.RiotException;
 import org.apache.jena.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.topbraid.shacl.util.ModelPrinter;
 import org.topbraid.shacl.validation.ValidationUtil;
 
 public class Validator {
 
   private static final Logger LOG = LoggerFactory.getLogger(Validator.class);
 
+  private static String BASE_URI = "http://dotwebstack.org/validator";
+  
   private static void loadFiles(Model model, String filter) throws FileNotFoundException {
 
     File path = new File(filter);
@@ -38,20 +42,33 @@ public class Validator {
         // Trig files contain multiple names graph.
         // We combine those graphs, and add them to the model
         Dataset ds = DatasetFactory.create();
-        RDFDataMgr.read(ds, new FileInputStream(file), "urn:dummy", Lang.TRIG);
+        RDFDataMgr.read(ds, new FileInputStream(file), BASE_URI, Lang.TRIG);
         model.add(ds.getUnionModel());
         ds.close();
       } else {
-        model.read(new FileInputStream(file), "urn:dummy", ext);
+        model.read(new FileInputStream(file), BASE_URI, ext);
       }
     }
   
   }
 
+  private static void writeModel(Model model, String fileName) throws IOException {
+    
+    FileWriter writer = new FileWriter(fileName);
+    RDFWriter w = model.getWriter(FileUtils.langTurtle);
+    w.write(model, writer, BASE_URI);
+    writer.close();
+    LOG.info(String.format("Reported to file: %s",fileName));
+  }
+  
   public static void main(String[] args) {
 
-    if (args.length != 3) {
-      LOG.info("Usage: validator data-graph-file ontology-graph-file shapes-graph-file");
+    if (args.length != 4) {
+      LOG.error("Usage: validator "
+          + "data-graph-file ontology-graph-file shapes-graph-file report-file");
+      LOG.error("Wildcards are allowed for input parameters");
+      LOG.error("Example: \"vocabulary/examples/*.trig\" \"vocabulary/elmo/*.ttl\" "
+          + "\"vocabulary/elmo-shacl.ttl\" \"validator/report.ttl\"");
     } else {
 
       LOG.info("Starting the validator");
@@ -79,9 +96,10 @@ public class Validator {
         LOG.info("Start validation");
         Resource report = ValidationUtil.validateModel(dataModel, shapesModel, true);
         
-        // Print violations
-        LOG.info(ModelPrinter.get().print(report.getModel()));
-      } catch (FileNotFoundException e) {
+        // Write violations
+        writeModel(report.getModel(),args[3]);
+
+      } catch (IOException e) {
         LOG.error(e.getMessage());
       } catch (RiotException e) {
         //Already send to output via SLF4J

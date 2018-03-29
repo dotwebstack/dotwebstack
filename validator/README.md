@@ -7,7 +7,7 @@ Usage:
 
 	validate.bat
   
-Results will be logged, you would like to have the following result:
+Results will be logged in the file `report.ttl`, you would like to have the following result:
 
 	[ a            sh:ValidationReport ;
 	  sh:conforms  true
