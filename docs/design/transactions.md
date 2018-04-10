@@ -14,4 +14,5 @@ At this moment, dotwebstack framework contains four specific steps:
 4. A *persistence step*, to store the transaction data into a particular backend and target named graph, using a specified persistence strategy.
 
 The diagram below gives a typical sequential flow.
+
 ![](transaction-flow.png)
