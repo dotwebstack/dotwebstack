@@ -45,6 +45,6 @@ Only React components that use the Linked Data API will use the DotWebStack API,
 
 The dotwebstack theatre contains a html serialization. The html serialization contains the definition of ReAct components, in the same way as an external webserver would place the ReAct components in a html page. The difference will be that the html serialization of the dotwebstack theatre will already be transpiled to native javascript code.
 
-The native javascript code will be generated from the configuration of the LD representations (using appearances), as depicted in the figure below.
+The native javascript code will be generated from the configuration of the LD representations (using appearances), as depicted in the figure below:
 
 ![](front-end-architecture.png)
