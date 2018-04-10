@@ -29,6 +29,8 @@ A webmaster can add a DotWebStack React component to its website, using the usua
 
 The DotWebStack React API handles the interaction between the browser and any webserver that serves RDF data (JSON-LD or JSON sparql query result). The resulting JSON objects can be used in the React widgets. This can be any already existing React widget, the dotwebstack ReAct wrapper will tranform the JSON objects from the API to the internal data structure of the React widget.
 
+### Test
+
 For newly developed widgets, the internal data structure may be equal to the original JSON objects, in such a case transformation is not needed.
 
 ![](front-end-client-side-DWS.png)
