@@ -29,11 +29,9 @@ A webmaster can add a DotWebStack React component to its website, using the usua
 
 The DotWebStack React API handles the interaction between the browser and any webserver that serves RDF data (JSON-LD or JSON sparql query result). The resulting JSON objects can be used in the React widgets. This can be any already existing React widget, the dotwebstack ReAct wrapper will tranform the JSON objects from the API to the internal data structure of the React widget.
 
-### Test
-
 For newly developed widgets, the internal data structure may be equal to the original JSON objects, in such a case transformation is not needed.
 
-![](front-end-client-side-DWS.png)
+![](front-end-client-side.png)
 
 By using the DotWebStack server components, it is even possible to create React components that interact with OpenAPI REST services. As is depicted in the figure above, a call from the React component is handled by the generic http frontend, and dispatched to the proper frontend handler as specified in the DotWebStack configuration. The only difference between an OpenAPI REST API and a Linked Data API is the message format: the Linked Data API will use the generic JSON-LD or JSON query result messag format, the OpenAPI REST API will use the message format as specified in the OAS (swagger) specifiation.
 
