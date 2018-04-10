@@ -19,17 +19,25 @@ The Linked Data frontend consists of two request mappers. These mappers register
 - A redirection request mapper, that registers path patterns to be handled by the redirection request handler. The redirection request handler redirections a URL to another URL (according to the 303 strategy as described in [Cool URIs](http://www.w3.org/TR/cooluris/)).
 - A linked data endpoint request mapper that registers path patterns to be handled by the linked data endpoint request handler. The linked data endpoint request handler performs all the necessary steps to generate the correct RDF serialization http response. 
 
-## Design of the ReAct UI frontend
+## Design of the React UI frontend
 
-The DotWebStack supports the use of ReAct UI frontend components. These ReAct components be used even when the server doesn't use the DotWebStack framework.
+The DotWebStack supports the use of React UI frontend components. These React components be used even when the server doesn't use the DotWebStack framework.
 
 ![](front-end-client-side.png)
 
-A webmaster can add a DotWebStack ReAct component to its website, using the usual method for adding a ReAct component to a website. The original source is transpiled to native javascript, and served from the webserver to the browser of the end-user.
+A webmaster can add a DotWebStack React component to its website, using the usual method for adding a React component to a website. The original source is transpiled to native javascript, and served from the webserver to the browser of the end-user.
 
-The DotWebStack ReAct API handles the interaction between the browser and any webserver that serves RDF data (JSON-LD or JSON sparql query result). The resulting JSON objects can be used in the ReAct widgets. This can be any already existing ReAct widget, the dotwebstack ReAct wrapper will tranform the JSON objects from the API to the internal data structure of the ReAct widget.
+The DotWebStack React API handles the interaction between the browser and any webserver that serves RDF data (JSON-LD or JSON sparql query result). The resulting JSON objects can be used in the React widgets. This can be any already existing React widget, the dotwebstack ReAct wrapper will tranform the JSON objects from the API to the internal data structure of the React widget.
 
 For newly developed widgets, the internal data structure may be equal to the original JSON objects, in such a case transformation is not needed.
+
+![](front-end-client-side-DWS.png)
+
+By using the DotWebStack server components, it is even possible to create React components that interact with OpenAPI REST services. As is depicted in the figure above, a call from the React component is handled by the generic http frontend, and dispatched to the proper frontend handler as specified in the DotWebStack configuration. The only difference between an OpenAPI REST API and a Linked Data API is the message format: the Linked Data API will use the generic JSON-LD or JSON query result messag format, the OpenAPI REST API will use the message format as specified in the OAS (swagger) specifiation.
+
+React components that use the OpenAPI frontend will be more specific and geared towards a specific business need, react components that use the Linked Data API will be more general and can be used for multiple business needs.
+
+Only React components that use the Linked Data API will use the DotWebStack API, as this component is specifically designed to work with a Linked Data backend, as depicted in the figure below.
 
 ![](front-end-react.png)
 

@@ -8,8 +8,7 @@
   </folder>
   <folder name="Application" id="212bda86" type="application">
     <element xsi:type="archimate:ApplicationComponent" id="5381643f" name="Loader"/>
-    <element xsi:type="archimate:ApplicationComponent" id="132e2bdf" name="Transpiler"/>
-    <element xsi:type="archimate:DataObject" id="90e4d119" name="Transpiled configurations"/>
+    <element xsi:type="archimate:DataObject" id="90e4d119" name="Native javascript (part of configuration object)"/>
     <element xsi:type="archimate:ApplicationComponent" id="67aa4127" name="Html serializer"/>
     <element xsi:type="archimate:ApplicationComponent" id="660f2a94" name="Information product layer"/>
     <element xsi:type="archimate:ApplicationComponent" id="2c4546f1" name="Browser"/>
@@ -41,7 +40,17 @@
     <element xsi:type="archimate:ApplicationComponent" id="2e781865" name="Redirection Request mapper"/>
     <element xsi:type="archimate:ApplicationComponent" id="e0c0d42c" name="Redirection Request handler"/>
     <element xsi:type="archimate:ApplicationComponent" id="339f8045" name="Any webserver serving html"/>
-    <element xsi:type="archimate:ApplicationComponent" id="0917e18a" name="Any webserver serving RDF (JSON-LD)"/>
+    <element xsi:type="archimate:ApplicationComponent" id="0917e18a" name="Any webserver serving RDF (JSON-LD/JSON query result)"/>
+    <element xsi:type="archimate:ApplicationComponent" id="68717dea" name="DotWebStack http server"/>
+    <element xsi:type="archimate:ApplicationFunction" id="0e0bb68d" name="DotWebStack API"/>
+    <element xsi:type="archimate:ApplicationFunction" id="57a9db95" name="Typical ReAct widget"/>
+    <element xsi:type="archimate:DataObject" id="3054c63d" name="Data structure of ReAct widget"/>
+    <element xsi:type="archimate:DataObject" id="6f6a2401" name="JSON GraphResult data structure"/>
+    <element xsi:type="archimate:DataObject" id="e77b05b3" name="JSON TupleResult data structure"/>
+    <element xsi:type="archimate:DataObject" id="c2d8d09f" name="JSON data structure"/>
+    <element xsi:type="archimate:ApplicationFunction" id="bda69919" name="DotWebStack wrapper for a typical ReAct widget"/>
+    <element xsi:type="archimate:ApplicationComponent" id="d668b011" name="JSON serializer"/>
+    <element xsi:type="archimate:ApplicationInterface" id="c7cef4a7" name="http endpoint for JSON"/>
   </folder>
   <folder name="Technology" id="635cee6d" type="technology">
     <element xsi:type="archimate:Artifact" id="e7b62f8d" name="Configuration"/>
@@ -60,8 +69,6 @@
   <folder name="Connectors" id="4c666a64" type="connectors"/>
   <folder name="Relations" id="32d0997b" type="relations">
     <element xsi:type="archimate:UsedByRelationship" id="f524592f" source="e7b62f8d" target="5381643f"/>
-    <element xsi:type="archimate:FlowRelationship" id="c3be2f45" source="5381643f" target="132e2bdf"/>
-    <element xsi:type="archimate:FlowRelationship" id="1c6dbde8" source="132e2bdf" target="5381643f"/>
     <element xsi:type="archimate:AccessRelationship" id="6a19e5ad" source="5381643f" target="90e4d119"/>
     <element xsi:type="archimate:AccessRelationship" id="066d46a8" source="67aa4127" target="90e4d119" accessType="1"/>
     <element xsi:type="archimate:FlowRelationship" id="c46c88f9" name="request" source="67aa4127" target="660f2a94"/>
@@ -125,87 +132,108 @@
     <element xsi:type="archimate:UsedByRelationship" id="206d7b12" source="d54024d8" target="2c4546f1"/>
     <element xsi:type="archimate:FlowRelationship" id="c203cb09" name="http-request" source="2c4546f1" target="339f8045"/>
     <element xsi:type="archimate:FlowRelationship" id="6040e730" name="http-response" source="339f8045" target="2c4546f1"/>
-    <element xsi:type="archimate:FlowRelationship" id="d2c3af5e" name="http-request (AJAX)" source="2c4546f1" target="0917e18a"/>
-    <element xsi:type="archimate:FlowRelationship" id="b4bc08c2" name="http-response (JSON-LD)" source="0917e18a" target="2c4546f1"/>
+    <element xsi:type="archimate:FlowRelationship" id="d2c3af5e" name="http-request (AJAX)" source="2c4546f1" target="c7cef4a7"/>
+    <element xsi:type="archimate:FlowRelationship" id="b4bc08c2" name="http-response (JSON-LD)" source="c7cef4a7" target="2c4546f1"/>
+    <element xsi:type="archimate:FlowRelationship" id="763f0e99" name="http-request" source="2c4546f1" target="68717dea"/>
+    <element xsi:type="archimate:FlowRelationship" id="b83533a8" name="http-response" source="68717dea" target="2c4546f1"/>
+    <element xsi:type="archimate:UsedByRelationship" id="72676e20" name="JSON-LD or JSON query result" source="0917e18a" target="0e0bb68d"/>
+    <element xsi:type="archimate:CompositionRelationship" id="98a82e1d" source="c2d8d09f" target="6f6a2401"/>
+    <element xsi:type="archimate:CompositionRelationship" id="e9e0218b" source="c2d8d09f" target="e77b05b3"/>
+    <element xsi:type="archimate:AccessRelationship" id="30a990b0" source="0e0bb68d" target="c2d8d09f" accessType="3"/>
+    <element xsi:type="archimate:AccessRelationship" id="97060320" source="bda69919" target="3054c63d"/>
+    <element xsi:type="archimate:UsedByRelationship" id="8d0737f3" source="0e0bb68d" target="bda69919"/>
+    <element xsi:type="archimate:UsedByRelationship" id="26580f9a" source="bda69919" target="57a9db95"/>
+    <element xsi:type="archimate:AccessRelationship" id="391c3a54" source="57a9db95" target="3054c63d" accessType="1"/>
+    <element xsi:type="archimate:FlowRelationship" id="12ec2365" name="request" source="d668b011" target="660f2a94"/>
+    <element xsi:type="archimate:FlowRelationship" id="e63bac12" name="RDF data" source="660f2a94" target="d668b011"/>
+    <element xsi:type="archimate:AggregationRelationship" id="fd9d7aa8" source="0917e18a" target="c7cef4a7"/>
+    <element xsi:type="archimate:AggregationRelationship" id="39361538" source="d668b011" target="c7cef4a7"/>
   </folder>
   <folder name="Views" id="1b1efcb1" type="diagrams">
     <element xsi:type="archimate:ArchimateDiagramModel" id="47580653" name="Front-end">
       <child xsi:type="archimate:DiagramObject" id="416edca7" textAlignment="2" targetConnections="86ef19e1" archimateElement="e7b62f8d">
-        <bounds x="36" y="228" width="120" height="55"/>
+        <bounds x="72" y="282" width="120" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="248cbece" source="416edca7" target="2332ace7" relationship="f524592f"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="2332ace7" textAlignment="2" targetConnections="248cbece 3adc852d dd248d49 01f9b657" archimateElement="5381643f">
-        <bounds x="252" y="228" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="7eb08810" source="2332ace7" target="a0c5b38d" relationship="c3be2f45">
-          <bendpoint startX="-24" startY="57" endX="-24" endY="-63"/>
-        </sourceConnection>
+      <child xsi:type="archimate:DiagramObject" id="2332ace7" textAlignment="2" targetConnections="248cbece dd248d49" archimateElement="5381643f">
+        <bounds x="252" y="282" width="120" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="08099fec" source="2332ace7" target="a11d50ec" relationship="6a19e5ad"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="a0c5b38d" textAlignment="2" targetConnections="7eb08810" archimateElement="132e2bdf">
-        <bounds x="252" y="348" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="3adc852d" source="a0c5b38d" target="2332ace7" relationship="1c6dbde8">
-          <bendpoint startX="36" startY="-63" endX="36" endY="57"/>
-        </sourceConnection>
-      </child>
       <child xsi:type="archimate:Note" id="8b513ec6" textAlignment="1">
-        <bounds y="132" width="185" height="53"/>
+        <bounds x="65" y="187" width="133" height="61"/>
         <sourceConnection id="86ef19e1" source="8b513ec6" target="416edca7"/>
-        <content>Configuration contains:&#xD;
-- JSX templates&#xD;
-- elmo UI specs (LDT 1.x legacy)</content>
+        <content>Configuration contains elmo:Appearance specifications</content>
       </child>
       <child xsi:type="archimate:Note" id="ed1fbf77" textAlignment="1">
-        <bounds x="60" y="312" width="147" height="71"/>
+        <bounds x="264" y="367" width="147" height="60"/>
         <sourceConnection id="dd248d49" source="ed1fbf77" target="2332ace7"/>
-        <content>elmo UI specs are converted into JSX templates, JSX templates are send to transpiler</content>
-      </child>
-      <child xsi:type="archimate:Note" id="0cc20bdd" textAlignment="1">
-        <bounds x="408" y="310" width="159" height="39"/>
-        <sourceConnection id="01f9b657" source="0cc20bdd" target="2332ace7"/>
-        <content>Native javascript is returned</content>
+        <content>elmo UI specs are converted into native javascript.</content>
       </child>
       <child xsi:type="archimate:DiagramObject" id="a11d50ec" textAlignment="2" targetConnections="08099fec 0b7fccfc" archimateElement="90e4d119">
-        <bounds x="456" y="228" width="120" height="55"/>
+        <bounds x="433" y="282" width="169" height="55"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="8e4cd252" textAlignment="2" targetConnections="dcda4b3b 1f407b2f" archimateElement="67aa4127">
-        <bounds x="648" y="228" width="120" height="55"/>
+        <bounds x="648" y="282" width="120" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="0b7fccfc" source="8e4cd252" target="a11d50ec" relationship="066d46a8"/>
         <sourceConnection xsi:type="archimate:Connection" id="5908fd55" source="8e4cd252" target="668131af" relationship="c46c88f9">
-          <bendpoint startX="-24" startY="45" endX="-23" endY="-56"/>
+          <bendpoint startX="-24" startY="45" endX="-125" endY="-56"/>
         </sourceConnection>
         <sourceConnection xsi:type="archimate:Connection" id="66890a65" source="8e4cd252" target="1ebeb7ad" relationship="090cd4f5">
           <bendpoint startX="48" startY="-87" endX="48" endY="93"/>
         </sourceConnection>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="668131af" textAlignment="2" targetConnections="5908fd55" archimateElement="660f2a94">
-        <bounds x="647" y="329" width="120" height="55"/>
+      <child xsi:type="archimate:DiagramObject" id="668131af" textAlignment="2" targetConnections="5908fd55 dc4e5578" archimateElement="660f2a94">
+        <bounds x="647" y="383" width="325" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="dcda4b3b" source="668131af" target="8e4cd252" relationship="31bc2002">
-          <bendpoint startX="37" startY="-44" endX="36" endY="57"/>
+          <bendpoint startX="-65" startY="-44" endX="36" endY="57"/>
+        </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="21fc774e" source="668131af" target="5974c3a8" relationship="e63bac12">
+          <bendpoint startX="139" startY="-44" endX="36" endY="57"/>
         </sourceConnection>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="1ebeb7ad" textAlignment="2" targetConnections="8fbd2162 473c1a83 a56ff770 66890a65 17b792e8" archimateElement="2c4546f1">
+      <child xsi:type="archimate:DiagramObject" id="1ebeb7ad" textAlignment="2" targetConnections="8fbd2162 473c1a83 a56ff770 66890a65 17b792e8 bb93648d 65ced913" archimateElement="2c4546f1">
         <bounds x="648" y="48" width="120" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="1f407b2f" source="1ebeb7ad" target="8e4cd252" relationship="820fb06d">
           <bendpoint startX="-36" startY="93" endX="-36" endY="-87"/>
         </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="543c9983" source="1ebeb7ad" target="d0acaf9a" relationship="d2c3af5e">
+          <bendpoint startX="180" startY="9" endX="-24" endY="-136"/>
+        </sourceConnection>
       </child>
       <child xsi:type="archimate:DiagramObject" id="db2123fb" textAlignment="2" archimateElement="d728d949">
-        <bounds x="456" y="24" width="146" height="37"/>
+        <bounds x="456" y="133" width="146" height="37"/>
         <sourceConnection xsi:type="archimate:Connection" id="8fbd2162" source="db2123fb" target="1ebeb7ad" relationship="dd354caf"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="1fe86ebc" textAlignment="2" archimateElement="351ac739">
-        <bounds x="456" y="81" width="146" height="55"/>
+        <bounds x="456" y="24" width="146" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="473c1a83" source="1fe86ebc" target="1ebeb7ad" relationship="3e45c501"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="c3ea396d" textAlignment="2" archimateElement="12092593">
-        <bounds x="458" y="147" width="144" height="34"/>
+        <bounds x="457" y="-12" width="144" height="34"/>
         <sourceConnection xsi:type="archimate:Connection" id="a56ff770" source="c3ea396d" target="1ebeb7ad" relationship="6ca101b5"/>
       </child>
       <child xsi:type="archimate:Note" id="7eb021f1" textAlignment="1">
-        <bounds x="828" y="36" width="162" height="80"/>
+        <bounds x="804" y="-58" width="193" height="80"/>
         <sourceConnection id="17b792e8" source="7eb021f1" target="1ebeb7ad"/>
         <content>http response contains html with json-ld in head, and transpiled javascript. Construction of DOM tree is done client-site using React&#xD;
 </content>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="5974c3a8" textAlignment="2" targetConnections="21fc774e" archimateElement="d668b011">
+        <bounds x="852" y="282" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="dc4e5578" source="5974c3a8" target="668131af" relationship="12ec2365">
+          <bendpoint startX="-36" startY="57" endX="67" endY="-44"/>
+        </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="fca81d1b" source="5974c3a8" target="d0acaf9a" relationship="39361538"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="505d7948" textAlignment="2" archimateElement="d54024d8">
+        <bounds x="456" y="84" width="146" height="37"/>
+        <sourceConnection xsi:type="archimate:Connection" id="bb93648d" source="505d7948" target="1ebeb7ad" relationship="206d7b12"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="d0acaf9a" textAlignment="2" targetConnections="543c9983 fca81d1b" archimateElement="c7cef4a7">
+        <bounds x="852" y="193" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="65ced913" source="d0acaf9a" target="1ebeb7ad" relationship="b4bc08c2">
+          <bendpoint startX="36" startY="-160" endX="240" endY="-15"/>
+        </sourceConnection>
       </child>
     </element>
     <element xsi:type="archimate:ArchimateDiagramModel" id="4743e9ea" name="Transaction flow">
@@ -435,92 +463,13 @@
         <content>ParameterMapper is used (conform endpoint specification) to map a request to the elmo:SubjectParameter. The value of elmo:SubjectParameter is used to match against uriPattern and/or appliesTo</content>
       </child>
     </element>
-    <element xsi:type="archimate:ArchimateDiagramModel" id="348cebbf" name="Front-end v2">
-      <child xsi:type="archimate:DiagramObject" id="60c27a01" textAlignment="2" targetConnections="8087321d" archimateElement="e7b62f8d">
-        <bounds x="36" y="228" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="04328417" source="60c27a01" target="5f62476f" relationship="f524592f"/>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="5f62476f" textAlignment="2" targetConnections="a2ffeaad d29c3c17 6c363160 04328417" archimateElement="5381643f">
-        <bounds x="252" y="228" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="1c4bce31" source="5f62476f" target="26461bae" relationship="c3be2f45">
-          <bendpoint startX="-24" startY="57" endX="-24" endY="-63"/>
-        </sourceConnection>
-        <sourceConnection xsi:type="archimate:Connection" id="fb71a9e6" source="5f62476f" target="a228eceb" relationship="6a19e5ad"/>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="26461bae" textAlignment="2" targetConnections="1c4bce31" archimateElement="132e2bdf">
-        <bounds x="252" y="348" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="d29c3c17" source="26461bae" target="5f62476f" relationship="1c6dbde8">
-          <bendpoint startX="36" startY="-63" endX="36" endY="57"/>
-        </sourceConnection>
-      </child>
-      <child xsi:type="archimate:Note" id="4d4c19bd" textAlignment="1">
-        <bounds y="132" width="185" height="53"/>
-        <sourceConnection id="8087321d" source="4d4c19bd" target="60c27a01"/>
-        <content>Configuration contains:&#xD;
-- JSX templates&#xD;
-- elmo UI specs (LDT 1.x legacy)</content>
-      </child>
-      <child xsi:type="archimate:Note" id="e4938c29" textAlignment="1">
-        <bounds x="60" y="312" width="147" height="71"/>
-        <sourceConnection id="a2ffeaad" source="e4938c29" target="5f62476f"/>
-        <content>elmo UI specs are converted into JSX templates, JSX templates are send to transpiler</content>
-      </child>
-      <child xsi:type="archimate:Note" id="e01a30d0" textAlignment="1">
-        <bounds x="408" y="310" width="159" height="39"/>
-        <sourceConnection id="6c363160" source="e01a30d0" target="5f62476f"/>
-        <content>Native javascript is returned</content>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="a228eceb" textAlignment="2" targetConnections="89db044c fb71a9e6" archimateElement="90e4d119">
-        <bounds x="456" y="228" width="120" height="55"/>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="8873fd09" textAlignment="2" targetConnections="11aaf3db 2e65a11c" archimateElement="67aa4127">
-        <bounds x="648" y="228" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="89db044c" source="8873fd09" target="a228eceb" relationship="066d46a8"/>
-        <sourceConnection xsi:type="archimate:Connection" id="b2286b52" source="8873fd09" target="fadf9a3c" relationship="c46c88f9">
-          <bendpoint startX="-24" startY="45" endX="-23" endY="-56"/>
-        </sourceConnection>
-        <sourceConnection xsi:type="archimate:Connection" id="19151109" source="8873fd09" target="929c8a68" relationship="090cd4f5">
-          <bendpoint startX="48" startY="-87" endX="48" endY="93"/>
-        </sourceConnection>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="fadf9a3c" textAlignment="2" targetConnections="b2286b52" archimateElement="660f2a94">
-        <bounds x="647" y="329" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="11aaf3db" source="fadf9a3c" target="8873fd09" relationship="31bc2002">
-          <bendpoint startX="37" startY="-44" endX="36" endY="57"/>
-        </sourceConnection>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="929c8a68" textAlignment="2" targetConnections="a2652ee4 55764057 752c0a8b 19151109 392d854b" archimateElement="2c4546f1">
-        <bounds x="648" y="48" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="2e65a11c" source="929c8a68" target="8873fd09" relationship="820fb06d">
-          <bendpoint startX="-36" startY="93" endX="-36" endY="-87"/>
-        </sourceConnection>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="96f382b7" textAlignment="2" archimateElement="d728d949">
-        <bounds x="456" y="24" width="146" height="37"/>
-        <sourceConnection xsi:type="archimate:Connection" id="a2652ee4" source="96f382b7" target="929c8a68" relationship="dd354caf"/>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="d423aa65" textAlignment="2" archimateElement="351ac739">
-        <bounds x="456" y="81" width="146" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="55764057" source="d423aa65" target="929c8a68" relationship="3e45c501"/>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="ecf23ece" textAlignment="2" archimateElement="12092593">
-        <bounds x="458" y="147" width="144" height="34"/>
-        <sourceConnection xsi:type="archimate:Connection" id="392d854b" source="ecf23ece" target="929c8a68" relationship="6ca101b5"/>
-      </child>
-      <child xsi:type="archimate:Note" id="98764f12" textAlignment="1">
-        <bounds x="828" y="36" width="162" height="80"/>
-        <sourceConnection id="752c0a8b" source="98764f12" target="929c8a68"/>
-        <content>http response contains html with json-ld in head, and transpiled javascript. Construction of DOM tree is done client-site using React&#xD;
-</content>
-      </child>
-    </element>
     <element xsi:type="archimate:ArchimateDiagramModel" id="822edacf" name="Front-end (client-side)">
       <child xsi:type="archimate:DiagramObject" id="719575a1" textAlignment="2" targetConnections="84670bc3 6983ac90 829b509c 03c8c273 1e5ed8d4 cd9a0a1b" archimateElement="2c4546f1">
         <bounds x="276" y="84" width="120" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="b61b9151" source="719575a1" target="e4552c3b" relationship="c203cb09">
           <bendpoint startX="-36" startY="93" endX="-36" endY="-99"/>
         </sourceConnection>
-        <sourceConnection xsi:type="archimate:Connection" id="f6493b25" source="719575a1" target="1cb1b5d5" relationship="d2c3af5e">
+        <sourceConnection xsi:type="archimate:Connection" id="f6493b25" source="719575a1" target="fbc87d13" relationship="d2c3af5e">
           <bendpoint startX="216" startY="9" endX="-42" endY="-184"/>
         </sourceConnection>
       </child>
@@ -546,11 +495,82 @@
           <bendpoint startX="48" startY="-99" endX="48" endY="93"/>
         </sourceConnection>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="1cb1b5d5" textAlignment="2" targetConnections="f6493b25" archimateElement="0917e18a">
-        <bounds x="534" y="277" width="120" height="55"/>
-        <sourceConnection xsi:type="archimate:Connection" id="cd9a0a1b" source="1cb1b5d5" target="719575a1" relationship="b4bc08c2">
+      <child xsi:type="archimate:DiagramObject" id="1cb1b5d5" textAlignment="2" archimateElement="0917e18a">
+        <bounds x="528" y="372" width="120" height="72"/>
+        <sourceConnection xsi:type="archimate:Connection" id="ae6836bc" source="1cb1b5d5" target="fbc87d13" relationship="fd9d7aa8"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="fbc87d13" textAlignment="2" targetConnections="f6493b25 ae6836bc" archimateElement="c7cef4a7">
+        <bounds x="528" y="276" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="cd9a0a1b" source="fbc87d13" target="719575a1" relationship="b4bc08c2">
           <bendpoint startX="30" startY="-208" endX="288" endY="-15"/>
         </sourceConnection>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" id="476f5880" name="Front-end (client-server interaction)">
+      <child xsi:type="archimate:DiagramObject" id="fbf99f6f" textAlignment="2" targetConnections="6bc801ad" archimateElement="68717dea">
+        <bounds x="372" y="252" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="ae47b041" source="fbf99f6f" target="8f82df15" relationship="b83533a8">
+          <bendpoint startX="48" startY="-63" endX="48" endY="69"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="8f82df15" textAlignment="2" targetConnections="ae47b041" archimateElement="2c4546f1">
+        <bounds x="372" y="120" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="6bc801ad" source="8f82df15" target="fbf99f6f" relationship="763f0e99">
+          <bendpoint startX="-36" startY="57" endX="-36" endY="-75"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:Note" id="c8d77a94" textAlignment="1">
+        <bounds x="168" y="120" width="185" height="56"/>
+        <content>http-request contains a &quot;Accept&quot; request header, with the mime-type of the requested serialization</content>
+      </child>
+      <child xsi:type="archimate:Note" id="08cf08ab" textAlignment="1">
+        <bounds x="528" y="180" width="350" height="126"/>
+        <content>http-response will contain a body with a RDF serialization, according to the request:&#xD;
+- JSON-LD for application/ld+json;&#xD;
+- RDF/XML for application/rdf+xml;&#xD;
+- Turtle for text/turtle;&#xD;
+- HTML webpage for text/html or application/xhtml+xml&#xD;
+- JSON SPARQL query result for application/sparql-results+json&#xD;
+- XML SPARQL query result for application/sparql-results+xml</content>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" id="79609691" name="Front-end (ReAct)">
+      <child xsi:type="archimate:DiagramObject" id="f90af68a" textAlignment="2" targetConnections="e4260a90" archimateElement="0e0bb68d">
+        <bounds x="300" y="324" width="156" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="63b23270" source="f90af68a" target="da6c5225" relationship="30a990b0"/>
+        <sourceConnection xsi:type="archimate:Connection" id="9ef3ba7a" source="f90af68a" target="7bf921ca" relationship="8d0737f3"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="f60144f9" textAlignment="2" targetConnections="9ef17c1e" archimateElement="57a9db95">
+        <bounds x="300" y="132" width="159" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="57eaade1" source="f60144f9" target="1edb202f" relationship="391c3a54"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="1edb202f" textAlignment="2" targetConnections="f983263a 57eaade1 3c9aafbe" archimateElement="3054c63d">
+        <bounds x="512" y="132" width="137" height="55"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="9e3cff47" textAlignment="2" archimateElement="0917e18a">
+        <bounds x="300" y="444" width="156" height="61"/>
+        <sourceConnection xsi:type="archimate:Connection" id="e4260a90" source="9e3cff47" target="f90af68a" relationship="72676e20"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="da6c5225" textAlignment="2" targetConnections="63b23270 521c9783" archimateElement="c2d8d09f">
+        <bounds x="512" y="303" width="308" height="97"/>
+        <child xsi:type="archimate:DiagramObject" id="e340cc00" textAlignment="2" archimateElement="6f6a2401">
+          <bounds x="12" y="36" width="139" height="55"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="7d4e0539" textAlignment="2" archimateElement="e77b05b3">
+          <bounds x="156" y="36" width="145" height="55"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="7bf921ca" textAlignment="2" targetConnections="9ef3ba7a 9f1ce991" archimateElement="bda69919">
+        <bounds x="300" y="225" width="159" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="f983263a" source="7bf921ca" target="1edb202f" relationship="97060320"/>
+        <sourceConnection xsi:type="archimate:Connection" id="9ef17c1e" source="7bf921ca" target="f60144f9" relationship="26580f9a"/>
+      </child>
+      <child xsi:type="archimate:Note" id="8e14fdb3" textAlignment="1">
+        <bounds x="512" y="225" width="162" height="56"/>
+        <sourceConnection id="3c9aafbe" source="8e14fdb3" target="1edb202f"/>
+        <sourceConnection id="521c9783" source="8e14fdb3" target="da6c5225"/>
+        <sourceConnection id="9f1ce991" source="8e14fdb3" target="7bf921ca"/>
+        <content>wrapper transform JSON data structure to the data structure of the ReAct widget</content>
       </child>
     </element>
   </folder>
