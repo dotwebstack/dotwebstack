@@ -33,6 +33,14 @@ GRAPH config:Theatre {
       [ a elmo:ValidationStep;
         elmo:conformsTo config:ConceptShapeGraph;
       ]
+      [ a elmo:AssertionStep;
+        rdfs:label "Er moet een label aanwezig zijn";
+        elmo:assert """
+          ASK {
+            ?begrip rdfs:label ?label
+          }
+        """
+      ]
       [ a elmo:UpdateStep;
         rdfs:label "Add missing labels";
         elmo:backend elmo:TransactionRepository;
