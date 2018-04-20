@@ -273,7 +273,7 @@ elmo-shape:Transaction a sh:NodeShape;
     sh:node elmo-shape:FlowList;
     sh:maxCount 1;
   ];
-  # Sequential flows are not supported yet, but we won't deny such a configuration
+  # Parallel flows are not supported yet, but we won't deny such a configuration
   sh:property [
     sh:path elmo:parallelFlow;
     sh:node elmo-shape:FlowList;
@@ -660,6 +660,18 @@ elmo-shape:SparqlBackend a sh:NodeShape;
     sh:minCount 1;
     sh:maxCount 1;
     sh:datatype xsd:anyURI;
+  ];
+  sh:property [
+    sh:name "elmo:username";
+    sh:path elmo:username;
+    sh:datatype xsd:string;
+    sh:maxCount 1;
+  ];
+  sh:property [
+    sh:name "elmo:password";
+    sh:path elmo:password;
+    sh:datatype xsd:string;
+    sh:maxCount 1;
   ];
   sh:property [
     sh:path [sh:inversePath elmo:backend ];
@@ -1223,16 +1235,16 @@ elmo-shape:Fragment a sh:NodeShape;
     sh:maxCount 1;
     sh:nodeKind sh:IRI;
   ];
-  sh:property [  
-    sh:name "elmo:valueDatatype";  
-    sh:path elmo:valueDatatype;  
-    sh:maxCount 1;  
-    sh:nodeKind sh:IRI;  
-  ];  
-    sh:property [  
-    sh:name "elmo:valueTemplate";  
-    sh:path elmo:valueTemplate;  
-    sh:maxCount 1;  
-    sh:datatype xsd:string;  
-  ];  
+  sh:property [
+    sh:name "elmo:valueDatatype";
+    sh:path elmo:valueDatatype;
+    sh:maxCount 1;
+    sh:nodeKind sh:IRI;
+  ];
+    sh:property [
+    sh:name "elmo:valueTemplate";
+    sh:path elmo:valueTemplate;
+    sh:maxCount 1;
+    sh:datatype xsd:string;
+  ];
 .
