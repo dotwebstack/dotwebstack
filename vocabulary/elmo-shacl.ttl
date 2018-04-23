@@ -334,6 +334,7 @@ elmo-shape:ValidationStep a sh:NodeShape;
   sh:property [
       sh:name "rdfs:label";
       sh:path rdfs:label;
+      sh:datatype xsd:string;
   ];
   sh:property [
     sh:name "elmo:conformsTo";
@@ -353,6 +354,7 @@ elmo-shape:AssertionStep a sh:NodeShape;
   sh:property [
       sh:name "rdfs:label";
       sh:path rdfs:label;
+      sh:datatype xsd:string;
   ];
   # Because the shape is closed, properties are expected (even if they are specified within sh:xone)
   sh:property [
@@ -395,6 +397,7 @@ elmo-shape:UpdateStep a sh:NodeShape;
   sh:property [
       sh:name "rdfs:label";
       sh:path rdfs:label;
+      sh:datatype xsd:string;
   ];
   sh:property [
     sh:path elmo:backend;
@@ -420,6 +423,7 @@ elmo-shape:PersistenceStep a sh:NodeShape;
   sh:property [
       sh:name "rdfs:label";
       sh:path rdfs:label;
+      sh:datatype xsd:string;
   ];
   sh:property [
     sh:path elmo:backend;
