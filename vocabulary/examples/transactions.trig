@@ -34,7 +34,7 @@ GRAPH config:Theatre {
         elmo:conformsTo config:ConceptShapeGraph;
       ]
       [ a elmo:AssertionStep;
-        rdfs:label "Er moet een label aanwezig zijn";
+        rdfs:label "Er moet een label aanwezig zijn"@nl;
         elmo:assert """
           ASK {
             ?begrip rdfs:label ?label
@@ -42,7 +42,7 @@ GRAPH config:Theatre {
         """
       ]
       [ a elmo:UpdateStep;
-        rdfs:label "Add missing labels";
+        rdfs:label "Add missing labels"@en;
         elmo:backend elmo:TransactionRepository;
 				elmo:query """
 					insert {
@@ -64,7 +64,7 @@ GRAPH config:Theatre {
       ]
       [
 				a elmo:UpdateStep;
-				rdfs:label "Add hash";
+				rdfs:label "Add hash"@en;
         elmo:backend config:MySparqlBackend;
 				elmo:query """
 					insert {
