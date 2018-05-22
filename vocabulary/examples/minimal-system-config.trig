@@ -13,8 +13,8 @@
 GRAPH config:DemoTheatre {
 	# Theatre declaration, URI MUST be the same as the system configuration name graph
 	config:DemoTheatre a elmo:Theatre;
-		rdfs:label "The demo theatre, using all vocabulary statements";
-		dc:title "Demo theatre";
+		rdfs:label "The demo theatre, using all vocabulary statements"@en;
+		dc:title "Demo theatre"@en;
 	.
 	
 	# All site declarations MUST be part of the system configuration graph

@@ -40,12 +40,12 @@ elmo-shape:Theatre a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "dc:title";
     sh:path dc:title;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:layout";
@@ -87,12 +87,12 @@ elmo-shape:Site a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "dc:title";
     sh:path dc:title;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:layout";
@@ -135,12 +135,12 @@ elmo-shape:Stage a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "dc:title";
     sh:path dc:title;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:layout";
@@ -175,7 +175,7 @@ elmo-shape:Layout a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "xhtml:stylesheet";
@@ -200,7 +200,7 @@ elmo-shape:InformationProduct a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:query";
@@ -318,7 +318,7 @@ elmo-shape:Step a sh:NodeShape;
   sh:property [
     sh:path rdfs:label;
     sh:name "rdfs:label";
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
 .
 
@@ -334,7 +334,7 @@ elmo-shape:ValidationStep a sh:NodeShape;
   sh:property [
       sh:name "rdfs:label";
       sh:path rdfs:label;
-      sh:datatype xsd:string;
+      sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:conformsTo";
@@ -354,7 +354,7 @@ elmo-shape:AssertionStep a sh:NodeShape;
   sh:property [
       sh:name "rdfs:label";
       sh:path rdfs:label;
-      sh:datatype xsd:string;
+      sh:datatype rdf:langString;
   ];
   # Because the shape is closed, properties are expected (even if they are specified within sh:xone)
   sh:property [
@@ -397,7 +397,7 @@ elmo-shape:UpdateStep a sh:NodeShape;
   sh:property [
       sh:name "rdfs:label";
       sh:path rdfs:label;
-      sh:datatype xsd:string;
+      sh:datatype rdf:langString;
   ];
   sh:property [
     sh:path elmo:backend;
@@ -423,7 +423,7 @@ elmo-shape:PersistenceStep a sh:NodeShape;
   sh:property [
       sh:name "rdfs:label";
       sh:path rdfs:label;
-      sh:datatype xsd:string;
+      sh:datatype rdf:langString;
   ];
   sh:property [
     sh:path elmo:backend;
@@ -609,7 +609,7 @@ elmo-shape:Backend a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
 .
 
@@ -777,7 +777,7 @@ elmo-shape:Endpoint a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:stage";
@@ -805,7 +805,7 @@ elmo-shape:DirectEndpoint a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:stage";
@@ -867,7 +867,7 @@ elmo-shape:DynamicEndpoint a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:stage";
@@ -892,7 +892,7 @@ elmo-shape:Redirection a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:path rdf:type;
@@ -927,7 +927,7 @@ elmo-shape:Representation a sh:NodeShape;
   sh:property [
     sh:name "rdfs:label";
     sh:path rdfs:label;
-    sh:datatype xsd:string;
+    sh:datatype rdf:langString;
   ];
   sh:property [
     sh:name "elmo:name";
