@@ -1,0 +1,114 @@
+@prefix elmo: <http://dotwebstack.org/def/elmo#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
+
+@prefix config: <http://dotwebstack.org/configuration/>.
+
+GRAPH config:Theatre {
+  config:SubjectData a elmo:InformationProduct;
+    elmo:requiredParameter elmo:SubjectParameter;
+    elmo:query """
+      construct {
+        ?subject ?p ?o
+      }
+      where {
+        ?subject ?p ?o
+      }
+    """
+  .
+  config:FriendsOfSubject a elmo:InformationProduct;
+    elmo:requiredParameter elmo:SubjectParameter;
+    elmo:query """
+      select ?friend ?friend_label
+      where {
+        ?friend foaf:knows ?subject
+        OPTIONAL {?friend rdfs:label ?friend_label}
+      }
+    """
+  .
+}
+
+#Frontend
+GRAPH config:MainStage {
+  # This version creates a default html temnplate
+  config:PersonRepresentation1 a elmo:Representation;
+    elmo:informationProduct config:SubjectData;
+    elmo:contains config:FriendsRepresentation;
+    elmo:appearance [
+      a elmo:ContentAppearance
+      elmo:shape [
+        sh:property [
+          sh:path foaf:firstName:
+          rdfs:label "First name"@en;
+          rdfs:label "Voornaam"@nl;
+        ];
+        sh:property [
+          sh:path foaf:surname;
+          rdfs:label "Surname"@en;
+          rdfs:label "Achternaam"@nl;
+        ]
+      ]
+    ]
+  .
+
+  #Uitzoekpunt: in geval van een GraphResult ligt het gebruik van SHACl voor de hand
+  #             bij het gebruik van een TupleResult minder, hoewel je ook dan wel SHACL
+  #             zou kunnen gebruiken, maar dan niet sh:path maar sh:name?
+  config:FriendsRepresentation a elmo:Representation;
+    elmo:informationProduct config:FriendsOfSubject;
+    elmo:appearance [
+      a elmo-app:TableAppearance;
+      elmo:fragment [
+        elmo:appliesTo "friend";
+        rdfs:label "Friend"@en;
+        rdfs:label "Vriend"@nl;
+      ]
+    ]
+  .
+
+  # This version is identical the the previous, but with the html template as it would have been created
+  # By stating a elmo:htmlTemplate, the default html template is overriden (in this case replaced by an identical version...)
+  config:PersonRepresentation2 a elmo:Representation;
+    elmo:appliesTo [a foaf:Person];
+    elmo:informationProduct config:SubjectData;
+    elmo:contains config:FriendsRepresentation;
+    elmo:htmlTemplate """
+      <div class="row">
+        ${toprepresentation}
+      </div>
+      <div class="row">
+        ${representation("http://dotwebstack.org/configuration/FriendsRepresentation")}
+      </div>
+    """;
+  .
+
+  # This version is a manually made html template
+  # The default html template is overriden, making it possible to add extra code.
+  # A third appearance is added, to show how to include linked data from different sources
+  # It also shows that the usual substitution of parameter values can be used, as within SPARQL queries
+  # At the location specified by the second value, RDF data is expected
+  config:GeoAppearance a elmo:GeoAppearance;
+  .
+  config:PersonRepresentation3 a elmo:Representation;
+    elmo:appliesTo [a foaf:Person];
+    elmo:informationProduct config:SubjectData;
+    elmo:contains config:FriendsRepresentation;
+    elmo:pageTemplate """
+      <div class="row">
+        <div class="col">
+          ${mainrepresentation}
+        </div>
+        <div class="col">
+          ${representation("http://dotwebstack.org/configuration/FriendsRepresentation")}
+        </div>
+      </div>
+      <div class="row">
+        ${appearance("http://dotwebstack.org/configuration/GeoAppearance",${subject})}
+      </div>
+    """;
+  .
+}
