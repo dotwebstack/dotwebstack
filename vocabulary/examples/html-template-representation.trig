@@ -9,6 +9,7 @@
 @prefix config: <http://dotwebstack.org/configuration/>.
 
 GRAPH config:Theatre {
+  # The default IP for URI resolving
   config:SubjectData a elmo:InformationProduct;
     elmo:requiredParameter elmo:SubjectParameter;
     elmo:query """
@@ -20,13 +21,15 @@ GRAPH config:Theatre {
       }
     """
   .
+  # Some specific IP for the same URI, but different information
   config:FriendsOfSubject a elmo:InformationProduct;
     elmo:requiredParameter elmo:SubjectParameter;
     elmo:query """
-      select ?friend ?friend_label
+      select ?friend ?friend_label ?city
       where {
         ?friend foaf:knows ?subject
         OPTIONAL {?friend rdfs:label ?friend_label}
+        OPTIONAL {?friend vcard:locality ?city}
       }
     """
   .
@@ -34,81 +37,174 @@ GRAPH config:Theatre {
 
 #Frontend
 GRAPH config:MainStage {
-  # This version creates a default html temnplate
-  config:PersonRepresentation1 a elmo:Representation;
-    elmo:informationProduct config:SubjectData;
-    elmo:contains config:FriendsRepresentation;
-    elmo:appearance [
-      a elmo:ContentAppearance
-      elmo:shape [
-        sh:property [
-          sh:path foaf:firstName:
-          rdfs:label "First name"@en;
-          rdfs:label "Voornaam"@nl;
-        ];
-        sh:property [
-          sh:path foaf:surname;
-          rdfs:label "Surname"@en;
-          rdfs:label "Achternaam"@nl;
-        ]
-      ]
-    ]
-  .
+  # This example reusing the redirection and dynamic endpoint configuration as defined in the redirection.trig:
+  #
+  #  config:NonInformationResourceRedirection a elmo:Redirection;
+  #    elmo:pathPattern "{path}/id/{reference}";
+  #    elmo:redirectTemplate "{path}/doc/{reference}";
+  #  .
+  #  config:DocEndpoint a elmo:DynamicEndpoint;
+  #    elmo:pathPattern "/doc/{reference}";
+  #    elmo:parameterMapper config:SubjectFromUrl;
+  #  .
+  #
+  # This means that a URI like "http://.../id/person/1234" is redirected to "http:/.../doc/person/1234"
+  # and this URI is mapped to the elmo:SubjectParameter, back to the value "http://.../id/person/1234"
 
-  #Uitzoekpunt: in geval van een GraphResult ligt het gebruik van SHACl voor de hand
-  #             bij het gebruik van een TupleResult minder, hoewel je ook dan wel SHACL
-  #             zou kunnen gebruiken, maar dan niet sh:path maar sh:name?
-  config:FriendsRepresentation a elmo:Representation;
-    elmo:informationProduct config:FriendsOfSubject;
-    elmo:appearance [
-      a elmo-app:TableAppearance;
-      elmo:fragment [
-        elmo:appliesTo "friend";
-        rdfs:label "Friend"@en;
-        rdfs:label "Vriend"@nl;
-      ]
-    ]
-  .
 
-  # This version is identical the the previous, but with the html template as it would have been created
-  # By stating a elmo:htmlTemplate, the default html template is overriden (in this case replaced by an identical version...)
-  config:PersonRepresentation2 a elmo:Representation;
-    elmo:appliesTo [a foaf:Person];
+  # Example (1)
+  #
+  # This example is the most implementation-specific, using only a
+  # html template to state the full representation of all the data,
+  # including the use of a subrepresentation.
+  # This example contains all appearance data as part of the html template
+  # The advantage of this configuration-style is that it is very flexible and doesn't require
+  # any specific functionallity within the dotwebstack framework.
+  # The disadvantage of this configuration-style is that it requires specific html knowledge, it is
+  # error prone (no validation on the specification) and it is not possible to have insight
+  # in the configuration itself, as it is not linked data.
+  # This configuration-style is included for flexibility and a first step for a dotwebstack html module
+  #
+  # Two webcomponents are used: "Resource" and "TupleList"
+  #
+  config:PersonRepresentation_HtmlTemplate a elmo:Representation;
+    elmo:appliesTo "http://{domain}/{path}/id/person/{reference}";
     elmo:informationProduct config:SubjectData;
-    elmo:contains config:FriendsRepresentation;
     elmo:htmlTemplate """
       <div class="row">
-        ${toprepresentation}
+        <@graphContext src=subject>
+          ${webcomponent("Resource",{"iri": subject})}
+        </@graphContext>
+      </div>
+      <div class="row">
+        <@tupleContext src=subject+"/friends">
+          ${webcomponent("TupleList", { "property": [
+            { "name": "friend", "label": "Vriend"},
+            { "name": "city", "label": "Woonplaats"}
+          ]})}
+        </@tupleContext>
+      </div>
+    """
+  .
+
+  # A specific endpoint is needed to serve the data for the friends-subrepresentation:
+  config:FriendsEndpoint a elmo:Endpoint;
+    elmo:pathPattern "/id/person/{reference}/friends";
+    elmo:getRepresentation config:FriendsRepresentation
+  .
+  config:FriendsRepresentation a elmo:Representation;
+    elmo:informationProduct config:FriendsOfSubject;
+    elmo:appearance config:FriendsAppearance # Appearance definition is not necessary for example (1)
+  .
+
+  # Example (2)
+  #
+  # This example uses a html template with references to the appearances that are used
+  # in this representation.
+  # The same configuration is used as in the previous example, but in this case the configuration
+  # is not part of the html template, but part of the appearance configuration.
+  #
+  # This configuration-style is work-in-progress and give the current state of thinking
+  # The configuration might change, and will not be implemented in the first sprint for the html module
+  #
+  # The advantage of this configuration-style is that it is easier to validate and no specific
+  # html knowledge is needed for the specification of the appearances.
+  # However, html knowledge is still needed, and no validation of the representation is possible.
+  # For the dotwebstack realisation, the ${appearance} macro will be implemented by transforming
+  # the appearance-configuration to the written-out version of the html template as specified in example (1)
+  #
+  config:PersonRepresentation_AppearanceHtmlTemplate a elmo:Representation;
+    elmo:appliesTo "http://{domain}/{path}/id/person/{reference}";
+    elmo:informationProduct config:SubjectData;
+    elmo:htmlTemplate """
+      <div class="row">
+        <@graphContext src=subject>
+          ${appearance("http://dotwebstack.org/configuration/PersonAppearance",{"iri": subject})}
+        </@graphContext>
+      </div>
+      <div class="row">
+        <@tupleContext src=subject+"/friends">
+          ${appearance("http://dotwebstack.org/configuration/FriendsAppearance")}
+        </@tupleContext>
+      </div>
+    """
+  .
+
+  #Appearance for persons
+  config:PersonAppearance a elmo:ResourceAppearance;
+    elmo:shape [
+      sh:property [
+        sh:path foaf:firstName;
+        rdfs:label "First name"@en;
+        rdfs:label "Voornaam"@nl;
+      ];
+      sh:property [
+        sh:path foaf:surname;
+        rdfs:label "Surname"@en;
+        rdfs:label "Achternaam"@nl;
+      ]
+    ]
+  .
+
+  #Appearance for friends
+  config:FriendsAppearance a elmo:TableAppearance;
+    elmo:shape [
+      sh:property [
+        elmo:name "friend";
+        rdfs:label "Friend"@en;
+        rdfs:label "Vriend"@nl;
+      ];
+      sh:property [
+        elmo:name "city";
+        rdfs:label "City"@en;
+        rdfs:label "Woonplaats"@nl;
+      ]
+    ]
+  .
+
+  # Example (3)
+  #
+  # This example uses a htmlTemplate with references to representations
+  # The first representation ("toprepresentation") represents the current representation
+  # The second representation is the representation as specified by its URI
+  # In this case, a specific endpoint for this representation is not needed
+  # The ${toprepresentaion} and ${represention} macros will create the html-template
+  # as specified in example (1), with the difference that the subrepresentation uses the
+  # default endpoint for dereferenceable uri's: http://{domain}/resource?subject=...&representation=...
+  #
+  # This configuration-style is work-in-progress and give the current state of thinking
+  # The configuration might change, and will not be implemented in the first sprint for the html module
+  #
+  # The advantage of this configuration-style is that it gives all flexibility within the
+  # disadvantage of losing validation and configuration reporting features.
+  # The disadvantage of this configuration-style is that it exposes the URI of the representation
+  #
+  config:PersonRepresentation_RepresentationHtmlTemplate a elmo:Representation;
+    elmo:appliesTo "http://{domain}/{path}/id/person/{reference}";
+    elmo:contains config:FriendsRepresentation;
+    elmo:informationProduct config:SubjectData;
+    elmo:htmlTemplate """
+      <div class="row">
+        ${toprepresentation({"iri": subject})}
       </div>
       <div class="row">
         ${representation("http://dotwebstack.org/configuration/FriendsRepresentation")}
       </div>
-    """;
+    """
   .
 
-  # This version is a manually made html template
-  # The default html template is overriden, making it possible to add extra code.
-  # A third appearance is added, to show how to include linked data from different sources
-  # It also shows that the usual substitution of parameter values can be used, as within SPARQL queries
-  # At the location specified by the second value, RDF data is expected
-  config:GeoAppearance a elmo:GeoAppearance;
-  .
-  config:PersonRepresentation3 a elmo:Representation;
-    elmo:appliesTo [a foaf:Person];
-    elmo:informationProduct config:SubjectData;
+  # Example (4)
+  #
+  # This example will create exactly the same html template as in example (3), without the
+  # need to specify the html template itself.
+  # It is a less flexible option, but has the advantage that no knowledge of html is needed.
+  # The obvious disadvantage is the lack of flexibility. The use case for example (4) is prototyping
+  # before you need to optimize the user interface. Migrating from the configuration-style of
+  # example (4) to example (3) simply means adding the htmlTemplate.
+  #
+  config:PersonRepresentation_RepresentationPlain a elmo:Representation;
+    elmo:appliesTo "http://{domain}/{path}/id/person/{reference}";
     elmo:contains config:FriendsRepresentation;
-    elmo:pageTemplate """
-      <div class="row">
-        <div class="col">
-          ${mainrepresentation}
-        </div>
-        <div class="col">
-          ${representation("http://dotwebstack.org/configuration/FriendsRepresentation")}
-        </div>
-      </div>
-      <div class="row">
-        ${appearance("http://dotwebstack.org/configuration/GeoAppearance",${subject})}
-      </div>
-    """;
+    elmo:informationProduct config:SubjectData;
   .
 }
