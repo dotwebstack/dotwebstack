@@ -66,6 +66,18 @@ GRAPH config:MainStage {
   # This configuration-style is included for flexibility and a first step for a dotwebstack html module
   #
   # Two webcomponents are used: "Resource" and "TupleList"
+  # Webcomponents MUST include a context.jsonld file that states the @context element that can be used
+  # to map the plain json configuration options for the webcomponent to linked data annotations.
+  # For this example the @context element for the "TupleList" webcomponent looks like:
+  #
+  # "@context": {
+  #   "sh": "http://www.w3.org/ns/shacl#",
+  #   "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+  #   "property": {"@id": "sh:property", "@type":"@id"},
+  #   "name": {"@id": "shacl:name"},
+  #   "label": {"@id": "rdfs:label"}
+  # }
+  }
   #
   config:PersonRepresentation_HtmlTemplate a elmo:Representation;
     elmo:appliesTo "http://{domain}/{path}/id/person/{reference}";
