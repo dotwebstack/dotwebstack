@@ -65,19 +65,7 @@ GRAPH config:MainStage {
   # in the configuration itself, as it is not linked data.
   # This configuration-style is included for flexibility and a first step for a dotwebstack html module
   #
-  # Two webcomponents are used: "Resource" and "TupleList"
-  # Webcomponents MUST include a context.jsonld file that states the @context element that can be used
-  # to map the plain json configuration options for the webcomponent to linked data annotations.
-  # For this example the @context element for the "TupleList" webcomponent looks like:
-  #
-  # "@context": {
-  #   "sh": "http://www.w3.org/ns/shacl#",
-  #   "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-  #   "property": {"@id": "sh:property", "@type":"@id"},
-  #   "name": {"@id": "shacl:name"},
-  #   "label": {"@id": "rdfs:label"}
-  # }
-  }
+  # Two webcomponents are used: "Resource" and "TupleList".
   #
   config:PersonRepresentation_HtmlTemplate a elmo:Representation;
     elmo:appliesTo "http://{domain}/{path}/id/person/{reference}";
@@ -90,9 +78,9 @@ GRAPH config:MainStage {
       </div>
       <div class="row">
         <@tupleContext src=subject+"/friends">
-          ${webcomponent("TupleList", { "property": [
-            { "name": "friend", "label": "Vriend"},
-            { "name": "city", "label": "Woonplaats"}
+          ${webcomponent("TupleList", { "columns": [
+            { "binding": "friend", "labelBinding": "friend_label", "columnLabel": "Vriend"},
+            { "binding": "city", "columnLabel": "Woonplaats"}
           ]})}
         </@tupleContext>
       </div>
@@ -143,7 +131,7 @@ GRAPH config:MainStage {
   .
 
   #Appearance for persons
-  config:PersonAppearance a elmo:ResourceAppearance;
+  config:PersonAppearance a dws-app:Resource;
     elmo:shape [
       sh:property [
         sh:path foaf:firstName;
@@ -159,19 +147,30 @@ GRAPH config:MainStage {
   .
 
   #Appearance for friends
-  config:FriendsAppearance a elmo:TableAppearance;
+  config:FriendsAppearance a dws-app:TupleList;
+    # Options for the webcomponent that are not related to the data should appear as properties of the appearance itself
     elmo:shape [
       sh:property [
-        elmo:name "friend";
-        rdfs:label "Friend"@en;
-        rdfs:label "Vriend"@nl;
+        sh:name "friend";
+        xhtml:role xhtml:link;
+        sh:group config:FriendFragment
       ];
       sh:property [
-        elmo:name "city";
+        sh:name "friend_label";
+        sh:group config:FriendFragment
+      ];
+      sh:property [
+        sh:order 2;
+        sh:name "city";
         rdfs:label "City"@en;
         rdfs:label "Woonplaats"@nl;
-      ]
+      ];
     ]
+  .
+  config:FriendFragment a sh:PropertyGroup;
+    sh:order 1;
+    rdfs:label "Friend"@en;
+    rdfs:label "Vriend"@nl
   .
 
   # Example (3)
