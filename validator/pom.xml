@@ -5,10 +5,10 @@
 
 	<groupId>org.dotwebstack</groupId>
 	<artifactId>validator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Validator</name>
-	
+
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -45,7 +45,7 @@
 			<version>1.7.25</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>

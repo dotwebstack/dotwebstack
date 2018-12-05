@@ -28,7 +28,7 @@ public class Validator {
   private static final Logger LOG = LoggerFactory.getLogger(Validator.class);
 
   private static String BASE_URI = "http://dotwebstack.org/validator";
-  
+
   private static void loadFiles(Model model, String filter) throws FileNotFoundException {
 
     File path = new File(filter);
@@ -49,33 +49,47 @@ public class Validator {
         model.read(new FileInputStream(file), BASE_URI, ext);
       }
     }
-  
+
   }
 
   private static void writeModel(Model model, String fileName) throws IOException {
-    
+
     FileWriter writer = new FileWriter(fileName);
     RDFWriter w = model.getWriter(FileUtils.langTurtle);
     w.write(model, writer, BASE_URI);
     writer.close();
     LOG.info(String.format("Reported to file: %s",fileName));
   }
-  
+
   public static void main(String[] args) {
 
-    if (args.length != 4) {
-      LOG.error("Usage: validator "
-          + "data-graph-file ontology-graph-file shapes-graph-file report-file");
-      LOG.error("Wildcards are allowed for input parameters");
-      LOG.error("Example: \"vocabulary/examples/*.trig\" \"vocabulary/elmo/*.ttl\" "
-          + "\"vocabulary/elmo-shacl.ttl\" \"validator/report.ttl\"");
-    } else {
+    if (args.length == 2) {
+
+      LOG.info("Truncating data graphs into single model");
+      LOG.info(String.format("File(s) containing the data graph: %s",args[0]));
+
+      try {
+        Model dataModel = ModelFactory.createModelForGraph(Factory.createDefaultGraph());
+
+        // Load the data model
+        LOG.info("Loading data files");
+        loadFiles(dataModel, args[0]);
+
+        // Write truncated data model
+        writeModel(dataModel,args[1]);
+
+      } catch (IOException e) {
+        LOG.error(e.getMessage());
+      } catch (RiotException e) {
+        //Already send to output via SLF4J
+      }
+    } else if (args.length == 4) {
 
       LOG.info("Starting the validator");
       LOG.info(String.format("File(s) containing the data graph: %s",args[0]));
       LOG.info(String.format("File(s) containing the ontology graph: %s",args[1]));
       LOG.info(String.format("File(s) containing the shapes graph: %s",args[2]));
-      
+
       try {
         Model dataModel = ModelFactory.createModelForGraph(Factory.createDefaultGraph());
 
@@ -91,11 +105,11 @@ public class Validator {
         Model shapesModel = ModelFactory.createModelForGraph(Factory.createDefaultGraph());
         LOG.info("Loading shape files");
         loadFiles(shapesModel, args[2]);
-        
+
         // Perform the validation of everything, using the data model
         LOG.info("Start validation");
         Resource report = ValidationUtil.validateModel(dataModel, shapesModel, true);
-        
+
         // Write violations
         writeModel(report.getModel(),args[3]);
 
@@ -104,6 +118,15 @@ public class Validator {
       } catch (RiotException e) {
         //Already send to output via SLF4J
       }
+    } else {
+
+      LOG.error("Usage:");
+      LOG.error("(1) validator "
+          + "data-graph-file ontology-graph-file shapes-graph-file report-file");
+      LOG.error("(2) validator data-graph-file truncated-data-file");
+      LOG.error("Wildcards are allowed for input parameters");
+      LOG.error("Example: \"vocabulary/examples/*.trig\" \"vocabulary/elmo/*.ttl\" "
+          + "\"vocabulary/elmo-shacl.ttl\" \"validator/report.ttl\"");
     }
   }
 }
