@@ -4,7 +4,8 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix elmo-app: <http://dotwebstack.org/def/elmo/appearance/>.
+@prefix dws-app: <http://dotwebstack.org/def/elmo/appearance/>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
 
 @prefix config: <http://dotwebstack.org/configuration/>.
 
