@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:archimate="http://www.archimatetool.com/archimate" name="DotWebStack revamp design" id="f4e8096f-ec65-4723-ad14-6d20378cdd18" version="4.0.1">
+  <folder name="Strategy" id="8ddcff8a-d439-4a6e-9701-6a5a18d5fd00" type="strategy"/>
+  <folder name="Business" id="e68fb837-ec1b-43f9-a11b-d4a4d109a32d" type="business"/>
+  <folder name="Application" id="5b20329a-edc7-4dab-b1a7-eb3cf242d506" type="application"/>
+  <folder name="Technology &amp; Physical" id="32ba0dc8-1d77-4682-ae6a-1bd94a8c9087" type="technology"/>
+  <folder name="Motivation" id="b1fe6e04-b4e3-4df5-a1cf-179060ecfa38" type="motivation"/>
+  <folder name="Implementation &amp; Migration" id="202d0fb7-0bcf-410c-8a29-57f167548866" type="implementation_migration"/>
+  <folder name="Other" id="ca45eb8e-0919-4f23-9812-bdccd8de4f20" type="other"/>
+  <folder name="Relations" id="919b177c-a391-46b6-b6ff-996ea02539a3" type="relations"/>
+  <folder name="Views" id="dec4b8fd-76c5-41a5-90d0-ba31077602ec" type="diagrams">
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Default View" id="bc405cc6-0fbd-45b1-ad76-07f4d55f0b79"/>
+  </folder>
+</archimate:model>
