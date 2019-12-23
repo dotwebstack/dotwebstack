@@ -5,7 +5,7 @@
     <element xsi:type="archimate:BusinessActor" name="http client" id="76dc7203-83db-4347-9f6f-55857abfad7e"/>
   </folder>
   <folder name="Application" id="5b20329a-edc7-4dab-b1a7-eb3cf242d506" type="application">
-    <element xsi:type="archimate:ApplicationComponent" name="Frontend" id="3a0803e7-2da2-4256-a614-02515f7b5fed"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Service" id="3a0803e7-2da2-4256-a614-02515f7b5fed"/>
     <element xsi:type="archimate:ApplicationComponent" name="Core" id="257a0580-a87f-49c7-b145-cd78597a0cb4"/>
     <element xsi:type="archimate:ApplicationComponent" name="Backend" id="0925c04f-3171-4be8-8eda-1e56302324c7"/>
     <element xsi:type="archimate:ApplicationComponent" name="Access" id="d41c7bee-3442-401c-a116-6dc094e7960c"/>
