@@ -967,13 +967,6 @@ elmo-shape:Representation a sh:NodeShape;
     sh:maxCount 1;
     sh:defaultValue elmo:MiddleLayer
   ];
-# Temporary disabled, not needed yet (part of the React UI prototype)
-#  sh:property [
-#    sh:name "elmo:pageTemplate";
-#    sh:path elmo:pageTemplate;
-#    sh:datatype xsd:string;
-#    sh:maxCount 1;
-#  ];
   sh:property [
     sh:name "elmo:appearance";
     sh:path elmo:appearance;
@@ -1105,12 +1098,18 @@ elmo-shape:Appearance a sh:NodeShape;
     sh:path elmo:index;
     sh:maxCount 1;
   ];
+  # Legacy appearances
   sh:property [
     sh:name "elmo:fragment";
     sh:path elmo:fragment;
     sh:nodeKind sh:BlankNodeOrIRI;
     sh:node elmo-shape:Fragment;
   ];
+  # DotWebStack appearances
+  sh:property [
+    sh:name "elmo:shape";
+    sh:path elmo:shape
+  ]
 .
 
 elmo-shape:TopLevelRepresentation a sh:NodeShape;
@@ -1124,9 +1123,15 @@ elmo-shape:TopLevelRepresentation a sh:NodeShape;
     sh:path elmo:contains;
     sh:name "elmo:contains";
     sh:class elmo:Representation;
-    sh:minCount 1;
+    # sh:minCount 1;
     # elmo:contains might also refer to a rdf:List of elmo:Representations to facilitate the order in which child representations are presented
   ];
+  sh:property [
+    sh:path elmo:htmlTemplate;
+    sh:name "elmo:htmlTemplate";
+    sh:datatype xsd:string;
+    sh:maxCount 1;
+  ]
 .
 elmo-shape:Service a sh:NodeShape;
   rdfs:label "Service shape";
